@@ -1,6 +1,14 @@
 @startuml
 class NormApi {
-    {static} + NormCreateInstance(priorityBoost:bool) : NormInstanceHandle
     'TODO: Add static methods for each method in normApi.h
+    {static} + NormCreateInstance(priorityBoost:bool) : NormInstanceHandle
+    {static} + NormDestroyInstance(instanceHandle:NormInstanceHandle) : void
+    {static} + NormStopInstance(instanceHandle:NormInstanceHandle) : void
+    {static} + NormRestartInstance(instanceHandle:NormInstanceHandle) : bool
+    {static} + NormSuspendInstance(instanceHandle:NormInstanceHandle) : bool
+    {static} + NormResumeInstance(instanceHandle:NormInstanceHandle) : void
+    {static} + NormSetCacheDirectory(instanceHandle:NormInstanceHandle, cachePath:string) : bool
+    {static} + NormGetNextEvent(instanceHandle:NormInstanceHandle, theEvent:NormEvent, waitForEvent:bool) : bool 'Note: theEvent is a pointer'
+    {static} + NormGetDescriptor(instanceHandle:NormInstanceHandle) : NormDescriptor
 }
 @enduml
