@@ -1,0 +1,6 @@
+@startuml
+class NormData {
+    ~ NormData(handle:long)
+    + byte[] Data <<get>>   
+}
+@enduml
