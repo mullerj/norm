@@ -1,0 +1,6 @@
+@startuml
+class NormApi {
+    {static} + NormCreateInstance(priorityBoost:bool) : NormInstanceHandle
+    'TODO: Add static methods for each method in normApi.h
+}
+@enduml
