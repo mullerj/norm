@@ -1,4 +1,39 @@
 @startuml
+enum NormEventType {
+    NORM_EVENT_INVALID
+    NORM_TX_QUEUE_VACANCY
+    NORM_TX_QUEUE_EMPTY
+    NORM_TX_FLUSH_COMPLETED
+    NORM_TX_WATERMARK_COMPLETED
+    NORM_TX_CMD_SENT
+    NORM_TX_OBJECT_SENT
+    NORM_TX_OBJECT_PURGED
+    NORM_TX_RATE_CHANGED
+    NORM_LOCAL_SENDER_CLOSED
+    NORM_REMOTE_SENDER_NEW
+    NORM_REMOTE_SENDER_RESET   
+    NORM_REMOTE_SENDER_ADDRESS  
+    NORM_REMOTE_SENDER_ACTIVE
+    NORM_REMOTE_SENDER_INACTIVE
+    NORM_REMOTE_SENDER_PURGED   
+    NORM_RX_CMD_NEW
+    NORM_RX_OBJECT_NEW
+    NORM_RX_OBJECT_INFO
+    NORM_RX_OBJECT_UPDATED
+    NORM_RX_OBJECT_COMPLETED
+    NORM_RX_OBJECT_ABORTED
+    NORM_RX_ACK_REQUEST         
+    NORM_GRTT_UPDATED
+    NORM_CC_ACTIVE
+    NORM_CC_INACTIVE
+    NORM_ACKING_NODE_NEW        
+    NORM_SEND_ERROR             
+    NORM_USER_TIMEOUT
+}
+struct NormEvent {
+    type:NormEventType
+    session:NormSessionHandle
+}
 class NormApi {
     'TODO: Add static methods for each method in normApi.h
     {static} + NormCreateInstance(priorityBoost:bool) : NormInstanceHandle
@@ -7,8 +42,82 @@ class NormApi {
     {static} + NormRestartInstance(instanceHandle:NormInstanceHandle) : bool
     {static} + NormSuspendInstance(instanceHandle:NormInstanceHandle) : bool
     {static} + NormResumeInstance(instanceHandle:NormInstanceHandle) : void
-    {static} + NormSetCacheDirectory(instanceHandle:NormInstanceHandle, cachePath:string) : bool
-    {static} + NormGetNextEvent(instanceHandle:NormInstanceHandle, theEvent:NormEvent, waitForEvent:bool) : bool 'Note: theEvent is a pointer'
-    {static} + NormGetDescriptor(instanceHandle:NormInstanceHandle) : NormDescriptor
+    {static} + NormSetCacheDirectory(instanceHandle:NormInstanceHandle, cachePath:char) : bool
+    {static} + NormGetNextEvent(instanceHandle:NormInstanceHandle, theEvent:NormEvent, waitForEvent:bool) : bool 'TODO:NormEvent'
+    {static} + NormGetDescriptor(instanceHandle:NormInstanceHandle) : NormDescriptor 'TODO:NormDescriptor'
+    {static} + NormCreateSession(instanceHandle:NorminstanceHandle, sessionAddress:char, sessionPort:ushort, localNodeId:NormNodeId) : NormSessionHandle 'TODO:NormNodeId'
+    {static} + NormDestroySession(sessionHandle:NormSessionHandle) : void 'TODO:NormSessionHandle'
+    {static} + NormGetInstance(sessionHandle:NormSessionHandle) : NormInstanceHandle 'TODO:NormInstanceHadle'
+    {static} + NormIsUnicastAddress(address:char) : bool
+    {static} + NormSetUserData(sessionHandle:NormSessionHandle, userData:nuint) : void
+    {static} + NormGetUserData(sessionHandle:NormSessionHandle) : nuint
+    {static} + NormSetUserTimer(sessionHandle:NormSessionHandle, seconds:double) : void
+    {static} + NormCancelUserTimer(sessionHandle:NormSessionHandle) : void
+    {static} + NormGetLocalNodeId(sessionHandle:NormSessionHandle) : NormNodeId
+    {static} + NormGetAddress(sessionHandle:NormSessionHandle, addrBuffer:char, bufferLen:uint, port:ushort) 'TODO:port'
+    {static} + NormGetRxPort(sessionHandle:NormSessionHandle) : ushort
+    {static} + NormSetTxPort(sessionHandle:NormSessionHandle, txPortNumber:ushort, enableReuse:bool, txBindAddress:char) 'TODO:enableReuse/txBindAddress'
+    {static} + NormGetTxPort(sessionHandle:NormSessionHandle) : ushort
+    {static} + NormSetTxOnly(sessionHandle:NormSessionHandle, txOnly:bool, connectToSessionAddress:bool) : void 'TODO:connectToSessionAddress'
+    {static} + NormLimitObjectInfo(sessionHandle:NormSessionHandle, state:bool) : void
+    {static} + NormPresetObjectInfo(sessionHandle:NormSessionHandle, objectSize:uint, segmentSize:ushort, numData:ushort, numParity:ushort) : bool 'TODO:type marshling objectSize'
+    {static} + NormSetId(sessionHandle:NormSessionHandle, normId:NormNodeId) : void
+    {static} + NormChangeDestination(sessionHandle:NormSessionHandle, sessionAddress:char, sessionPort:ushort, connectToSessionAddress:bool) : bool 'TODO:connectToSessionAddress default'
+    {static} + NormSetServerListner(sessionHandle:NormSessionHandle, state:bool) : void
+    {static} + NormTransferSender(sessionHandle:NormSessionHandle, sender:NormNodeHandle) : bool 'TODO:NormNodeHandle'
+    {static} + NormSetRxPortReuse(sessionHandle:NormSessionHandle, enableReuse:bool, rxBindAddress:char, senderAddress:char, senderPort:ushort) : void 'TODO:defaults'
+    {static} + NormGetRxBindAddress(sessionHandle:NormSessionHandle, addr:char, addrLen:uint, port:ushort) : bool ' TODO:marshaling addrLen/port'
+    {static} + NormSetEcnSupport(sessionHandle:NormSessionHandle, ecnEnable:bool, ignoreLoss:bool, tolerateLoss:bool) : void 'TODO:defaults'
+    {static} + NormSetMulticastInterface(sessionHandle:NormSessionHandle, interfaceName:char) : bool 'TODO interfaceName should not be a single char'
+    {static} + NormSetSSM(sessionHandle:NormSessionHandle, sourceAddress:char) : bool 'TODO: sourceAddress should not be a single char'
+    {static} + NormSetTTL(sessionHandle:NormSessionHandle, ttle:byte) : bool 'TODO: marshaling'
+    {static} + NormSetTOS(sessionHandle:NormSessionHandle, tos:byte) : bool 'TODO:marshaling'
+    {static} + NormSetLoopback(sessionHandle:NormSessionHandle, loopback:bool) : bool
+    {static} + NormSetMulticastLoopback(sessionHandle:NormSessionHandle, loopback:bool) : bool
+    {static} + NormSetFragmentation(sessionHandle:NormSessionHandle, fragmentation:bool) : bool
+    {static} + NormSetMessageTrace(sessionHandle:NormSessionHandle, state:bool) : void
+    {static} + NormSetTxLoss(sessionHandle:NormSessionHandle, precent:double) : void
+    {static} + NormSetRxLoss(sessionHandle:NormSessionHandle, precent:double) : void
+    {static} + NormOpenDebugLog(instanceHandle:NormInstanceHandle, path:char) : bool 'TODO:marshalling path'
+    {static} + NormCloseDebugLog(instanceHandle:NormInstanceHandle) : void
+    {static} + NormOpenDebugPipe(instanceHandle:NormInstanceHandle, pipeName:char) : bool 'TODO:marshalling pipename'
+    {static} + NormCloseDebugPipe(instanceHandle:NormInstanceHandle) : void
+    {static} + NormSetDebugLevel(level:uint) : void 'TODO:marshalling level'
+    {static} + NormGetDebugLevel() : uint 'TODO:marshalling return type'
+    {static} + NormSetReportInterval(sessionHandle:NormSessionHandle, interval:double) : void
+    {static} + NormGetReportInterval(sessionHandle:NormSessionHandle) : double
+    {static} + NormGetRandomSessionId() : NormSessionId 'TODO: NormSessionId'
+    {static} + NormStartSender(sessionHandle:NormSessionHande, instanceId:NormSessionId, bufferSpace:uint, segmentSize:ushort, numData:ushort, numParity:ushort, fecId:byte) : bool 'TODO: marshalling'
+    {static} + NormStopSender(sessionHandle:NormSessionHandle) : void
+    {static} + NormSetTxRate(sessionHandle:NormSessionHandle, bitsPerSecond:double) : void
+    {static} + NormGetTxRate(sessionHandle:NormSessionHandle): double
+    {static} + NormSetTxSocketBuffer(sessionHandle:NormSessionHandle, bufferSize:uint) : bool 'TODO:marshalling'
+    {static} + NormSetFlowControl(sessionHandle:NormSessionHandle, flowControlFactor:double) : void
+    {static} + NormSetCongestionControl(sessionHandle:NormSessionHandle, enable:bool, adjustRate:bool) : void 'TODO:default'
+    {static} + NormSetTxRateBounds(sessionHandle:NormSessionHandle, rateMin:double, rateMax:double) : void
+    {static} + NormSetTxChacheBounds(sessionHandle:NormSessionHandle, sizeMax:NormSize, countMin:uint, countMax:uint) : void 'TODO: NormSize'
+    {static} + NormSetAutoParity(sessionHandle:NormSessionHandle, autoParity:byte) : void 'TODO:marshalling'
+    {static} + NormSetGrttEstimate(sessionHandle:NormSessionHandle, grttEstimate:double) : void
+    {static} + NormGetGrttEstimate(sessionHandle:NormSessionHandle) : double
+    {static} + NormSetGrttMax(sessionHandle:NormSessionHandle, grttMax:double) : void
+    {static} + NormSetGrttProbingMode(sessionHandle:NormSessionHandle, probingMode:NormProbingMode) : void 'TODO:NormProbingMode'
+    {static} + NormSetGrttProbingInterval(sessionHandle:NormSessionHandle, intervalMin:double, intervalMax:double) : void
+    {static} + NormSetGrttProbingTOS(sessionHandle:NormSessionHandle, probeTOS:byte) : void 'TODO:marshalling'
+    {static} + NormSetBackoffFactor(sessionHandle:NormSessionHandle, backoffFactor:double) : void
+    {static} + NormSetGroupSize(sessionHandle:NormSessionHandle, groupSize:uint) : void 'TODO:marshalling'
+    {static} + NormSetTxRobustFactor(sessionHandle:NormSessionHandle, robustFactor:int) : void
+    {static} + NormFileEnqueue(sessionHandle:NormSessionHandle, fileName:char, infoPtr:char, infoLen:uint): NormObjectHandle 'TODO'
+    {static} + NormDataEnqueue(sessionHandle:NormSessionHandle, dataPtr:char, dataLen:uint, infoPtr:char, infoLen:uint) : NormObjectHandle 'TODO'
+    {static} + NormRequeueObject(sessionHandle:NormSessionHandle, objectHandle:NormObjectHandle) : bool
+    {static} + NormStreamOpen(sessionHandle:NormSessionHandle, bufferSize:uint, infoPtr:char, infoLen:uint) : NormObjectHandle 'TODO'
+    {static} + NormObjectSetUserData(objectHandle:NormObjectHandle, userData:nuint) : void 'TODO'
+    {static} + NormObjectGetUserData(objectHandle:NormObjectHandle) : nuint 'TODO'
+    {static} + NormStreamClose(streamHandle:NormObjectHandle, graceful:bool)  void 'TODO'
+    {static} + NormGetStreamBufferSegmentCount(bufferBytes:uint, segmentSize:ushort, blockSize:ushort) : uint 'TODO'
+    {static} + NormStreamWrite(streamHandle:NormObjectHandle, buffer:char, numBytes:uint) : uint 'TODO'
+    {static} + NormStreamFlush(streamHandle:NormObjectHandle, eom:bool, flushMode:NormFlushMode) : void 'TODO'
+    {static} + NormStreamSetAutoFlush(streamHandle:NormObjectHandle, flushMode: NormFlushMode) : void
+    {static} + NormStreamSetPushEnable(streamHandle:NormObjectHandle, pushEnable:bool) : void
+    {static} + NormStreamHasVacancy(streamHandle:NormObjectHandle) : bool
 }
 @enduml
