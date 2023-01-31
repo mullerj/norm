@@ -87,6 +87,13 @@ enum NormEventType
     NORM_SEND_ERROR
     NORM_USER_TIMEOUT
 }
+struct NormEvent
+{
+    type:NormEventType
+    session:NormSessionHande
+    sender:NormNodeHandle
+    object:NormObjectHandle
+}
 class NormApi
 {
     {static} + NormGetVersion(major:int*, minor:int*, patch:int*) : int
