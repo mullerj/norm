@@ -90,13 +90,14 @@ enum NormEventType
 struct NormEvent
 {
     type:NormEventType
-    session:NormSessionHande
+    session:NormSessionHandle
     sender:NormNodeHandle
     object:NormObjectHandle
 }
 class NormApi
 {
     {static} + NormGetVersion(major:int*, minor:int*, patch:int*) : int
+    {static} + NormCreateInstance() : NormInstanceHandle
     {static} + NormCreateInstance(priorityBoost:bool) : NormInstanceHandle
     {static} + NormDestroyInstance(instanceHandle:NormInstanceHandle) : void
     {static} + NormStopInstance(instanceHandle:NormInstanceHandle) : void
@@ -104,6 +105,7 @@ class NormApi
     {static} + NormSuspendInstance(instanceHandle:NormInstanceHandle) : bool
     {static} + NormResumeInstance(instanceHandle:NormInstanceHandle) : void
     {static} + NormSetCacheDirectory(instanceHandle:NormInstanceHandle, cachePath:const char*) : bool
+    {static} + NormGetNextEvent(instanceHandle:NormInstanceHandle, theEvent:NormEvent*) : bool 
     {static} + NormGetNextEvent(instanceHandle:NormInstanceHandle, theEvent:NormEvent*, waitForEvent:bool) : bool 
     {static} + NormGetDescriptor(instanceHandle:NormInstanceHandle) : NormDescriptor 
     {static} + NormCreateSession(instanceHandle:NorminstanceHandle, sessionAddress:const char*, sessionPort:UINT16, localNodeId:NormNodeId) : NormSessionHandle 
@@ -115,19 +117,25 @@ class NormApi
     {static} + NormSetUserTimer(sessionHandle:NormSessionHandle, seconds:double) : void
     {static} + NormCancelUserTimer(sessionHandle:NormSessionHandle) : void
     {static} + NormGetLocalNodeId(sessionHandle:NormSessionHandle) : NormNodeId
+    {static} + NormGetAddress(sessionHandle:NormSessionHandle, addrBuffer:char*, bufferLen:unsigned int*)  : bool
     {static} + NormGetAddress(sessionHandle:NormSessionHandle, addrBuffer:char*, bufferLen:unsigned int*, port:UINT16*)  : bool
     {static} + NormGetRxPort(sessionHandle:NormSessionHandle) : UINT16
-    {static} + NormSetTxPort(sessionHandle:NormSessionHandle, txPortNumber:UINT16, enableReuse:bool, txBindAddress:const char*) :bool 
+    {static} + NormSetTxPort(sessionHandle:NormSessionHandle, txPortNumber:UINT16) : bool
+    {static} + NormSetTxPort(sessionHandle:NormSessionHandle, txPortNumber:UINT16, enableReuse:bool, txBindAddress:const char*) : bool 
     {static} + NormGetTxPort(sessionHandle:NormSessionHandle) : UINT16
+    {static} + NormSetTxOnly(sessionHandle:NormSessionHandle, txOnly:bool) : void 
     {static} + NormSetTxOnly(sessionHandle:NormSessionHandle, txOnly:bool, connectToSessionAddress:bool) : void 
     {static} + NormLimitObjectInfo(sessionHandle:NormSessionHandle, state:bool) : void
     {static} + NormPresetObjectInfo(sessionHandle:NormSessionHandle, objectSize:unsigned long, segmentSize:UINT16, numData:UINT16, numParity:UINT16) : bool 
     {static} + NormSetId(sessionHandle:NormSessionHandle, normId:NormNodeId) : void
+    {static} + NormChangeDestination(sessionHandle:NormSessionHandle, sessionAddress:const char*, sessionPort:UINT16) :bool
     {static} + NormChangeDestination(sessionHandle:NormSessionHandle, sessionAddress:const char*, sessionPort:UINT16, connectToSessionAddress:bool) : bool 
     {static} + NormSetServerListner(sessionHandle:NormSessionHandle, state:bool) : void
     {static} + NormTransferSender(sessionHandle:NormSessionHandle, sender:NormNodeHandle) : bool 
+    {static} + NormSetRxPortReuse(sessionHandle:NormSessionHandle, enableReuse:bool) : void
     {static} + NormSetRxPortReuse(sessionHandle:NormSessionHandle, enableReuse:bool, rxBindAddress:const char*, senderAddress:const char*, senderPort:UINT16) : void 
     {static} + NormGetRxBindAddress(sessionHandle:NormSessionHandle, addr:char*, addrLen:unsigned int&, port:UINT16&) : bool 
+    {static} + NormSetEcnSupport(sessionHandle:NormSessionHandle, ecnEnable:bool) : void
     {static} + NormSetEcnSupport(sessionHandle:NormSessionHandle, ecnEnable:bool, ignoreLoss:bool, tolerateLoss:bool) : void 
     {static} + NormSetMulticastInterface(sessionHandle:NormSessionHandle, interfaceName:const char*) : bool 
     {static} + NormSetSSM(sessionHandle:NormSessionHandle, sourceAddress:const char*) : bool 
@@ -148,12 +156,14 @@ class NormApi
     {static} + NormSetReportInterval(sessionHandle:NormSessionHandle, interval:double) : void
     {static} + NormGetReportInterval(sessionHandle:NormSessionHandle) : double
     {static} + NormGetRandomSessionId() : NormSessionId 
-    {static} + NormStartSender(sessionHandle:NormSessionHande, instanceId:NormSessionId, bufferSpace:UINT32, segmentSize:UINT16, numData:UINT16, numParity:UINT16, fecId:UINT8) : bool 
+    {static} + NormStartSender(sessionHandle:NormSessionHandle, instanceId:NormSessionId, bufferSpace:UINT32, segmentSize:UINT16, numData:UINT16, numParity:UINT16) : bool
+    {static} + NormStartSender(sessionHandle:NormSessionHandle, instanceId:NormSessionId, bufferSpace:UINT32, segmentSize:UINT16, numData:UINT16, numParity:UINT16, fecId:UINT8) : bool 
     {static} + NormStopSender(sessionHandle:NormSessionHandle) : void
     {static} + NormSetTxRate(sessionHandle:NormSessionHandle, bitsPerSecond:double) : void
     {static} + NormGetTxRate(sessionHandle:NormSessionHandle): double
     {static} + NormSetTxSocketBuffer(sessionHandle:NormSessionHandle, bufferSize:unsigned int) : bool 
     {static} + NormSetFlowControl(sessionHandle:NormSessionHandle, flowControlFactor:double) : void
+    {static} + NormSetCongestionControl(sessionHandle:NormSessionHandle, enable:bool) : void 
     {static} + NormSetCongestionControl(sessionHandle:NormSessionHandle, enable:bool, adjustRate:bool) : void 
     {static} + NormSetTxRateBounds(sessionHandle:NormSessionHandle, rateMin:double, rateMax:double) : void
     {static} + NormSetTxCacheBounds(sessionHandle:NormSessionHandle, sizeMax:NormSize, countMin:UINT32, countMax:UINT32) : void 
@@ -167,22 +177,29 @@ class NormApi
     {static} + NormSetBackoffFactor(sessionHandle:NormSessionHandle, backoffFactor:double) : void
     {static} + NormSetGroupSize(sessionHandle:NormSessionHandle, groupSize:unsigned int) : void 
     {static} + NormSetTxRobustFactor(sessionHandle:NormSessionHandle, robustFactor:int) : void
+    {static} + NormFileEnqueue(sessionHandle:NormSessionHandle, fileName:const char*): NormObjectHandle
     {static} + NormFileEnqueue(sessionHandle:NormSessionHandle, fileName:const char*, infoPtr:const char*, infoLen:unsigned int): NormObjectHandle 
+    {static} + NormDataEnqueue(sessionHandle:NormSessionHandle, dataPtr:const char*, dataLen:UINT32) : NormObjectHandle
     {static} + NormDataEnqueue(sessionHandle:NormSessionHandle, dataPtr:const char*, dataLen:UINT32, infoPtr:const char*, infoLen:unsigned int) : NormObjectHandle 
     {static} + NormRequeueObject(sessionHandle:NormSessionHandle, objectHandle:NormObjectHandle) : bool
+    {static} + NormStreamOpen(sessionHandle:NormSessionHandle, bufferSize:UINT32) : NormObjectHandle 
     {static} + NormStreamOpen(sessionHandle:NormSessionHandle, bufferSize:UINT32, infoPtr:const char*, infoLen:unsigned int) : NormObjectHandle 
     {static} + NormObjectSetUserData(objectHandle:NormObjectHandle, userData:const void*) : void 
     {static} + NormObjectGetUserData(objectHandle:NormObjectHandle) : const void*
+    {static} + NormStreamClose(streamHandle:NormObjectHandle)  void 
     {static} + NormStreamClose(streamHandle:NormObjectHandle, graceful:bool)  void 
     {static} + NormGetStreamBufferSegmentCount(bufferBytes:unsigned int, segmentSize:UINT16, blockSize:UINT16) : unsigned int
     {static} + NormStreamWrite(streamHandle:NormObjectHandle, buffer:const char*, numBytes:unsigned int) : unsigned int
+    {static} + NormStreamFlush(streamHandle:NormObjectHandle) : void 
     {static} + NormStreamFlush(streamHandle:NormObjectHandle, eom:bool, flushMode:NormFlushMode) : void 
     {static} + NormStreamSetAutoFlush(streamHandle:NormObjectHandle, flushMode: NormFlushMode) : void
     {static} + NormStreamSetPushEnable(streamHandle:NormObjectHandle, pushEnable:bool) : void
     {static} + NormStreamHasVacancy(streamHandle:NormObjectHandle) : bool
     {static} + NormStreamGetVacancy(streamHandle:NormObjectHandle, bytesWanted:unsigned int) : unsigned int
     {static} + NormStreamMarkEom(streamHandle:NormObjectHandle) : void
+    {static} + NormSetWatermark(sessionHandle:NormSessionHandle, objectHandle:NormObjectHandle) : bool
     {static} + NormSetWatermark(sessionHandle:NormSessionHandle, objectHandle:NormObjectHandle, overrideFlush:bool) : bool
+    {static} + NormSetWatermarkEx(sessionHandle:NormSessionHandle, objectHandle:NormObjectHandle, buffer:const char*, numBytes:unsigned int) : bool
     {static} + NormSetWatermarkEx(sessionHandle:NormSessionHandle, objectHandle:NormObjectHandle, buffer:const char*, numBytes:unsigned int, overrideFlush:bool) : bool
     {static} + NormResetWatermark(sessionHandle:NormSessionHandle) : bool
     {static} + NormCancelWatermark(sessionHandle:NormSessionHandle) : void
@@ -190,9 +207,12 @@ class NormApi
     {static} + NormRemoveAckingNode(sessionHandle:NormSessionHandle, nodeId:NormNodeId) : void
     {static} + NormGetAckingNodeHandle(sessionHandle:NormSessionHandle, nodeId:NormNodeId) : NormNodeHandle
     {static} + NormSetAutoAckingNodes(sessionHandle:NormSessionHandle, trackingStatus:NormTrackingStatus) : void
+    {static} + NormGetAckingStatus(sessionHandle:NormSessionHandle) : NormAckingStatus
     {static} + NormGetAckingStatus(sessionHandle:NormSessionHandle, nodeId:NormNodeId) : NormAckingStatus
+    {static} + NormGetNextAckingNode(sessionHandle:NormSessionHandle, nodeId:NormNodeId*) : bool
     {static} + NormGetNextAckingNode(sessionHandle:NormSessionHandle, nodeId:NormNodeId*, ackingStatus:NormAckingStatus*) : bool
     {static} + NormGetAckEx(sessionHandle:NormSessionHandle, nodeId:NormNodeId, buffer:char*, buflen:unsigned int*) : bool
+    {static} + NormSendCommand(sessionHandle:NormSessionHandle, cmdBuffer:const char*, cmdLength:unsigned int) : bool
     {static} + NormSendCommand(sessionHandle:NormSessionHandle, cmdBuffer:const char*, cmdLength:unsigned int, robust:bool) : bool
     {static} + NormCancelCommand(sessionHandle:NormSessionHandle) : void
     {static} + NormSetSynStatus(sessionHandle:NormSessionHandle, state:bool) : void
@@ -200,6 +220,7 @@ class NormApi
     {static} + NormStopReceiver(sessionHandle:NormSessionHandle) : void
     {static} + NormSetRxCacheLimit(sessionHandle:NormSessionHandle, countMax:unsigned short) : void
     {static} + NormSetRxSocketBuffer(sessionHandle:NormSessionHandle, bufferSize:unsigned int) : bool
+    {static} + NormSetSilentReceiver(sessionHandle:NormSessionHandle, silent:bool) : void
     {static} + NormSetSilentReceiver(sessionHandle:NormSessionHandle, silent:bool, maxDelay:int) : void
     {static} + NormSetDefaultUnicastNack(sessionHandle:NormSessionHandle, unicastNacks:bool) : void
     {static} + NormNodeSetUnicastNack(remoteSender:NormNodeHandle, unicastNacks:bool) : void
@@ -211,6 +232,7 @@ class NormApi
     {static} + NormNodeSetRepairBoundary(remoteSender:NormNodeHandle, repairBoundary:NormRepairBoundary) : void
     {static} + NormSetDefaultRxRobustFactor(sessionHandle:NormSessionHandle, robustFactor:int) : void
     {static} + NormNodeSetRxRobustFactor(remoteSenderremoteSender, robustFactor:int) : void
+    {static} + NormPreallocateRemoteSender(sessionHandle:NormSessionHandle, bufferSize:unsigned long, segmentSize:UINT16, numData:UINT16, numParity:UINT16) : bool
     {static} + NormPreallocateRemoteSender(sessionHandle:NormSessionHandle, bufferSize:unsigned long, segmentSize:UINT16, numData:UINT16, numParity:UINT16, streamBufferSize:unsigned int) : bool
     {static} + NormStreamRead(streamHandle:NormObjectHandle, buffer:char*, numBytes:unsigned int*) : bool
     {static} + NormStreamSeekMsgStart(streamHandle:NormObjectHandle) : bool
@@ -233,6 +255,7 @@ class NormApi
     {static} + NormFree(dataPtr:char*) : void
     {static} + NormObjectGetSender(objectHandle:NormObjectHandle) : NormNodeHandle
     {static} + NormNodeGetId(nodeHandle:NormNodeHandle) : NormNodeId
+    {static} + NormNodeGetAddress(nodeHandle:NormNodeHandle, addrBuffer:char*, bufferLen: unsigned int*) : bool
     {static} + NormNodeGetAddress(nodeHandle:NormNodeHandle, addrBuffer:char*, bufferLen: unsigned int*, port:UINT16*) : bool
     {static} + NormNodeSetUserData(nodeHandle:NormNodeHandle, userData:const void*) : void
     {static} + NormNodeGetUserData(nodeHandle:NormNodeHandle) : const void*
