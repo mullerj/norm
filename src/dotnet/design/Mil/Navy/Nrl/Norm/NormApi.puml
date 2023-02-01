@@ -97,26 +97,26 @@ struct NormEvent
 class NormApi
 {
     {static} + NormGetVersion(major:int*, minor:int*, patch:int*) : int
-    {static} + NormCreateInstance() : NormInstanceHandle
-    {static} + NormCreateInstance(priorityBoost:bool) : NormInstanceHandle
-    {static} + NormDestroyInstance(instanceHandle:NormInstanceHandle) : void
-    {static} + NormStopInstance(instanceHandle:NormInstanceHandle) : void
-    {static} + NormRestartInstance(instanceHandle:NormInstanceHandle) : bool
-    {static} + NormSuspendInstance(instanceHandle:NormInstanceHandle) : bool
-    {static} + NormResumeInstance(instanceHandle:NormInstanceHandle) : void
-    {static} + NormSetCacheDirectory(instanceHandle:NormInstanceHandle, cachePath:in string) : bool
-    {static} + NormGetNextEvent(instanceHandle:NormInstanceHandle, theEvent:ref NormEvent) : bool 
-    {static} + NormGetNextEvent(instanceHandle:NormInstanceHandle, theEvent:ref NormEvent, waitForEvent:bool) : bool 
-    {static} + NormGetDescriptor(instanceHandle:NormInstanceHandle) : NormDescriptor 
-    {static} + NormCreateSession(instanceHandle:NorminstanceHandle, sessionAddress:in string, sessionPort:ushort, localNodeId:NormNodeId) : in nuint 
+    {static} + NormCreateInstance() : nuint
+    {static} + NormCreateInstance(priorityBoost:bool) : nuint
+    {static} + NormDestroyInstance(instanceHandle: in nuint) : void
+    {static} + NormStopInstance(instanceHandle: in nuint) : void
+    {static} + NormRestartInstance(instanceHandle: in nuint) : bool
+    {static} + NormSuspendInstance(instanceHandle: in nuint) : bool
+    {static} + NormResumeInstance(instanceHandle: in nuint) : void
+    {static} + NormSetCacheDirectory(instanceHandle: in nuint, cachePath:in string) : bool
+    {static} + NormGetNextEvent(instanceHandle: in nuint, theEvent:ref NormEvent) : bool 
+    {static} + NormGetNextEvent(instanceHandle: in nuint, theEvent:ref NormEvent, waitForEvent:bool) : bool 
+    {static} + NormGetDescriptor(instanceHandle: in nuint) : NormDescriptor 
+    {static} + NormCreateSession(instanceHandle: in nuint, sessionAddress:in string, sessionPort:ushort, localNodeId:uint) : in nuint 
     {static} + NormDestroySession(sessionHandle:in nuint) : void 
-    {static} + NormGetInstance(sessionHandle:in nuint) : NormInstanceHandle 
+    {static} + NormGetInstance(sessionHandle:in nuint) : nuint
     {static} + NormIsUnicastAddress(address:in string) : bool
     {static} + NormSetUserData(sessionHandle:in nuint, userData:in nuint) : void
     {static} + NormGetUserData(sessionHandle:in nuint) : in nuint
     {static} + NormSetUserTimer(sessionHandle:in nuint, seconds:double) : void
     {static} + NormCancelUserTimer(sessionHandle:in nuint) : void
-    {static} + NormGetLocalNodeId(sessionHandle:in nuint) : NormNodeId
+    {static} + NormGetLocalNodeId(sessionHandle:in nuint) : uint
     {static} + NormGetAddress(sessionHandle:in nuint, addrBuffer:string, bufferLen:ref uint)  : bool
     {static} + NormGetAddress(sessionHandle:in nuint, addrBuffer:string, bufferLen:ref uint, port:ref ushort)  : bool
     {static} + NormGetRxPort(sessionHandle:in nuint) : ushort
@@ -127,7 +127,7 @@ class NormApi
     {static} + NormSetTxOnly(sessionHandle:in nuint, txOnly:bool, connectToSessionAddress:bool) : void 
     {static} + NormLimitObjectInfo(sessionHandle:in nuint, state:bool) : void
     {static} + NormPresetObjectInfo(sessionHandle:in nuint, objectSize:ulong, segmentSize:ushort, numData:ushort, numParity:ushort) : bool 
-    {static} + NormSetId(sessionHandle:in nuint, normId:NormNodeId) : void
+    {static} + NormSetId(sessionHandle:in nuint, normId:uint) : void
     {static} + NormChangeDestination(sessionHandle:in nuint, sessionAddress:in string, sessionPort:ushort) :bool
     {static} + NormChangeDestination(sessionHandle:in nuint, sessionAddress:in string, sessionPort:ushort, connectToSessionAddress:bool) : bool 
     {static} + NormSetServerListner(sessionHandle:in nuint, state:bool) : void
@@ -147,10 +147,10 @@ class NormApi
     {static} + NormSetMessageTrace(sessionHandle:in nuint, state:bool) : void
     {static} + NormSetTxLoss(sessionHandle:in nuint, precent:double) : void
     {static} + NormSetRxLoss(sessionHandle:in nuint, precent:double) : void
-    {static} + NormOpenDebugLog(instanceHandle:NormInstanceHandle, path:in string) : bool 
-    {static} + NormCloseDebugLog(instanceHandle:NormInstanceHandle) : void
-    {static} + NormOpenDebugPipe(instanceHandle:NormInstanceHandle, pipeName:in string) : bool 
-    {static} + NormCloseDebugPipe(instanceHandle:NormInstanceHandle) : void
+    {static} + NormOpenDebugLog(instanceHandle: in nuint, path:in string) : bool 
+    {static} + NormCloseDebugLog(instanceHandle: in nuint) : void
+    {static} + NormOpenDebugPipe(instanceHandle: in nuint, pipeName:in string) : bool 
+    {static} + NormCloseDebugPipe(instanceHandle: in nuint) : void
     {static} + NormSetDebugLevel(level:uint) : void 
     {static} + NormGetDebugLevel() : uint
     {static} + NormSetReportInterval(sessionHandle:in nuint, interval:double) : void
@@ -203,15 +203,15 @@ class NormApi
     {static} + NormSetWatermarkEx(sessionHandle:in nuint, objectHandle:in nuint, buffer:in string, numBytes:uint, overrideFlush:bool) : bool
     {static} + NormResetWatermark(sessionHandle:in nuint) : bool
     {static} + NormCancelWatermark(sessionHandle:in nuint) : void
-    {static} + NormAddAckingNode(sessionHandle:in nuint, nodeId:NormNodeId) : bool
-    {static} + NormRemoveAckingNode(sessionHandle:in nuint, nodeId:NormNodeId) : void
-    {static} + NormGetAckingNodeHandle(sessionHandle:in nuint, nodeId:NormNodeId) : in nuint
+    {static} + NormAddAckingNode(sessionHandle:in nuint, nodeId:uint) : bool
+    {static} + NormRemoveAckingNode(sessionHandle:in nuint, nodeId:uint) : void
+    {static} + NormGetAckingNodeHandle(sessionHandle:in nuint, nodeId:uint) : in nuint
     {static} + NormSetAutoAckingNodes(sessionHandle:in nuint, trackingStatus:NormTrackingStatus) : void
     {static} + NormGetAckingStatus(sessionHandle:in nuint) : NormAckingStatus
-    {static} + NormGetAckingStatus(sessionHandle:in nuint, nodeId:NormNodeId) : NormAckingStatus
-    {static} + NormGetNextAckingNode(sessionHandle:in nuint, nodeId:ref NormNodeId) : bool
-    {static} + NormGetNextAckingNode(sessionHandle:in nuint, nodeId:ref NormNodeId, ackingStatus:ref NormAckingStatus) : bool
-    {static} + NormGetAckEx(sessionHandle:in nuint, nodeId:NormNodeId, buffer:string, buflen:ref uint) : bool
+    {static} + NormGetAckingStatus(sessionHandle:in nuint, nodeId:uint) : NormAckingStatus
+    {static} + NormGetNextAckingNode(sessionHandle:in nuint, nodeId:ref uint) : bool
+    {static} + NormGetNextAckingNode(sessionHandle:in nuint, nodeId:ref uint, ackingStatus:ref NormAckingStatus) : bool
+    {static} + NormGetAckEx(sessionHandle:in nuint, nodeId:uint, buffer:string, buflen:ref uint) : bool
     {static} + NormSendCommand(sessionHandle:in nuint, cmdBuffer:in string, cmdLength:uint) : bool
     {static} + NormSendCommand(sessionHandle:in nuint, cmdBuffer:in string, cmdLength:uint, robust:bool) : bool
     {static} + NormCancelCommand(sessionHandle:in nuint) : void
@@ -254,7 +254,7 @@ class NormApi
     {static} + NormAlloc(numBytes:nuint) : string
     {static} + NormFree(dataPtr:string) : void
     {static} + NormObjectGetSender(objectHandle:in nuint) : in nuint
-    {static} + NormNodeGetId(nodeHandle:in nuint) : NormNodeId
+    {static} + NormNodeGetId(nodeHandle:in nuint) : uint
     {static} + NormNodeGetAddress(nodeHandle:in nuint, addrBuffer:string, bufferLen: ref uint) : bool
     {static} + NormNodeGetAddress(nodeHandle:in nuint, addrBuffer:string, bufferLen: ref uint, port:ref ushort) : bool
     {static} + NormNodeSetUserData(nodeHandle:in nuint, userData:in nuint) : void
@@ -267,10 +267,10 @@ class NormApi
     {static} + NormNodeDelete(remoteSender:in nuint) : void
     {static} + NormNodeRetain(nodeHandle:in nuint) : void
     {static} + NormNodeRelease(nodeHandle:in nuint) : void
-    {static} + NormReleasePreviousEvent(instanceHandle:NormInstanceHandle) : void
+    {static} + NormReleasePreviousEvent(instanceHandle: in nuint) : void
     {static} + NormCountCompletedObjects(sessionHandle:in nuint) : uint
     {static} + NormNodeSetAutoDelete(remoteSender:in nuint, autoDelete:bool) : void
-    {static} + NormNodeAllowSender(senderId:NormNodeId) : bool
-    {static} + NormNodeDenySender(senderId:NormNodeId) : bool
+    {static} + NormNodeAllowSender(senderId:uint) : bool
+    {static} + NormNodeDenySender(senderId:uint) : bool
 }
 @enduml
