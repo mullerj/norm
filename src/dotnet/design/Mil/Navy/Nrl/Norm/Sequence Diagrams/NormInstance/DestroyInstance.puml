@@ -1,0 +1,4 @@
+@startuml
+Client -> NormInstance : DestroyInstance()
+NormInstance -> NormApi : NormDestroyInstance(_handle)
+@enduml

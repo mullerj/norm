@@ -1,0 +1,4 @@
+@startuml
+Client -> NormInstance : new()
+NormInstance -> NormInstance : CreateInstance(false)
+@enduml

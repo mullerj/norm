@@ -1,0 +1,4 @@
+@startuml
+Client -> NormInstance : CloseDebugLog()
+NormInstance -> NormApi : NormCloseDebugLog(_handle)
+@enduml

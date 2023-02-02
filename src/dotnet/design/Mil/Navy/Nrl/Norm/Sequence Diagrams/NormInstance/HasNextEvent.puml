@@ -1,0 +1,14 @@
+@startuml
+Client -> NormInstance : HasNextEvent(sec, usec)
+NormInstance -> NormApi : NormGetDescriptor(_handle)
+NormInstance <- NormApi : descriptor
+NormInstance -> TimeSpan : new(0, 0, 0, sec, usec)
+NormInstance <- TimeSpan : timeout
+NormInstance -> RuntimeInformation : IsOsPlatform(OSPlatform.Windows)
+NormInstance <- RuntimeInformation : isWindows
+alt isWindows == True
+    
+else is Windows == False
+    
+end
+@enduml

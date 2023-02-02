@@ -1,0 +1,10 @@
+@startuml
+Client -> NormInstance : GetNextEvent()
+NormInstance -> NormApi : NormGetNextEvent(_handle, theEvent)
+NormInstance <- NormApi : success
+alt success == True
+Client <- NormInstance: theEvent
+else success == False
+NormInstance -> IOException: throw new ("Failed to get next event")
+end
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+Client -> NormInstance : CreateSession(address, port, localNodeId)
+NormInstance -> NormApi : NormCreateSession(_handle, address, port, localNodeId)
+NormInstance <- NormApi : session
+alt session == NORM_SESSION_INVALID
+    NormInstance -> IOException : throw new("Failed to create session")
+else
+    Client <- NormInstance : session
+end
+@enduml
