@@ -1,99 +1,4 @@
 @startuml 
-enum NormObjectType
-{
-    NORM_OBJECT_NONE
-    NORM_OBJECT_DATA
-    NORM_OBJECT_FILE
-    NORM_OBJECT_STREAM
-}
-enum NormFlushMode
-{
-    NORM_FLUSH_NONE
-    NORM_FLUSH_PASSIVE
-    NORM_FLUSH_ACTIVE
-}
-enum NormNackingMode
-{
-    NORM_NACK_NONE
-    NORM_NACK_INFO_ONLY
-    NORM_NACK_NORMAL
-}
-enum NormNackingMode
-{
-    NORM_NACK_NONE
-    NORM_NACK_INFO_ONLY
-    NORM_NACK_NORMAL
-}
-enum NormAckingStatus
-{
-    NORM_ACK_INVALID
-    NORM_ACK_FAILURE
-    NORM_ACK_PENDING
-    NORM_ACK_SUCCESS
-}
-enum NormTrackingStatus
-{
-    NORM_TRACK_NONE
-    NORM_TRACK_RECEIVERS
-    NORM_TRACK_SENDERS
-    NORM_TRACK_ALL
-}
-enum NormProbingMode
-{
-    NORM_PROBE_NONE
-    NORM_PROBE_PASSIVE
-    NORM_PROBE_ACTIVE
-}
-enum NormSyncPolicy
-{
-    NORM_SYNC_CURRENT
-    NORM_SYNC_STREAM
-    NORM_SYNC_ALL
-}
-enum NormRepairBoundary
-{
-    NORM_BOUNDARY_BLOCK
-    NORM_BOUNDARY_OBJECT
-}
-enum NormEventType
-{
-    NORM_EVENT_INVALID = 0
-    NORM_TX_QUEUE_VACANCY
-    NORM_TX_QUEUE_EMPTY
-    NORM_TX_FLUSH_COMPLETED
-    NORM_TX_WATERMARK_COMPLETED
-    NORM_TX_CMD_SENT
-    NORM_TX_OBJECT_SENT
-    NORM_TX_OBJECT_PURGED
-    NORM_TX_RATE_CHANGED
-    NORM_LOCAL_SENDER_CLOSED
-    NORM_REMOTE_SENDER_NEW
-    NORM_REMOTE_SENDER_RESET
-    NORM_REMOTE_SENDER_ADDRESS
-    NORM_REMOTE_SENDER_ACTIVE
-    NORM_REMOTE_SENDER_INACTIVE
-    NORM_REMOTE_SENDER_PURGED
-    NORM_RX_CMD_NEW
-    NORM_RX_OBJECT_NEW
-    NORM_RX_OBJECT_INFO
-    NORM_RX_OBJECT_UPDATED
-    NORM_RX_OBJECT_COMPLETED
-    NORM_RX_OBJECT_ABORTED
-    NORM_RX_ACK_REQUEST
-    NORM_GRTT_UPDATED
-    NORM_CC_ACTIVE
-    NORM_CC_INACTIVE
-    NORM_ACKING_NODE_NEW
-    NORM_SEND_ERROR
-    NORM_USER_TIMEOUT
-}
-struct NormEvent
-{
-    type:NormEventType
-    session:nuint
-    sender:nuint
-    object:nuint
-}
 class NormApi
 {
     + {static} NormGetVersion(major:int, minor:int, patch:int) : int
@@ -106,7 +11,7 @@ class NormApi
     + {static} NormResumeInstance(instanceHandle:nuint) : void
     + {static} NormSetCacheDirectory(instanceHandle:nuint, cachePath:string) : bool
     + {static} NormGetNextEvent(instanceHandle:nuint, theEvent:NormEvent) : bool 
-    + {static} NoGetNextEvent(instanceHandle:nuint, theEvent:NormEvent, waitForEvent:bool) : bool 
+    + {static} NormGetNextEvent(instanceHandle:nuint, theEvent:NormEvent, waitForEvent:bool) : bool 
     + {static} NormGetDescriptor(instanceHandle:nuint) : NormDescriptor 
     + {static} NormCreateSession(instanceHandle:nuint, sessionAddress:string, sessionPort:ushort, localNodeId:uint) : nuint 
     + {static} NormDestroySession(sessionHandle:nuint) : void 
