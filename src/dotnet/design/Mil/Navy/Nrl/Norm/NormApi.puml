@@ -1,11 +1,4 @@
 @startuml 
-struct NormEvent
-{
-    type:NormEventType
-    session:nuint
-    sender:nuint
-    object:nuint
-}
 class NormApi
 {
     + {static} NormGetVersion(major:int, minor:int, patch:int) : int
