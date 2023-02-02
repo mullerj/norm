@@ -11,7 +11,7 @@ class NormApi
     + {static} NormResumeInstance(instanceHandle:nuint) : void
     + {static} NormSetCacheDirectory(instanceHandle:nuint, cachePath:string) : bool
     + {static} NormGetNextEvent(instanceHandle:nuint, theEvent:NormEvent) : bool 
-    + {static} NoGetNextEvent(instanceHandle:nuint, theEvent:NormEvent, waitForEvent:bool) : bool 
+    + {static} NormGetNextEvent(instanceHandle:nuint, theEvent:NormEvent, waitForEvent:bool) : bool 
     + {static} NormGetDescriptor(instanceHandle:nuint) : NormDescriptor 
     + {static} NormCreateSession(instanceHandle:nuint, sessionAddress:string, sessionPort:ushort, localNodeId:uint) : nuint 
     + {static} NormDestroySession(sessionHandle:nuint) : void 
