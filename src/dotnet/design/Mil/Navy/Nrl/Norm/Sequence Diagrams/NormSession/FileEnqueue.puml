@@ -1,0 +1,8 @@
+@startuml
+Client -> NormSession : FileEnqueue(filename)
+NormSession -> Encoding.ASCII : GetBytes(filename)
+NormSession <- Encoding.ASCII : info
+NormSession -> NormSession : fileEnqueue(filename, info, 0, info.Length)
+NormSession <- NormSession : normFile
+Client <- NormSession : normFile
+@enduml

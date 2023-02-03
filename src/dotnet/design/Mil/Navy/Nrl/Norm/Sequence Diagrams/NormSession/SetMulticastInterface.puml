@@ -1,0 +1,8 @@
+@startuml
+Client -> NormSession : SetMulticastInterface(interfaceName)
+NormSession -> NormApi : NormSetMulticastInterface(_handle, interfaceName)
+NormSession <- NormApi : success
+alt success == False
+    NormSession -> IOException : throw new("Failed to set multicast interface")
+end
+@enduml

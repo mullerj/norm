@@ -1,0 +1,4 @@
+@startuml  
+NormSession -> NormSession : DestroySessionNative()
+NormSession -> NormApi : NormDestroySession(_handle)
+@enduml

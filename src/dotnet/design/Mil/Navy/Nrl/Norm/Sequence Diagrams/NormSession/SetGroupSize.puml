@@ -1,0 +1,4 @@
+@startuml
+Client -> NormSession : SetGroupSize(groupSize)
+NormSession -> NormApi : NormSetGroupSize(_handle, groupSize)
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+Client -> NormSession : SetFlowControl(flowControlFactor)
+NormSession -> NormApi : NormSetFlowControl(_handle, flowControlFactor)
+@enduml

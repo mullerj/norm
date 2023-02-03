@@ -1,0 +1,4 @@
+@startuml
+Client -> NormSession : SetGrttProbingInterval(intervalMin, intervalMax)
+NormSession -> NormApi : NormSetGrttProbingInterval(_handle, intervalMin, intervalMax)
+@enduml

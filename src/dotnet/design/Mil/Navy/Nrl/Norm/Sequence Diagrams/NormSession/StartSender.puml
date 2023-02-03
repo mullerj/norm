@@ -1,0 +1,8 @@
+@startuml
+Client -> NormSession:StartSender(sessionId, bufferSpace, segmentSize, blockSize, numParity)
+NormSession -> NormApi : NormStarterSender(_handle, sessionId, bufferSpace, segmentSize, blockSize, numParity)
+NormSession <- NormApi : success
+alt success == false
+    NormSession -> IOException : throw new("Failed to start sender")
+end
+@enduml

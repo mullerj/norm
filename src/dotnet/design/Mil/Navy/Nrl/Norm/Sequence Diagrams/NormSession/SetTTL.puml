@@ -1,0 +1,8 @@
+@startuml
+Client -> NormSession : SetTTL(ttl)
+NormSession -> NormApi : NormSetTTL(_handle, ttl)
+NormSession <- NormApi : success
+alt success == false
+    NormSession -> IOException : throw new("Failed to set TTL")
+end
+@enduml

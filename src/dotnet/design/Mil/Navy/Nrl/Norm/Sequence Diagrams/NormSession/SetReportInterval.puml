@@ -1,0 +1,4 @@
+@startuml
+Client -> NormSession : SetReportInterval(interval)
+NormSession -> NormApi : NormSetReportInterval(_handle, interval)
+@enduml

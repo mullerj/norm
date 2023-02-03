@@ -1,0 +1,4 @@
+@startuml
+Client -> NormSession : SetTxRateBounds(rateMin, rateMax)
+NormSession -> NormApi : NormSetTxRateBounds(_handle, rateMin, rateMax)
+@enduml

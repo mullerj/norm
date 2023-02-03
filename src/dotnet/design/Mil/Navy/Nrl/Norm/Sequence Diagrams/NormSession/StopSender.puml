@@ -1,0 +1,4 @@
+@startuml
+Client -> NormSession : StopSender()
+NormSession -> NormApi : NormStopSender(_handle)
+@enduml

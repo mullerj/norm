@@ -1,0 +1,8 @@
+@startuml 
+Client -> NormSession : SetTxPort(port, enableReuse, txAddress)
+NormSession -> NormApi : NormSetTxPort(_handle, port, enableReuse, txAddress)
+NormSession <- NormApi : success
+alt success == False
+    NormSession -> IOException : throw new("Invalid tx bind address")
+end
+@enduml

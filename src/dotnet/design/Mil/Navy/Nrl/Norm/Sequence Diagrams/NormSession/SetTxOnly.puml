@@ -1,0 +1,4 @@
+@startuml
+Client -> NormSession: SetTxOnly(txOnly)
+NormSession -> NormApi: NormSetTxOnly(_handle, txOnly)
+@enduml

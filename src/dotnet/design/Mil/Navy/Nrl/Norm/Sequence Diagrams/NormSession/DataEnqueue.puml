@@ -1,0 +1,3 @@
+@startuml
+Client -> NormSession : DataEnqueue(dataBuffer, dataOffset, dataLength)
+@enduml

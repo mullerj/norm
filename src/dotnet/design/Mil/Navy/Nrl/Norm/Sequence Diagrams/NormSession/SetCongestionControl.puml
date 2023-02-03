@@ -1,0 +1,4 @@
+@startuml
+Client -> NormSession : SetCongestionControl(enable)
+NormSession -> NormSession : SetCongestionControl(enable, True)
+@enduml

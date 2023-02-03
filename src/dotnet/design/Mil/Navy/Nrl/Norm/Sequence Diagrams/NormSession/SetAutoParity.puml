@@ -1,0 +1,4 @@
+@startuml
+Client -> NormSession : SetAutoParity(autoParity)
+NormSession -> NormApi : NormSetAutoParity(_handle, autoParity)
+@enduml

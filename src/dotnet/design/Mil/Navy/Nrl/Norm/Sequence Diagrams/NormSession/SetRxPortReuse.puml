@@ -1,0 +1,4 @@
+@startuml
+Client -> NormSession : SetRxPortReuse(enable)
+NormSession -> NormSession : SetRxPortReuse(enable, NULL, NULL, 0)
+@enduml

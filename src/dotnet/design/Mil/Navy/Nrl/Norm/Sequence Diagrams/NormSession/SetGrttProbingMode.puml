@@ -1,0 +1,4 @@
+@startuml
+Client -> NormSession : SetGrttProbingMode(probingMode)
+NormSession -> NormApi : NormSetGrttProbingMode(_handle, probingMode)
+@enduml

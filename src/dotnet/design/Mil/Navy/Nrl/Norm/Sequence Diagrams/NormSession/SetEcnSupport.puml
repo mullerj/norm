@@ -1,0 +1,4 @@
+@startuml
+Client -> NormSession : SetEcnSupport(ecnEnable, ignoreLoss)
+NormSession -> NormSession : SetEcnSupport(ecnEnable, ignoreLoss, False)
+@enduml

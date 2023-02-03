@@ -1,0 +1,8 @@
+@startuml
+Client -> NormSession : SetTOS(tos)
+NormSession -> NormApi : NormSetTOS(_handle, tos)
+NormSession <- NormApi : success
+alt success == false
+    NormSession -> IOException : throw new("Failed to set TOS")
+end
+@enduml
