@@ -152,8 +152,6 @@ class NormApi
     + {static} NormFileRename(fileHandle:long, fileName:string) : bool
     + {static} NormDataAccessData(objectHandle:long) : string
     + {static} NormDataDetachData(objectHandle:long) : string
-    + {static} NormAlloc(numBytes:nuint) : string
-    + {static} NormFree(dataPtr:string) : void
     + {static} NormObjectGetSender(objectHandle:long) : long
     + {static} NormNodeGetId(nodeHandle:long) : uint
     + {static} NormNodeGetAddress(nodeHandle:long, addrBuffer:string, bufferLen: uint) : bool
