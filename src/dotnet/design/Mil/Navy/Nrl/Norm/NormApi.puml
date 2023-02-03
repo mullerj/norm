@@ -17,8 +17,6 @@ class NormApi
     + {static} NormDestroySession(sessionHandle:long) : void 
     + {static} NormGetInstance(sessionHandle:long) : long
     + {static} NormIsUnicastAddress(address:string) : bool
-    + {static} NormSetUserData(sessionHandle:long, userData:nuint) : void
-    + {static} NormGetUserData(sessionHandle:long) : nuint
     + {static} NormSetUserTimer(sessionHandle:long, seconds:double) : void
     + {static} NormCancelUserTimer(sessionHandle:long) : void
     + {static} NormGetLocalNodeId(sessionHandle:long) : long
@@ -89,8 +87,6 @@ class NormApi
     + {static} NormRequeueObject(sessionHandle:long, objectHandle:long) : bool
     + {static} NormStreamOpen(sessionHandle:long, bufferSize:long) : long 
     + {static} NormStreamOpen(sessionHandle:long, bufferSize:long, infoPtr:string, infoLen:int) : long 
-    + {static} NormObjectSetUserData(objectHandle:long, userData:nuint) : void 
-    + {static} NormObjectGetUserData(objectHandle:long) : nuint
     + {static} NormStreamClose(streamHandle:long)  void 
     + {static} NormStreamClose(streamHandle:long, graceful:bool)  void 
     + {static} NormGetStreamBufferSegmentCount(bufferBytes:uint, segmentSize:ushort, blockSize:ushort) : uint
@@ -162,8 +158,6 @@ class NormApi
     + {static} NormNodeGetId(nodeHandle:long) : uint
     + {static} NormNodeGetAddress(nodeHandle:long, addrBuffer:string, bufferLen: uint) : bool
     + {static} NormNodeGetAddress(nodeHandle:long, addrBuffer:string, bufferLen: uint, port:ushort) : bool
-    + {static} NormNodeSetUserData(nodeHandle:long, userData:nuint) : void
-    + {static} NormNodeGetUserData(nodeHandle:long) : nuint
     + {static} NormNodeGetGrtt(remoteSender:long) : double
     + {static} NormNodeGetCommand(remoteSender:long, :string, buflen:uint) : bool
     + {static} NormNodeSendAckEx(remoteSender:long, buffer:string, numBytes:uint) : bool
