@@ -39,7 +39,7 @@ class NormSession {
     + SetGrttProbingInterval(intervalMin:double, intervalMax:double) : void
     + SetBackoffFactor(backoffFactor:double) : void
     + SetGroupSize(groupSize:long) : void
-    + SetTxRobustFactor(robustFactro:int) : void
+    + SetTxRobustFactor(robustFactor:int) : void
     + FileEnqueue(filename:string) : NormFile
     + FileEnqueue(filename:string info:byte[], infoOffset:int, infoLength:int) : NormFile
     + DataEnqueue(dataBuffer:MemoryStream, dataOffset:int, dataLength:int) : NormData
