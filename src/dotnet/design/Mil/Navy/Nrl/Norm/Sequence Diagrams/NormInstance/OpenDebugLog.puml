@@ -2,8 +2,7 @@
 Client -> NormInstance : OpenDebugLog(filename)
 NormInstance -> NormApi : NormOpenDebugLog(_handle, filename)
 NormInstance <- NormApi : success
-alt success == True
-else success == false
+alt success == false
     NormInstance -> IOException : throw new ("Failed to open debug log")
 end
 @enduml

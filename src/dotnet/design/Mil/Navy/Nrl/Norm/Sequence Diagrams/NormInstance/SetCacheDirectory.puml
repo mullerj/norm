@@ -1,9 +1,8 @@
 @startuml
 Client -> NormInstance : SetCacheDirectory(cachePath)
 NormInstance -> NormApi : NormSetCacheDirectory(_handle, cachePath)
-NormInstance <- NormApi : success
-alt success == True  
-else success == False
+NormInstance <- NormApi : success 
+alt success == False
     NormInstance -> IOException : throw new ("Failed to set the cache directory")
 end
 @enduml
