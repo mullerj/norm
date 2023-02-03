@@ -3,7 +3,7 @@ class NormInstance {
     - _handle: long
     + NormInstance()
     + NormInstance(priorityBoost:bool)
-    - CreateInstance(priorityBoost:string) : void
+    - CreateInstance(priorityBoost:bool) : void
     + DestroyInstance() : void
     + StopInstance() : void
     + RestartInstance() : bool
