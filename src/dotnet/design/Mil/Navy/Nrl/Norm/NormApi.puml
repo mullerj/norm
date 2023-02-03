@@ -21,7 +21,7 @@ class NormApi
     + {static} NormGetUserData(sessionHandle:long) : nuint
     + {static} NormSetUserTimer(sessionHandle:long, seconds:double) : void
     + {static} NormCancelUserTimer(sessionHandle:long) : void
-    + {static} NormGetLocalNodeId(sessionHandle:long) : uint
+    + {static} NormGetLocalNodeId(sessionHandle:long) : long
     + {static} NormGetAddress(sessionHandle:long, addrBuffer:string, bufferLen:uint)  : bool
     + {static} NormGetAddress(sessionHandle:long, addrBuffer:string, bufferLen:uint, port:ushort)  : bool
     + {static} NormGetRxPort(sessionHandle:long) : ushort
@@ -32,7 +32,7 @@ class NormApi
     + {static} NormSetTxOnly(sessionHandle:long, txOnly:bool, connectToSessionAddress:bool) : void 
     + {static} NormLimitObjectInfo(sessionHandle:long, state:bool) : void
     + {static} NormPresetObjectInfo(sessionHandle:long, objectSize:ulong, segmentSize:ushort, numData:ushort, numParity:ushort) : bool 
-    + {static} NormSetId(sessionHandle:long, normId:uint) : void
+    + {static} NormSetId(sessionHandle:long, normId:long) : void
     + {static} NormChangeDestination(sessionHandle:long, sessionAddress:string, sessionPort:ushort) :bool
     + {static} NormChangeDestination(sessionHandle:long, sessionAddress:string, sessionPort:ushort, connectToSessionAddress:bool) : bool 
     + {static} NormSetServerListner(sessionHandle:long, state:bool) : void
@@ -175,7 +175,7 @@ class NormApi
     + {static} NormReleasePreviousEvent(instanceHandle:long) : void
     + {static} NormCountCompletedObjects(sessionHandle:long) : uint
     + {static} NormNodeSetAutoDelete(remoteSender:long, autoDelete:bool) : void
-    + {static} NormNodeAllowSender(senderId:uint) : bool
-    + {static} NormNodeDenySender(senderId:uint) : bool
+    + {static} NormNodeAllowSender(senderId:long) : bool
+    + {static} NormNodeDenySender(senderId:long) : bool
 }
 @enduml
