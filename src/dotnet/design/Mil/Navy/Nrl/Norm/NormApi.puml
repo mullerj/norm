@@ -1,6 +1,9 @@
 @startuml 
 class NormApi
 {
+    + <<const>> NORM_OBJECT_INVALID : int = 0
+    + <<const>> FILENAME_MAX : int = 260
+    + <<const>> NORM_LIBRARY : string = "norm"
     + {static} NormGetVersion(major:int, minor:int, patch:int) : int
     + {static} NormCreateInstance() : long
     + {static} NormCreateInstance(priorityBoost:bool) : long
