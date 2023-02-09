@@ -25,24 +25,20 @@ The NORM library should be built prior to building the .NET extension since it i
 Building
 ------------
 
-To build the .NET extension for NORM, execute the .NET CLI in the src/dotnet directory:
+To build the .NET extension for NORM, execute the .NET CLI command in the src/dotnet directory:
 
   ```
-  dotnet build Mil.Navy.Nrl.Norm.sln
+  dotnet build .
   ```
 
 ------------
 Testing
 ------------
 
-Before testing the .NET extension for NORM, the NORM library needs to be copied to the test bin directory, src/dotnet/tests/Mil.Navy.Nrl.Norm.IntegrationTests/bin/Debug/.net6.0.
-Ensure that the NORM library filename is only norm and the file extension.
-For example, it should be norm.dll on Windows.
-
-Next, execute the .NET CLI in the src/dotnet directory:
+To test the .NET extension for NORM, execute the .NET CLI command in the src/dotnet directory:
 
   ```
-  dotnet test Mil.Navy.Nrl.Norm.sln
+  dotnet test .
   ```
 
 The test command results should show that all tests have passed.

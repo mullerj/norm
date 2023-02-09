@@ -25,4 +25,8 @@
     <ProjectReference Include="..\..\src\Mil.Navy.Nrl.Norm\Mil.Navy.Nrl.Norm.csproj" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy ..\..\..\..\build\norm*.dll $(TargetDir)norm.dll" />
+  </Target>
+
 </Project>
