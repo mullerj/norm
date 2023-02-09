@@ -18,9 +18,16 @@ norp/makefiles/norp
 *.o
 *.a
 
+# build java files
+*.class
+
+#build android files
+android/.gradle
+
 # waf cruft
 .waf*
 .lock-waf*
+waf*/*
 
 # OS generated files #
 .DS_Store
