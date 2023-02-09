@@ -1,0 +1,17 @@
+@startuml FileEnqueue
+Client -> NormInstance : new()
+NormInstance -> NormInstance : CreateInstance(false)
+Client -> NormInstance : CreateSession(address, port, localNodeId)
+NormInstance -> NormApi : NormCreateSession(_handle, address, port, localNodeId)
+NormInstance <- NormApi : session
+alt session == NORM_SESSION_INVALID
+    NormInstance -> IOException : throw new("Failed to create session")
+end
+NormInstance -> NormSession : new(session)
+Client <- NormInstance : NormSession
+Client -> NormSession : StartSender(sessionId, bufferSpace, segmentSize, blockSize, numParity)
+NormSession -> NormApi : NormStartSender(sessionId, bufferSpace, segmentSize, blockSize, numParity)
+Client -> NormSession : DataEnqueue(dataBuffer:MemoryStream, dataOffset:int, dataLength:int)
+Client -> NormSession : StopSender();
+NormSession -> NormApi : NormStopSender(sessionHandle:long)
+@enduml
