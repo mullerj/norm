@@ -1,6 +1,6 @@
 @startuml
 class NormObject {
-    - _handle:long
+    # _handle:long
     ~ NormObject(handle:long)
     + SetNackingMode(nackingMode:NormNackingMode) : void
     + Type : NormObjectType <<get>>

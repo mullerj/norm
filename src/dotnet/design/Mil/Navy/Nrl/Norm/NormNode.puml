@@ -1,6 +1,6 @@
 @startuml
 class NormNode {
-    - <<const>> NORM_NODE_ANY : long = 0xffffffff
+    + <<const>> NORM_NODE_ANY : long = 0xffffffff
     - _handle : long
     ~ NormNode(handle:long)
     + SetUnicastNack(state:bool) : void

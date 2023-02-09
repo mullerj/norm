@@ -54,13 +54,13 @@ class NormApi
     + {static} NormCloseDebugLog(instanceHandle:long) : void
     + {static} NormOpenDebugPipe(instanceHandle:long, pipeName:string) : bool 
     + {static} NormCloseDebugPipe(instanceHandle:long) : void
-    + {static} NormSetDebugLevel(level:uint) : void 
-    + {static} NormGetDebugLevel() : uint
+    + {static} NormSetDebugLevel(level:int) : void 
+    + {static} NormGetDebugLevel() : int
     + {static} NormSetReportInterval(sessionHandle:long, interval:double) : void
     + {static} NormGetReportInterval(sessionHandle:long) : double
-    + {static} NormGetRandomSessionId() : NormSessionId 
-    + {static} NormStartSender(sessionHandle:long, instanceId:NormSessionId, bufferSpace:uint, segmentSize:ushort, numData:ushort, numParity:ushort) : bool
-    + {static} NormStartSender(sessionHandle:long, instanceId:NormSessionId, bufferSpace:uint, segmentSize:ushort, numData:ushort, numParity:ushort, fecId:byte) : bool 
+    + {static} NormGetRandomSessionId() : int 
+    + {static} NormStartSender(sessionHandle:long, instanceId:int, bufferSpace:long, segmentSize:int, numData:short, numParity:short) : bool
+    + {static} NormStartSender(sessionHandle:long, instanceId:int, bufferSpace:long, segmentSize:int, numData:short, numParity:short, fecId:NormFecType) : bool 
     + {static} NormStopSender(sessionHandle:long) : void
     + {static} NormSetTxRate(sessionHandle:long, bitsPerSecond:double) : void
     + {static} NormGetTxRate(sessionHandle:long) : double
@@ -69,7 +69,7 @@ class NormApi
     + {static} NormSetCongestionControl(sessionHandle:long, enable:bool) : void 
     + {static} NormSetCongestionControl(sessionHandle:long, enable:bool, adjustRate:bool) : void 
     + {static} NormSetTxRateBounds(sessionHandle:long, rateMin:double, rateMax:double) : void
-    + {static} NormSetTxCacheBounds(sessionHandle:long, sizeMax:NormSize, countMin:uint, countMax:uint) : void 
+    + {static} NormSetTxCacheBounds(sessionHandle:long, sizeMax:long, countMin:long, countMax:long) : void 
     + {static} NormSetAutoParity(sessionHandle:long, autoParity:byte) : void 
     + {static} NormSetGrttEstimate(sessionHandle:long, grttEstimate:double) : void
     + {static} NormGetGrttEstimate(sessionHandle:long) : double
@@ -117,7 +117,7 @@ class NormApi
     + {static} NormSendCommand(sessionHandle:long, cmdBuffer:string, cmdLength:uint, robust:bool) : bool
     + {static} NormCancelCommand(sessionHandle:long) : void
     + {static} NormSetSynStatus(sessionHandle:long, state:bool) : void
-    + {static} NormStartReceiver(sessionHandle:long, bufferSpace:uint) : bool
+    + {static} NormStartReceiver(sessionHandle:long, bufferSpace:long) : bool
     + {static} NormStopReceiver(sessionHandle:long) : void
     + {static} NormSetRxCacheLimit(sessionHandle:long, countMax:ushort) : void
     + {static} NormSetRxSocketBuffer(sessionHandle:long, bufferSize:uint) : bool
@@ -143,12 +143,12 @@ class NormApi
     + {static} NormObjectHasInfo(objectHandle:long) : bool
     + {static} NormObjectGetInfoLength(objectHandle:long) : ushort
     + {static} NormObjectGetInfo(objectHandle:long, buffer:char, bufferLen:ushort) : ushort
-    + {static} NormObjectGetSize(objectHandle:long) : NormSize
-    + {static} NormObjectGetBytesPending(objectHandle:long) : NormSize
+    + {static} NormObjectGetSize(objectHandle:long) : int
+    + {static} NormObjectGetBytesPending(objectHandle:long) : int
     + {static} NormObjectCancel(objectHandle:long) : void
     + {static} NormObjectRetain(objectHandle:long) : void
     + {static} NormObjectRelease(objectHandle:long) : void
-    + {static} NormFileGetName(fileHandle:long, nameBuffer:string, bufferLen:uint) : bool
+    + {static} NormFileGetName(fileHandle:long, nameBuffer:string, bufferLen:int) : bool
     + {static} NormFileRename(fileHandle:long, fileName:string) : bool
     + {static} NormDataAccessData(objectHandle:long) : string
     + {static} NormDataDetachData(objectHandle:long) : string

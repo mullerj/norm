@@ -13,7 +13,7 @@ class NormInstance {
     + OpenDebugLog(filename:string) : void
     + CloseDebugLog() : void
     + OpenDebugPipe(pipename:string) : void
-    + DebugLevel: string <<get>> <<set>>
+    + DebugLevel: int <<get>> <<set>>
     + HasNextEvent(sec:int, usec:int) : boolean
     + GetNextEvent() : NormEvent
     + CreateSession(address:string, port:int, localNodeId:long) : NormSession
