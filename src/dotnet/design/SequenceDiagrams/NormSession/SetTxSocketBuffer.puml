@@ -1,7 +1,0 @@
-@startuml
-Client -> NormSession : SetTxSocketBuffer(bufferSize)
-NormSession -> NormApi : NormSetTxSocketBuffer(_handle, bufferSize)
-NormSession <- NormApi : success
-alt success == false
-    NormSession -> IOException : throw new("Failed to set tx socket buffer")
-@enduml

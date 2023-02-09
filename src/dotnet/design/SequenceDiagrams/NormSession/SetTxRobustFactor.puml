@@ -1,4 +1,0 @@
-@startuml
-Client -> NormSession : SetTxRobustFactor(robustFactor)
-NormSession -> NormApi : NormSetTxRobustFactor(_handle, robustFactor)
-@enduml

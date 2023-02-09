@@ -1,4 +1,0 @@
-@startuml
-Client -> NormSession : SetBackoffFactor(backoffFactor)
-NormSession -> NormApi : NormSetBackoffFactor(_handle, backoffFactor)
-@enduml

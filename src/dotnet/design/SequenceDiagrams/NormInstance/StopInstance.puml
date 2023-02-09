@@ -1,4 +1,0 @@
-@startuml
-Client -> NormInstance : StopInstance()
-NormInstance -> NormApi : NormStopInstance(_handle)
-@enduml

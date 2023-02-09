@@ -1,4 +1,0 @@
-@startuml
-Client -> NormSession : SetTxLoss(precent)
-NormSession -> NormApi : NormSetTxLoss(_handle, precent)
-@enduml

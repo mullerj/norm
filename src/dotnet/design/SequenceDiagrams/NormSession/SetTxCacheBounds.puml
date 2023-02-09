@@ -1,4 +1,0 @@
-@startuml
-Client -> NormSession : SetTxCacheBounds(sizeMax, countMin, countMax)
-NormSession -> NormApi : NormSetTxCacheBounds(_handle, (NormSize)sizeMax, countMin, countMax)
-@enduml

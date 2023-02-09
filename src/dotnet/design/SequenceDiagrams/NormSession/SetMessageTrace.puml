@@ -1,4 +1,0 @@
-@startuml
-Client -> NormSession : SetMessageTrace(flag)
-NormSession -> NormApi : NormSetMessageTrace(_handle, flag)
-@enduml

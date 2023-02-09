@@ -1,8 +1,0 @@
-@startuml
-Client -> NormSession : SetLoopback(loopbackEnable)
-NormSession -> NormApi : NormSetLoopback(_handle, loopbackEnable)
-NormSession <- NormApi : success
-alt success == false
-    NormSession -> IOException : throw new("Failed to set loopback")
-end
-@enduml

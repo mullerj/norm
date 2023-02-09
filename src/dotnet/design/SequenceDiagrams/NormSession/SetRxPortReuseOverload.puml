@@ -1,4 +1,0 @@
-@startuml
-Client -> NormSession : SetRxPortReuse(enable, rxBindAddress, senderAddress, senderPort)
-NormSession -> NormApi : NormSetRxPortReuse(_handle, enable, rxBindAddress, senderAddress, senderPort)
-@enduml

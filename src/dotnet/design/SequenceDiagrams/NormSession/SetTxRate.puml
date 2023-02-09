@@ -1,4 +1,0 @@
-@startuml
-Client -> NormSession : SetTxRate(rate)
-NormSession -> NormApi : NormSetTxRate(_handle, rate)
-@enduml

@@ -1,4 +1,0 @@
-@startuml
-Client -> NormSession : SetGrttMax(grttMax)
-NormSession -> NormApi : NormSetGrttmax(_handle, grttMax)
-@enduml

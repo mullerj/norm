@@ -1,4 +1,0 @@
-@startuml
-Client -> NormSession : SetTxPort(port)
-NormSession -> NormSession : SetTxPort(_handle, port, False, NULL)
-@enduml

@@ -1,4 +1,0 @@
-@startuml
-Client -> NormInstance : ResumeInstance()
-NormInstance -> NormApi : NormResumeInstance(_handle)
-@enduml

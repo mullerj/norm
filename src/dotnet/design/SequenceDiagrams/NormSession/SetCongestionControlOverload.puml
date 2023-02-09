@@ -1,4 +1,0 @@
-@startuml
-Client -> NormSession : SetCongestionControl(enable, adjustRate)
-NormSession -> NormApi : NormSetCongestionControl(_handle, enable, adjustRate)
-@enduml

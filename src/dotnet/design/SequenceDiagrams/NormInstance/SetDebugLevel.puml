@@ -1,4 +1,0 @@
-@startuml
-Client -> NormInstance : SetDebugLevel(level)
-NormInstance -> NormApi : NormSetDebugLevel(level)
-@enduml

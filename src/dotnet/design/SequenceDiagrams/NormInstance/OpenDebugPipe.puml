@@ -1,8 +1,0 @@
-@startuml
-Client -> NormInstance : OpenDebugPipe(pipename)
-NormInstance -> NormApi : NormOpenDebugPipe(_handle, pipename)
-NormInstance <- NormApi : success
-alt success == False
-    NormInstance -> IOException : throw new ("Failed to open debug log")
-end
-@enduml

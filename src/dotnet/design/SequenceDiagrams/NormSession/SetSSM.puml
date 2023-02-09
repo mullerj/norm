@@ -1,8 +1,0 @@
-@startuml
-Client -> NormSession : SetSSM(sourceAddr)
-NormSession -> NormApi : NormSetSSM(_handle, sourceAddr)
-NormSession <- NormApi : success
-alt success == false
-    NormSession -> IOException : throw new("Failed to set SSM source address")
-end
-@enduml

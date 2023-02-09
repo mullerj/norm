@@ -1,6 +1,0 @@
-@startuml
-Client -> NormSession : GetGrttEstimate()
-NormSession -> NormApi : NormGetGrttEstimate(_handle)
-NormSession <- NormApi : grttEstimate
-Client <- NormSession : grttEstimate
-@enduml

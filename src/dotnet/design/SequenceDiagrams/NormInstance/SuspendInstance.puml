@@ -1,6 +1,0 @@
-@startuml
-Client -> NormInstance : SuspendInstance()
-NormInstance -> NormApi : NormSuspendInstance(_handle)
-NormInstance <- NormApi : bool
-Client <- NormInstance : bool
-@enduml

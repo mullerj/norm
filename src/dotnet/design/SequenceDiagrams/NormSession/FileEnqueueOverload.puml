@@ -1,9 +1,0 @@
-@startuml
-Client -> NormSession : FileEnqueue(filename, info, infoOffset, infoLength)
-NormSession -> NormApi : NormFileEnqueue(_handle, filename, ((string)info + infoOffset), infoLength) //TODO adding offset to byte array
-NormSession <- NormApi : fileEnqueue
-alt fileEnqueue == NORM_OBJECT_INVALID
-    NormSession -> IOException : throw new("Failed to enqueue file")
-end
-Client <- NormSession : fileEnqueue
-@enduml

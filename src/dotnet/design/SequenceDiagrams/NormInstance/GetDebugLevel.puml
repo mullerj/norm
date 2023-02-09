@@ -1,6 +1,0 @@
-@startuml
-Client -> NormInstance : GetDebugLevel()
-NormInstance -> NormApi : NormGetDebugLevel()
-NormInstance <- NormApi : level
-Client <- NormInstance: level
-@enduml

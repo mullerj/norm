@@ -1,4 +1,0 @@
-@startuml
-Client -> NormInstance: new(priorityBoost)
-NormInstance -> NormInstance : CreateInstance(priorityBoost)
-@enduml

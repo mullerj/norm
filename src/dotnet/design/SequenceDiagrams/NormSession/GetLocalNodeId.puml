@@ -1,6 +1,0 @@
-@startuml
-Client -> NormSession : GetLocalNodeId()
-NormSession -> NormApi : NormGetLocalNodeId(_handle)
-NormSession <- NormApi : localNodeId
-Client <- NormSession : localNodeId
-@enduml

@@ -1,6 +1,0 @@
-@startuml
-Client -> NormSession : GetTxRate()
-NormSession -> NormApi : NormGetTxRate(_handle)
-NormSession <- NormApi : txRate
-Client <- NormSession : txRate
-@enduml
