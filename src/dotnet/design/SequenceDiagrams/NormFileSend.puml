@@ -1,4 +1,4 @@
-@startuml FileEnqueue
+@startuml NormFileSend
 Client -> NormInstance : new()
 NormInstance -> NormInstance : CreateInstance(false)
 NormInstance -> NormApi : NormCreateInstance(false)
