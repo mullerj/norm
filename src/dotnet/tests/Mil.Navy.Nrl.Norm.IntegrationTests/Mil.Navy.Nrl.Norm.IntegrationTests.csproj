@@ -21,4 +21,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Mil.Navy.Nrl.Norm\Mil.Navy.Nrl.Norm.csproj" />
+  </ItemGroup>
+
 </Project>
