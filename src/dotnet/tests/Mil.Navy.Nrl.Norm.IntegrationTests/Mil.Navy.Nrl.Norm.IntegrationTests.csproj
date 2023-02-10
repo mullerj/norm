@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy ..\..\..\..\build\norm*.dll $(TargetDir)&#xD;&#xA;cd $(TargetDir)&#xD;&#xA;ren norm*.dll norm.dll" />
+    <Exec Command="copy ..\..\..\..\build\norm*.dll $(TargetDir)&#xD;&#xA;cd $(TargetDir)&#xD;&#xA;del /f norm.dll&#xD;&#xA;ren norm*.dll norm.dll" />
   </Target>
 
 </Project>
