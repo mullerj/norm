@@ -7,7 +7,7 @@ Client <- NormInstance : NormInstance
 Client -> NormInstance : CreateSession(address, port, localNodeId)
 NormInstance -> NormApi : NormCreateSession(instanceHandle, address, port, localNodeId)
 NormInstance <- NormApi : sessionHandle
-alt sessionHandle == NORM_SESSION_INVALID
+alt sessionHandle == NormApi.NORM_SESSION_INVALID
     NormInstance -> IOException : throw new("Failed to create session")
 end
 NormInstance -> NormSession : new(sessionHandle)
