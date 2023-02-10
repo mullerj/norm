@@ -35,5 +35,15 @@
         {
             NormApi.NormDestroyInstance(_handle);
         }
+
+        public NormSession CreateSession(string address, int port, long localNodeId)
+        {
+            var session = NormApi.NormCreateSession(_handle, address, port, localNodeId);
+            if (session == NormApi.NORM_SESSION_INVALID)
+            {
+                throw new IOException("Failed to create session");
+            }
+            return new NormSession(session);
+        }
     }
 }

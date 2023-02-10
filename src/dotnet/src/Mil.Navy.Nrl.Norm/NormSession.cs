@@ -1,0 +1,62 @@
+﻿using Mil.Navy.Nrl.Norm.Enums;
+using System.Text;
+
+namespace Mil.Navy.Nrl.Norm
+{
+    public class NormSession
+    {
+        private static Dictionary<long, NormSession> _normSessions = new Dictionary<long, NormSession>();
+        private long _handle;
+
+        internal NormSession(long handle)
+        {
+            _handle = handle;
+            _normSessions.Add(handle, this);
+        }
+
+        public void DestroySession()
+        {
+            _normSessions.Remove(_handle);
+            DestroySessionNative();
+        }
+
+        private void DestroySessionNative()
+        {
+            NormApi.NormDestroySession(_handle);
+        }
+
+        public void StartSender(int sessionId, long bufferSpace, int segmentSize, short blockSize, short numParity, NormFecType fecId)
+        {
+            if (!NormApi.NormStartSender(_handle, sessionId, bufferSpace, segmentSize, blockSize, numParity, fecId))
+            {
+                throw new IOException("Failed to start sender");
+            }
+        }
+
+        public void StartSender(int sessionId, long bufferSpace, int segmentSize, short blockSize, short numParity)
+        {
+            StartSender(sessionId, bufferSpace, segmentSize, blockSize, numParity, NormFecType.SB);
+        }
+
+        public void StopSender()
+        {
+            NormApi.NormStopSender(_handle);
+        }
+
+        public NormFile FileEnqueue(string filename, byte[] info, int infoLength)
+        {
+            var objectHandle = NormApi.NormFileEnqueue(_handle, filename, info, infoLength);
+            if (objectHandle == NormApi.NORM_OBJECT_INVALID)
+            {
+                throw new IOException("Failed to enqueue file");
+            }
+            return new NormFile(objectHandle);
+        }
+
+        public NormFile FileEnqueue(string filename)
+        {
+            var info = Encoding.ASCII.GetBytes(filename);
+            return FileEnqueue(filename, info, info.Length);
+        }
+    }
+}

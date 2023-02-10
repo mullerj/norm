@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using Mil.Navy.Nrl.Norm.Enums;
+using System.Runtime.InteropServices;
 
 namespace Mil.Navy.Nrl.Norm
 {
@@ -8,6 +9,8 @@ namespace Mil.Navy.Nrl.Norm
     public static class NormApi
     {
         public const string NORM_LIBRARY = "norm";
+        public const int NORM_SESSION_INVALID = 0;
+        public const int NORM_OBJECT_INVALID = 0;
 
         /// <summary>
         /// This function creates an instance of a NORM protocol engine and is the necessary first step before any other API functions may be used.
@@ -23,5 +26,49 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="instanceHandle">The NORM protocol engine instance referred to by the instanceHandle parameter</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormDestroyInstance(long instanceHandle);
+
+        /// <summary>
+        /// This function creates a NORM protocol session (NormSession) using the address (multicast or unicast) and port
+        /// parameters provided.While session state is allocated and initialized, active session participation does not begin
+        /// until a call is made to NormStartSender() and/or NormStartReceiver() to join the specified multicast group
+        /// (if applicable) and start protocol operation.
+        /// </summary>
+        /// <param name="instanceHandle">Valid NormInstanceHandle previously obtained with a call to NormCreateInstance() </param>
+        /// <param name="sessionAddress">Specified address determines the destination of NORM messages sent </param>
+        /// <param name="sessionPort">Valid, unused port number corresponding to the desired NORM session address. </param>
+        /// <param name="localNodeId">Identifies the application's presence in the NormSession </param>
+        /// <returns></returns>
+        [DllImport(NORM_LIBRARY)]
+        public static extern long NormCreateSession(long instanceHandle, string sessionAddress, int sessionPort, long localNodeId);
+
+        /// <summary>
+        /// This function immediately terminates the application's participation in the NormSession and frees any resources used by that session.
+        /// </summary>
+        /// <param name="sessionHandle"> Used to identify application in the NormSession </param>
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormDestroySession(long sessionHandle);
+
+        /// <summary>
+        /// The application's participation as a sender within a specified NormSession begins when this function is called.
+        /// </summary>
+        /// <param name="instanceHandle"> Valid NormSessionHandle previously obtained with a call to NormCreateSession() </param>
+        /// <param name="instanceId"> Application-defined value used as the instance_id field of NORM sender messages for the application's participation within a session </param>
+        /// <param name="bufferSpace"> This specifies the maximum memory space (in bytes) the NORM protocol engine is allowed to use to buffer any sender calculated FEC segments and repair state for the session. </param>
+        /// <param name="segmentSize"> This parameter sets the maximum payload size (in bytes) of NORM sender messages (not including any NORM message header fields). </param>
+        /// <param name="numData">  </param>
+        /// <param name="numParity"></param>
+        /// <param name="fedId"></param>
+        /// <returns></returns>
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormStartSender(long instanceHandle, int instanceId, long bufferSpace, int segmentSize, short numData, short numParity, NormFecType fedId);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormStopSender(long sessionHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern long NormFileEnqueue(long sessionHandle, string fileName);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern long NormFileEnqueue(long sessionHandle, string fileName, byte[]? infoPtr, int infoLen);
     }
 }

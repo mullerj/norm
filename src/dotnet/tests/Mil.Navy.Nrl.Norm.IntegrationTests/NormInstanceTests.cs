@@ -9,6 +9,7 @@
         /// The NORM instance
         /// </summary>
         private readonly NormInstance _normInstance;
+        private NormSession? _normSession;
         /// <summary>
         /// Determines if the NORM instance has been destroyed
         /// </summary>
@@ -34,13 +35,14 @@
         {
             if (!_isDestroyed) 
             {
+                _normSession?.DestroySession();
                 _normInstance.DestroyInstance();
                 _isDestroyed = true;
             }
         }
 
         /// <summary>
-        /// Dispose destroys the NormInstance
+        /// Dispose destroys the NORM instance
         /// </summary>
         public void Dispose()
         {
@@ -48,7 +50,7 @@
         }
 
         /// <summary>
-        /// Test for creating NormInstance
+        /// Test for creating a NORM instance
         /// </summary>
         [Fact]
         public void CreatesNormInstance()
@@ -57,12 +59,39 @@
         }
 
         /// <summary>
-        /// Test for destroying NormInstance
+        /// Test for destroying a NORM instance
         /// </summary>
         [Fact]
         public void DestroysNormInstance()
         {
             DestroyInstance();
+        }
+
+        /// <summary>
+        /// Test for creating a NORM session
+        /// </summary>
+        [Fact]
+        public void CreatesSession()
+        {
+            var sessionAddress = "224.1.2.3";
+            var sessionPort = 6003;
+            var localNodeId = NormNode.NORM_NODE_ANY;
+
+            _normSession = _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId);
+            Assert.NotNull(_normSession);
+        }
+
+        /// <summary>
+        /// Test for throwing an exception when attempting to create a NORM session with an invalid session address
+        /// </summary>
+        [Fact]
+        public void CreateSessionThrowsExceptionForInvalidSessionAddress()
+        {
+            var sessionAddress = "999.999.999.999";
+            var sessionPort = 6003;
+            var localNodeId = NormNode.NORM_NODE_ANY;
+
+            Assert.Throws<IOException>(() => _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId));
         }
     }
 }
