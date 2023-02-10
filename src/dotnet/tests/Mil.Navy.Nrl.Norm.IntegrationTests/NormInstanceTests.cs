@@ -93,5 +93,12 @@
 
             Assert.Throws<IOException>(() => _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId));
         }
+
+        [Fact]
+        public void GetsNextEvent()
+        {
+            var actual = _normInstance.GetNextEvent();
+            Assert.NotNull(actual);
+        }
     }
 }

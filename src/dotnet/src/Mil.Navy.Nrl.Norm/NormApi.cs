@@ -70,5 +70,8 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern long NormFileEnqueue(long sessionHandle, string fileName, byte[]? infoPtr, int infoLen);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormGetNextEvent(long instanceHandle, NormEvent theEvent);
     }
 }

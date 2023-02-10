@@ -45,5 +45,16 @@
             }
             return new NormSession(session);
         }
+
+        public NormEvent GetNextEvent()
+        {
+            NormEvent? theEvent = null;
+            bool success = NormApi.NormGetNextEvent(_handle, theEvent);
+            if (!success)
+            {
+                return null;
+            }
+            return theEvent;
+        }
     }
 }
