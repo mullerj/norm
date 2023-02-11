@@ -85,6 +85,9 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormGetNextEvent(long instanceHandle, out NormEvent theEvent);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern bool NormGetNextEvent(long instanceHandle, out NormEvent theEvent, bool waitForEvent);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern NormObjectType NormObjectGetType(long objectHandle);
     }
 }
