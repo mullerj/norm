@@ -1,4 +1,6 @@
-﻿namespace Mil.Navy.Nrl.Norm.IntegrationTests
+﻿using Mil.Navy.Nrl.Norm.Enums;
+
+namespace Mil.Navy.Nrl.Norm.IntegrationTests
 {
     public class NormSessionTests : IDisposable
     {
@@ -134,6 +136,18 @@
             {
                 var normFile = _normSession.FileEnqueue(filePath);
                 Assert.NotNull(normFile);
+                var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY, NormEventType.NORM_TX_FLUSH_COMPLETED };
+                var actualEventTypes = new List<NormEventType>();
+                NormEvent? normEvent;
+                while ((normEvent = _normInstance.GetNextEvent()) != null)
+                {
+                    actualEventTypes.Add(normEvent.Type);
+                    if (normEvent.Type == NormEventType.NORM_TX_FLUSH_COMPLETED)
+                    {
+                        break;
+                    }
+                }
+                Assert.Equal(expectedEventTypes, actualEventTypes);
             }
             catch (Exception)
             {

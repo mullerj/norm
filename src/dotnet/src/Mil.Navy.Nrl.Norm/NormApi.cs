@@ -11,6 +11,16 @@ namespace Mil.Navy.Nrl.Norm
         public const string NORM_LIBRARY = "norm";
         public const int NORM_SESSION_INVALID = 0;
         public const int NORM_OBJECT_INVALID = 0;
+        public const int NORM_NODE_INVALID = 0;
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct NormEvent
+        {
+            public NormEventType Type;
+            public long Session;
+            public long Sender;
+            public long Object;
+        }
 
         /// <summary>
         /// This function creates an instance of a NORM protocol engine and is the necessary first step before any other API functions may be used.
@@ -72,6 +82,9 @@ namespace Mil.Navy.Nrl.Norm
         public static extern long NormFileEnqueue(long sessionHandle, string fileName, byte[]? infoPtr, int infoLen);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormGetNextEvent(long instanceHandle, NormEvent theEvent);
+        public static extern bool NormGetNextEvent(long instanceHandle, out NormEvent theEvent);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern NormObjectType NormObjectGetType(long objectHandle);
     }
 }

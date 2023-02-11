@@ -14,6 +14,11 @@ namespace Mil.Navy.Nrl.Norm
             _normSessions.Add(handle, this);
         }
 
+        internal static NormSession GetSession(long handle)
+        {
+            return _normSessions[handle];
+        }
+
         public void DestroySession()
         {
             _normSessions.Remove(_handle);

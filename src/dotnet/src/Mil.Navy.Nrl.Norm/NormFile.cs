@@ -2,6 +2,8 @@
 {
     public class NormFile : NormObject
     {
-        internal NormFile(long handle) : base(handle) { }
+        internal NormFile(long handle) : base(handle) 
+        { 
+        }
     }
 }
