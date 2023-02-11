@@ -22,8 +22,10 @@ class NormSession {
     + SetTxLoss(precent:double) : void
     + SetRxLoss(precent:double) : void
     + ReportInterval: double <<get>> <<set>>
-    + StartSender(sessionId:int, bufferSpace:long, segmentSize:int, blockSize:short, numParity:short) : void
     + StartSender(sessionId:int, bufferSpace:long, segmentSize:int, blockSize:short, numParity:short, fecId:NormFecType) : void
+    + StartSender(sessionId:int, bufferSpace:long, segmentSize:int, blockSize:short, numParity:short) : void
+    + StartSender(bufferSpace:long, segmentSize:int, blockSize:short, numParity:short, fecId:NormFecType) : void
+    + StartSender(bufferSpace:long, segmentSize:int, blockSize:short, numParity:short) : void
     + StopSender() : void
     + SetTxOnly(txOnly:bool) : void
     + TxRate:double <<get>> <<set>>

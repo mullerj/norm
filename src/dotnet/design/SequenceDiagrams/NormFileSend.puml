@@ -30,9 +30,9 @@ end
 NormSession -> NormFile: new(objectHandle)
 NormSession <- NormFile : NormFile
 Client <- NormSession : NormFile
-loop NormEvent != null
-    Client -> NormInstance : GetNextEvent()
-    NormInstance -> NormApi : NormGetNextEvent(instanceHandle, NormEvent)
+loop NormInstance.HasNextEvent(waitTime)
+    Client -> NormInstance : GetNextEvent(false)
+    NormInstance -> NormApi : NormGetNextEvent(instanceHandle, NormEvent, false)
     NormInstance <- NormApi : success
     alt success == false
         Client <- NormInstance : null
