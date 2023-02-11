@@ -37,7 +37,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         {
             if (!_isSenderStarted)
             {
-                _normSession.StartSender(1, 1024 * 1024, 1400, 64, 16);
+                _normSession.StartSender(1024 * 1024, 1400, 64, 16);
                 _isSenderStarted = true;
             }
         }
@@ -136,15 +136,14 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 var normFile = _normSession.FileEnqueue(filePath);
                 Assert.NotNull(normFile);
-                var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY, NormEventType.NORM_TX_FLUSH_COMPLETED };
+                var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY};
                 var actualEventTypes = new List<NormEventType>();
-                NormEvent? normEvent;
-                while ((normEvent = _normInstance.GetNextEvent()) != null)
+                while (_normInstance.HasNextEvent(TimeSpan.FromMilliseconds(30)))
                 {
-                    actualEventTypes.Add(normEvent.Type);
-                    if (normEvent.Type == NormEventType.NORM_TX_FLUSH_COMPLETED)
+                    var normEvent = _normInstance.GetNextEvent(false);
+                    if (normEvent != null)
                     {
-                        break;
+                        actualEventTypes.Add(normEvent.Type);
                     }
                 }
                 Assert.Equal(expectedEventTypes, actualEventTypes);

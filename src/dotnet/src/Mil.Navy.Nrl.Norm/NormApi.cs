@@ -12,6 +12,7 @@ namespace Mil.Navy.Nrl.Norm
         public const int NORM_SESSION_INVALID = 0;
         public const int NORM_OBJECT_INVALID = 0;
         public const int NORM_NODE_INVALID = 0;
+        public const int NORM_DESCRIPTOR_INVALID = 0;
 
         [StructLayout(LayoutKind.Sequential)]
         public struct NormEvent
@@ -58,6 +59,9 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern void NormDestroySession(long sessionHandle);
 
+        [DllImport(NORM_LIBRARY)]
+        public static extern int NormGetRandomSessionId();
+
         /// <summary>
         /// The application's participation as a sender within a specified NormSession begins when this function is called.
         /// </summary>
@@ -80,6 +84,9 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern long NormFileEnqueue(long sessionHandle, string fileName, byte[]? infoPtr, int infoLen);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern int NormGetDescriptor(long instanceHandle);
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormGetNextEvent(long instanceHandle, out NormEvent theEvent);

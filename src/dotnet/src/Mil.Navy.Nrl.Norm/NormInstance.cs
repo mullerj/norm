@@ -1,4 +1,6 @@
-﻿namespace Mil.Navy.Nrl.Norm
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Mil.Navy.Nrl.Norm
 {
     /// <summary>
     /// An instance of a NORM protocol engine
@@ -46,14 +48,29 @@
             return new NormSession(session);
         }
 
-        public NormEvent? GetNextEvent()
+        public bool HasNextEvent(TimeSpan waitTime)
         {
-            bool success = NormApi.NormGetNextEvent(_handle, out NormApi.NormEvent normEvent);
+            var normDescriptor = NormApi.NormGetDescriptor(_handle);
+            if (normDescriptor == NormApi.NORM_DESCRIPTOR_INVALID)
+            {
+                return false;
+            }
+            return Kernel32.WaitForSingleObject(normDescriptor, (int)waitTime.TotalMilliseconds) == Kernel32.WAIT_OBJECT_0;
+        }
+
+        public NormEvent? GetNextEvent(bool waitForEvent)
+        {
+            bool success = NormApi.NormGetNextEvent(_handle, out NormApi.NormEvent normEvent, waitForEvent);
             if (!success)
             {
                 return null;
             }
             return new NormEvent(normEvent.Type, normEvent.Session, normEvent.Sender, normEvent.Object);
+        }
+
+        public NormEvent? GetNextEvent()
+        {
+            return GetNextEvent(true);
         }
     }
 }

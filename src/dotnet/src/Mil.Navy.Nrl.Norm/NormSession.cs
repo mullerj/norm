@@ -43,6 +43,17 @@ namespace Mil.Navy.Nrl.Norm
             StartSender(sessionId, bufferSpace, segmentSize, blockSize, numParity, NormFecType.SB);
         }
 
+        public void StartSender(long bufferSpace, int segmentSize, short blockSize, short numParity, NormFecType fecId)
+        {
+            var sessionId = NormApi.NormGetRandomSessionId();
+            StartSender(sessionId, bufferSpace, segmentSize, blockSize, numParity, fecId);
+        }
+
+        public void StartSender(long bufferSpace, int segmentSize, short blockSize, short numParity)
+        {
+            StartSender(bufferSpace, segmentSize, blockSize, numParity, NormFecType.SB);
+        }
+
         public void StopSender()
         {
             NormApi.NormStopSender(_handle);
