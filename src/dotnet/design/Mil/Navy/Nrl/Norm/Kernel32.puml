@@ -1,6 +1,0 @@
-@startuml
-class Kernel32 
-{
-    + {static} WaitForSingleObject(hHandle:int, dwMilliseconds:int) : long
-}
-@enduml

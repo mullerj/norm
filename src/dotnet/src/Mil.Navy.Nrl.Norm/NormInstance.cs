@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Microsoft.Win32.SafeHandles;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Mil.Navy.Nrl.Norm
 {
@@ -55,7 +56,9 @@ namespace Mil.Navy.Nrl.Norm
             {
                 return false;
             }
-            return Kernel32.WaitForSingleObject(normDescriptor, (int)waitTime.TotalMilliseconds) == Kernel32.WAIT_OBJECT_0;
+            using var eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset);
+            eventWaitHandle.SafeWaitHandle = new SafeWaitHandle(new IntPtr(normDescriptor), false);;
+            return eventWaitHandle.WaitOne(waitTime);
         }
 
         public NormEvent? GetNextEvent(bool waitForEvent)
