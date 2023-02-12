@@ -25,7 +25,7 @@
     <ProjectReference Include="..\..\src\Mil.Navy.Nrl.Norm\Mil.Navy.Nrl.Norm.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' == 'Windows_NT'">
     <Exec Command="copy ..\..\..\..\build\norm*.dll $(TargetDir)&#xD;&#xA;cd $(TargetDir)&#xD;&#xA;del /f norm.dll&#xD;&#xA;ren norm*.dll norm.dll" />
   </Target>
 
