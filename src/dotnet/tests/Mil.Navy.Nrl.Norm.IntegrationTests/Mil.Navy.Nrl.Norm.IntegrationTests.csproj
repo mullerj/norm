@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -25,8 +25,9 @@
     <ProjectReference Include="..\..\src\Mil.Navy.Nrl.Norm\Mil.Navy.Nrl.Norm.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' == 'Windows_NT'">
-    <Exec Command="copy ..\..\..\..\build\norm*.dll $(TargetDir)&#xD;&#xA;cd $(TargetDir)&#xD;&#xA;del /f norm.dll&#xD;&#xA;ren norm*.dll norm.dll" />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy ..\..\..\..\build\norm*.dll $(TargetDir)&#xD;&#xA;cd $(TargetDir)&#xD;&#xA;del /f norm.dll&#xD;&#xA;ren norm*.dll norm.dll" Condition="'$(OS)' == 'Windows_NT'" />
+    <Exec Command="cp -f ../../../../build/libnorm.so $(TargetDir)norm.so" Condition="'$(OS)' != 'Windows_NT'" />
   </Target>
 
 </Project>
