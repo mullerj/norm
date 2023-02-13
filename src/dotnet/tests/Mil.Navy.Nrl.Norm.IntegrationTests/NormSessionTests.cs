@@ -195,5 +195,57 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             StartReceiver();
             StopReceiver();
         }
+
+        [Fact]
+        public void ReceiverReceives()
+        {
+            StartSender();
+            StartReceiver();
+
+            //Set up cache directory
+            var folderName = Guid.NewGuid().ToString();
+            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            Directory.CreateDirectory(cachePath);
+            _normInstance.SetCacheDirectory(cachePath);
+
+            //Set up file to send
+            var fileName = Guid.NewGuid().ToString();
+            var fileContent = "Hello to the other norm node!!!!!!";
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            File.WriteAllText(filePath, fileContent);
+
+
+            //Expected path
+            var expectedPath = Path.Combine(cachePath, fileName);
+
+            try
+            {
+                //Enqueue file
+                var normFile = _normSession.FileEnqueue(filePath);
+
+                //Check that file exists
+                Assert.True(File.Exists(expectedPath));
+
+                //Check file content
+                if(File.Exists(expectedPath))
+                {
+                    var actualContent = File.ReadAllText(expectedPath);
+                    Assert.Equal(fileContent, actualContent);
+                }
+                
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+                File.Delete(filePath);
+                File.Delete(expectedPath);
+                Directory.Delete(cachePath);
+            }
+        }
     }
 }

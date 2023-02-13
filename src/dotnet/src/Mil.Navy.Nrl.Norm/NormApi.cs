@@ -108,5 +108,8 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern void NormStopReceiver(long sessionHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetCacheDirectory(long instanceHandle, string cachePath);
     }
 }

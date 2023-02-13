@@ -80,5 +80,13 @@ namespace Mil.Navy.Nrl.Norm
             }
             return new NormEvent(normEvent.Type, normEvent.Session, normEvent.Sender, normEvent.Object);
         }
+
+        public void SetCacheDirectory(string cachePath)
+        {
+            if(!NormApi.NormSetCacheDirectory(_handle, cachePath))
+            {
+                throw new IOException("Failed to set the cache directory");
+            }
+        }
     }
 }
