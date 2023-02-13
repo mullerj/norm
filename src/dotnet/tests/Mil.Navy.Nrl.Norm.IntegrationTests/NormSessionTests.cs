@@ -1,4 +1,6 @@
 ﻿using Mil.Navy.Nrl.Norm.Enums;
+using System.Net.Sockets;
+using System.Reflection.PortableExecutable;
 
 namespace Mil.Navy.Nrl.Norm.IntegrationTests
 {
@@ -10,6 +12,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         private bool _isSessionDestroyed;
         private bool _isSenderStarted;
         private bool _isSenderStopped;
+
+        private bool _isReceiverStarted;
+        private bool _isReceiverStopped;
 
         /// <summary>
         /// Create a NORM session
@@ -47,6 +52,25 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             if (_isSenderStarted && !_isSenderStopped)
             {
                 _normSession.StopSender();
+                _isSenderStopped = true;
+            }
+        }
+
+        private void StartReceiver()
+        {
+            if(!_isReceiverStarted)
+            {
+                //The appropriate bufferSpace to use is a function of expected network delay * bandwidth product and packet loss characteristics
+                _normSession.StartReceiver(10*10);
+                _isReceiverStarted = true;
+            }
+        }
+
+        private void StopReceiver()
+        {
+            if(_isReceiverStarted && ! _isReceiverStopped)
+            {
+                _normSession.StopReceiver();
                 _isSenderStopped = true;
             }
         }
@@ -157,6 +181,19 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 StopSender();
                 File.Delete(filePath);
             }
+        }
+
+        [Fact]
+        public void StartsReceiver()
+        {
+            StartReceiver();
+        }
+
+        [Fact]
+        public void StopsReceiver()
+        {
+            StartReceiver();
+            StopReceiver();
         }
     }
 }

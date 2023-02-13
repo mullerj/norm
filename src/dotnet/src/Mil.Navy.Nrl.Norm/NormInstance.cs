@@ -49,6 +49,11 @@ namespace Mil.Navy.Nrl.Norm
             return new NormSession(session);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="waitTime"></param>
+        /// <returns></returns>
         public bool HasNextEvent(TimeSpan waitTime)
         {
             var normDescriptor = NormApi.NormGetDescriptor(_handle);
@@ -61,6 +66,11 @@ namespace Mil.Navy.Nrl.Norm
             return eventWaitHandle.WaitOne(waitTime);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="waitForEvent"></param>
+        /// <returns></returns>
         public NormEvent? GetNextEvent(bool waitForEvent)
         {
             bool success = NormApi.NormGetNextEvent(_handle, out NormApi.NormEvent normEvent, waitForEvent);
@@ -69,11 +79,6 @@ namespace Mil.Navy.Nrl.Norm
                 return null;
             }
             return new NormEvent(normEvent.Type, normEvent.Session, normEvent.Sender, normEvent.Object);
-        }
-
-        public NormEvent? GetNextEvent()
-        {
-            return GetNextEvent(true);
         }
     }
 }
