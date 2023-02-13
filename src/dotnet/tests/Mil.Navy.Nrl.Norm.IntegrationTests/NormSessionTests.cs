@@ -197,7 +197,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         }
 
         [Fact]
-        public void ReceiverReceives()
+        public void ReceivesFile()
         {
             _normSession.SetLoopback(true);
             StartSender();
