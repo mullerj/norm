@@ -223,11 +223,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var actualEventTypes = new List<NormEventType>();
                 while (_normInstance.HasNextEvent(TimeSpan.FromMilliseconds(30)))
                 {
-                    var normEvent = _normInstance.GetNextEvent(false);
-                    if (normEvent != null)
-                    {
-                        actualEventTypes.Add(normEvent.Type);
-                    }
+                    _normInstance.GetNextEvent(false);
                 }
 
                 //Check that file exists
