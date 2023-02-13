@@ -96,5 +96,20 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern NormObjectType NormObjectGetType(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormFileRename(long fileHandle, string fileName);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormFileGetName(long fileHandle, string nameBuffer, int bufferLen);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormStartReceiver(long sessionHandle, long bufferSpace);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormStopReceiver(long sessionHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetCacheDirectory(long instanceHandle, string cachePath);
     }
 }

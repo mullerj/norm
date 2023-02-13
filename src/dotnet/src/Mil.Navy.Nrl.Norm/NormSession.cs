@@ -74,5 +74,18 @@ namespace Mil.Navy.Nrl.Norm
             var info = Encoding.ASCII.GetBytes(filename);
             return FileEnqueue(filename, info, info.Length);
         }
+
+        public void StartReceiver(long bufferSpace)
+        {
+            if(!NormApi.NormStartReceiver(_handle, bufferSpace))
+            {
+                throw new IOException("Failed to start receiver");
+            }
+        }
+
+        public void StopReceiver()
+        {
+            NormApi.NormStopReceiver(_handle);
+        }
     }
 }

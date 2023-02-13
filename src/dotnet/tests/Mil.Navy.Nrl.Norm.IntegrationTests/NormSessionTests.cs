@@ -1,4 +1,6 @@
 ﻿using Mil.Navy.Nrl.Norm.Enums;
+using System.Net.Sockets;
+using System.Reflection.PortableExecutable;
 
 namespace Mil.Navy.Nrl.Norm.IntegrationTests
 {
@@ -10,6 +12,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         private bool _isSessionDestroyed;
         private bool _isSenderStarted;
         private bool _isSenderStopped;
+
+        private bool _isReceiverStarted;
+        private bool _isReceiverStopped;
 
         /// <summary>
         /// Create a NORM session
@@ -47,6 +52,25 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             if (_isSenderStarted && !_isSenderStopped)
             {
                 _normSession.StopSender();
+                _isSenderStopped = true;
+            }
+        }
+
+        private void StartReceiver()
+        {
+            if(!_isReceiverStarted)
+            {
+                //The appropriate bufferSpace to use is a function of expected network delay * bandwidth product and packet loss characteristics
+                _normSession.StartReceiver(10*10);
+                _isReceiverStarted = true;
+            }
+        }
+
+        private void StopReceiver()
+        {
+            if(_isReceiverStarted && ! _isReceiverStopped)
+            {
+                _normSession.StopReceiver();
                 _isSenderStopped = true;
             }
         }
@@ -156,6 +180,71 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 StopSender();
                 File.Delete(filePath);
+            }
+        }
+
+        [Fact]
+        public void StartsReceiver()
+        {
+            StartReceiver();
+        }
+
+        [Fact]
+        public void StopsReceiver()
+        {
+            StartReceiver();
+            StopReceiver();
+        }
+
+        [Fact]
+        public void ReceiverReceives()
+        {
+            StartSender();
+            StartReceiver();
+
+            //Set up cache directory
+            var folderName = Guid.NewGuid().ToString();
+            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            Directory.CreateDirectory(cachePath);
+            _normInstance.SetCacheDirectory(cachePath);
+
+            //Set up file to send
+            var fileName = Guid.NewGuid().ToString();
+            var fileContent = "Hello to the other norm node!!!!!!";
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            File.WriteAllText(filePath, fileContent);
+
+
+            //Expected path
+            var expectedPath = Path.Combine(cachePath, fileName);
+
+            try
+            {
+                //Enqueue file
+                var normFile = _normSession.FileEnqueue(filePath);
+
+                //Check that file exists
+                Assert.True(File.Exists(expectedPath));
+
+                //Check file content
+                if(File.Exists(expectedPath))
+                {
+                    var actualContent = File.ReadAllText(expectedPath);
+                    Assert.Equal(fileContent, actualContent);
+                }
+                
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+                File.Delete(filePath);
+                File.Delete(expectedPath);
+                Directory.Delete(cachePath);
             }
         }
     }

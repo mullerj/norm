@@ -52,6 +52,11 @@ namespace Mil.Navy.Nrl.Norm
             return new NormSession(session);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="waitTime"></param>
+        /// <returns></returns>
         public bool HasNextEvent(TimeSpan waitTime)
         {
             var normDescriptor = NormApi.NormGetDescriptor(_handle);
@@ -78,6 +83,11 @@ namespace Mil.Navy.Nrl.Norm
             return hasNextEvent;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="waitForEvent"></param>
+        /// <returns></returns>
         public NormEvent? GetNextEvent(bool waitForEvent)
         {
             bool success = NormApi.NormGetNextEvent(_handle, out NormApi.NormEvent normEvent, waitForEvent);
@@ -88,9 +98,12 @@ namespace Mil.Navy.Nrl.Norm
             return new NormEvent(normEvent.Type, normEvent.Session, normEvent.Sender, normEvent.Object);
         }
 
-        public NormEvent? GetNextEvent()
+        public void SetCacheDirectory(string cachePath)
         {
-            return GetNextEvent(true);
+            if(!NormApi.NormSetCacheDirectory(_handle, cachePath))
+            {
+                throw new IOException("Failed to set the cache directory");
+            }
         }
     }
 }
