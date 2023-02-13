@@ -199,6 +199,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         [Fact]
         public void ReceiverReceives()
         {
+            _normSession.SetLoopback(true);
             StartSender();
             StartReceiver();
 
@@ -214,25 +215,31 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
             File.WriteAllText(filePath, fileContent);
 
-
-            //Expected path
-            var expectedPath = Path.Combine(cachePath, fileName);
-
             try
             {
                 //Enqueue file
                 var normFile = _normSession.FileEnqueue(filePath);
 
+                var actualEventTypes = new List<NormEventType>();
+                while (_normInstance.HasNextEvent(TimeSpan.FromMilliseconds(30)))
+                {
+                    var normEvent = _normInstance.GetNextEvent(false);
+                    if (normEvent != null)
+                    {
+                        actualEventTypes.Add(normEvent.Type);
+                    }
+                }
+
                 //Check that file exists
-                Assert.True(File.Exists(expectedPath));
+                var expectedFileCount = 1;
+                var actualFiles = Directory.GetFiles(cachePath);
+                var actualFileCount = actualFiles.Length;
+                Assert.Equal(expectedFileCount, actualFileCount);
 
                 //Check file content
-                if(File.Exists(expectedPath))
-                {
-                    var actualContent = File.ReadAllText(expectedPath);
-                    Assert.Equal(fileContent, actualContent);
-                }
-                
+                var actualContent = File.ReadAllText(actualFiles.First());
+                Assert.Equal(fileContent, actualContent);
+
             }
             catch(Exception)
             {
@@ -243,8 +250,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 StopSender();
                 StopReceiver();
                 File.Delete(filePath);
-                File.Delete(expectedPath);
-                Directory.Delete(cachePath);
+                Directory.Delete(cachePath, true);
             }
         }
     }

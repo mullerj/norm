@@ -60,6 +60,9 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormDestroySession(long sessionHandle);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetLoopback(long sessionHandle, bool loopback);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern int NormGetRandomSessionId();
 
         /// <summary>

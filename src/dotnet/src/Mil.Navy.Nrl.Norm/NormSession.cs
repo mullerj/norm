@@ -30,6 +30,14 @@ namespace Mil.Navy.Nrl.Norm
             NormApi.NormDestroySession(_handle);
         }
 
+        public void SetLoopback(bool loopbackEnable)
+        {
+            if (!NormApi.NormSetLoopback(_handle, loopbackEnable))
+            {
+                throw new IOException("Failed to set loopback");
+            }
+        }
+
         public void StartSender(int sessionId, long bufferSpace, int segmentSize, short blockSize, short numParity, NormFecType fecId)
         {
             if (!NormApi.NormStartSender(_handle, sessionId, bufferSpace, segmentSize, blockSize, numParity, fecId))
