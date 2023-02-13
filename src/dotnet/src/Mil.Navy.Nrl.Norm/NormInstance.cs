@@ -1,5 +1,8 @@
 ﻿using Microsoft.Win32.SafeHandles;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Net.Sockets;
 
 namespace Mil.Navy.Nrl.Norm
 {
@@ -56,9 +59,23 @@ namespace Mil.Navy.Nrl.Norm
             {
                 return false;
             }
-            using var eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset);
-            eventWaitHandle.SafeWaitHandle = new SafeWaitHandle(new IntPtr(normDescriptor), false);;
-            return eventWaitHandle.WaitOne(waitTime);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) 
+            {
+                using var eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset);
+                eventWaitHandle.SafeWaitHandle = new SafeWaitHandle(new IntPtr(normDescriptor), false);
+                return eventWaitHandle.WaitOne(waitTime);
+            }
+           
+            var hasNextEvent = false;
+            var timeout = DateTime.Now.Add(waitTime);
+            while (!hasNextEvent && DateTime.Now <= timeout)
+            {
+                using var socketHandle = new SafeSocketHandle(new IntPtr(normDescriptor), false);
+                using var socket =new Socket(socketHandle);
+                hasNextEvent = socket.Available > 0;
+               
+            }  
+            return hasNextEvent;
         }
 
         public NormEvent? GetNextEvent(bool waitForEvent)
