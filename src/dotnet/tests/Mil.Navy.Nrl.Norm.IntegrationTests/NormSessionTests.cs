@@ -181,6 +181,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY};
                 var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
                 Assert.Equal(expectedEventTypes, actualEventTypes);
+                var expectedFileName = filePath;
+                var actualFileName = normFile.Name;
+                Assert.Equal(expectedFileName, actualFileName);
             }
             catch (Exception)
             {
