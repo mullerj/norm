@@ -191,7 +191,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 var normFile = _normSession.FileEnqueue(filePath);
                 Assert.NotNull(normFile);
-                var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY};
+                var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY };
                 var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
                 Assert.Equal(expectedEventTypes, actualEventTypes);
                 var expectedFileName = filePath;
@@ -230,14 +230,28 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             try
             {
-                var repairWindowSize = 1024 * 1024;
-                normStream = _normSession.StreamOpen(repairWindowSize);
+                //Enqueue file
+                var normFile = _normSession.FileEnqueue(filePath);
+                //Wait for events
+                var normEvents = GetEvents();
 
-                var expectedBytesWritten = data.Length;
-                var actualBytesWritten = normStream.Write(data, data.Length);
+                var expectedNormEventType = NormEventType.NORM_RX_OBJECT_COMPLETED;
+                Assert.Contains(expectedNormEventType, normEvents.Select(e => e.Type));
+                var normObjectEvent = normEvents.First(e => e.Type == expectedNormEventType);
+
+                var receivedNormFile = Assert.IsType<NormFile>(normObjectEvent.Object);
+                var expectedFileName = receivedNormFile.Name;
+
+                //Check that file exists
+                var expectedFileCount = 1;
+                var actualFiles = Directory.GetFiles(cachePath);
+                var actualFileCount = actualFiles.Length;
+                Assert.Equal(expectedFileCount, actualFileCount);
 
                 //Check file content
-                var actualContent = File.ReadAllText(actualFiles.First());
+                var actualFileName = actualFiles.First();
+                Assert.Equal(expectedFileName, actualFileName);
+                var actualContent = File.ReadAllText(actualFileName);
                 Assert.Equal(fileContent, actualContent);
 
             }
@@ -343,29 +357,15 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             try
             {
-                //Enqueue file
-                var normFile = _normSession.FileEnqueue(filePath);
-                //Wait for events
-                var normEvents = GetEvents();
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
 
-                var expectedNormEventType = NormEventType.NORM_RX_OBJECT_COMPLETED;
-                Assert.Contains(expectedNormEventType, normEvents.Select(e => e.Type));
-                var normObjectEvent = normEvents.First(e => e.Type == expectedNormEventType);
+                var expectedBytesWritten = data.Length;
+                var actualBytesWritten = normStream.Write(data, data.Length);
 
-                var receivedNormFile = Assert.IsType<NormFile>(normObjectEvent.Object);
-                var expectedFileName = receivedNormFile.Name;
-
-                //Check that file exists
-                var expectedFileCount = 1;
-                var actualFiles = Directory.GetFiles(cachePath);
-                var actualFileCount = actualFiles.Length;
-                Assert.Equal(expectedFileCount, actualFileCount);
-
-                //Check file content
-                var actualFileName = actualFiles.First();
-                Assert.Equal(expectedFileName, actualFileName);
-                var actualContent = File.ReadAllText(actualFileName);
-                Assert.Equal(fileContent, actualContent);
+                WaitForEvents();
+                normStream.MarkEom();
+                normStream.Flush();
 
                 Assert.Equal(expectedBytesWritten, actualBytesWritten);
             }
@@ -411,7 +411,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var expectedNormEventType = NormEventType.NORM_RX_OBJECT_UPDATED;
                 Assert.Contains(expectedNormEventType, normEvents.Select(e => e.Type));
                 var normObjectEvent = normEvents.First(e => e.Type == expectedNormEventType);
-                
+
                 var receivedNormStream = Assert.IsType<NormStream>(normObjectEvent.Object);
                 var numRead = 0;
                 var receiveBuffer = new byte[65536];
