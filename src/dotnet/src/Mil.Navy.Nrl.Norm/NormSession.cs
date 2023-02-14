@@ -83,6 +83,22 @@ namespace Mil.Navy.Nrl.Norm
             return FileEnqueue(filename, info, info.Length);
         }
 
+        public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength, byte[] info, int infoOffset, int infoLength)
+        {
+            var dataPtr = Encoding.ASCII.GetString(dataBuffer.ToArray());
+            var objectHadle = NormApi.NormDataEnqueue(_handle, dataPtr, dataLength, info, infoLength);
+            if(objectHadle == NormApi.NORM_OBJECT_INVALID)
+            {
+                throw new IOException("Failed to enqueue data");
+            }
+            return new NormData(objectHadle);
+        }
+
+        public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength)
+        {
+            return DataEnqueue(dataBuffer, dataOffset, dataLength, null, 0, 0);
+        }
+
         public NormStream StreamOpen(long bufferSize, byte[]? info, int infoLength)
         {
             var objectHandle = NormApi.NormStreamOpen(_handle, bufferSize, info, infoLength);

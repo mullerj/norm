@@ -145,6 +145,19 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             StopSender();
         }
 
+        [Fact]
+        public void StartsReceiver()
+        {
+            StartReceiver();
+        }
+
+        [Fact]
+        public void StopsReceiver()
+        {
+            StartReceiver();
+            StopReceiver();
+        }
+
         private IEnumerable<NormEvent> GetEvents()
         {
             var normEvents = new List<NormEvent>();
@@ -194,6 +207,134 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         }
 
         [Fact]
+        public void ReceivesFile()
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+
+            //Set up cache directory
+            var folderName = Guid.NewGuid().ToString();
+            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            Directory.CreateDirectory(cachePath);
+            _normInstance.SetCacheDirectory(cachePath);
+
+            //Set up file to send
+            var fileName = Guid.NewGuid().ToString();
+            var fileContent = "Hello to the other norm node!!!!!!";
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            File.WriteAllText(filePath, fileContent);
+
+            try
+            {
+                //Enqueue file
+                _normSession.FileEnqueue(filePath);
+                //Wait for events
+                WaitForEvents();
+
+                //Check that file exists
+                var expectedFileCount = 1;
+                var actualFiles = Directory.GetFiles(cachePath);
+                var actualFileCount = actualFiles.Length;
+                Assert.Equal(expectedFileCount, actualFileCount);
+
+                //Check file content
+                var actualContent = File.ReadAllText(actualFiles.First());
+                Assert.Equal(fileContent, actualContent);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+                File.Delete(filePath);
+                Directory.Delete(cachePath, true);
+            }
+        }
+
+        [Fact]
+        public void EnqueuesData()
+        {
+            StartSender();
+            //Create data to write to the stream
+            UnicodeEncoding unicodeEncoding = new UnicodeEncoding();
+            byte[] data = unicodeEncoding.GetBytes("Data string to be transmitted");
+
+            //Create memoryStream
+            MemoryStream memStream = new MemoryStream();
+
+            //Write data to the stream
+            memStream.Write(data, 0, data.Length);
+
+            try
+            {
+                _normSession.DataEnqueue(data, 0, data.Length);
+                var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY };
+                var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
+                Assert.Equal(expectedEventTypes, actualEventTypes);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                memStream.Dispose();
+                memStream.Close();
+                StopSender();
+            }
+        }
+
+        [Fact]
+        public void ReceivesData()
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+
+            //Set up cache directory
+            var folderName = Guid.NewGuid().ToString();
+            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            Directory.CreateDirectory(cachePath);
+            _normInstance.SetCacheDirectory(cachePath);
+
+            //Create data to be sent
+            var expectedContent = "Data string to be transmitted";
+            var data = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(data, 0, data.Length);
+                var expectedEventTypes = new List<NormEventType> 
+                { 
+                    NormEventType.NORM_TX_OBJECT_SENT,
+                    NormEventType.NORM_TX_QUEUE_EMPTY,
+                    NormEventType.NORM_REMOTE_SENDER_NEW,
+                    NormEventType.NORM_REMOTE_SENDER_ACTIVE,
+                    NormEventType.NORM_RX_OBJECT_NEW,
+                    NormEventType.NORM_RX_OBJECT_UPDATED,
+                    NormEventType.NORM_RX_OBJECT_COMPLETED
+                };
+                var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
+                Assert.Equal(expectedEventTypes, actualEventTypes);
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+                Directory.Delete(cachePath, true);
+            }
+        }
+
+        [Fact]
         public void SendsStream()
         {
             StartSender();
@@ -228,69 +369,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 normStream?.Close(true);
                 StopSender();
-            }
-        }
-
-        [Fact]
-        public void StartsReceiver()
-        {
-            StartReceiver();
-        }
-
-        [Fact]
-        public void StopsReceiver()
-        {
-            StartReceiver();
-            StopReceiver();
-        }
-
-        [Fact]
-        public void ReceivesFile()
-        {
-            _normSession.SetLoopback(true);
-            StartSender();
-            StartReceiver();
-
-            //Set up cache directory
-            var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            Directory.CreateDirectory(cachePath);
-            _normInstance.SetCacheDirectory(cachePath);
-
-            //Set up file to send
-            var fileName = Guid.NewGuid().ToString();
-            var fileContent = "Hello to the other norm node!!!!!!";
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
-            File.WriteAllText(filePath, fileContent);
-
-            try
-            {
-                //Enqueue file
-                var normFile = _normSession.FileEnqueue(filePath);
-                //Wait for events
-                WaitForEvents();
-
-                //Check that file exists
-                var expectedFileCount = 1;
-                var actualFiles = Directory.GetFiles(cachePath);
-                var actualFileCount = actualFiles.Length;
-                Assert.Equal(expectedFileCount, actualFileCount);
-
-                //Check file content
-                var actualContent = File.ReadAllText(actualFiles.First());
-                Assert.Equal(fileContent, actualContent);
-
-            }
-            catch(Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                StopSender();
-                StopReceiver();
-                File.Delete(filePath);
-                Directory.Delete(cachePath, true);
             }
         }
     }
