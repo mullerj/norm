@@ -13,6 +13,7 @@ namespace Mil.Navy.Nrl.Norm
         public const int NORM_OBJECT_INVALID = 0;
         public const int NORM_NODE_INVALID = 0;
         public const int NORM_DESCRIPTOR_INVALID = 0;
+        public const int FILENAME_MAX = 260;
 
         [StructLayout(LayoutKind.Sequential)]
         public struct NormEvent
@@ -104,7 +105,7 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormFileRename(long fileHandle, string fileName);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormFileGetName(long fileHandle, string nameBuffer, int bufferLen);
+        public static extern bool NormFileGetName(long fileHandle, out string nameBuffer, int bufferLen);
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormStartReceiver(long sessionHandle, long bufferSpace);

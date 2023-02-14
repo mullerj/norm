@@ -1,21 +1,22 @@
-﻿using System.Xml.Linq;
-
-namespace Mil.Navy.Nrl.Norm
+﻿namespace Mil.Navy.Nrl.Norm
 {
     public class NormFile : NormObject
     {
-        public string name
+        internal NormFile(long handle) : base(handle)
+        {
+
+        }
+
+        public string Name
         {
             get
             {
-                NormApi.NormFileGetName(_handle, name, Int32.MaxValue);
+                if (!NormApi.NormFileGetName(_handle, out string name, NormApi.FILENAME_MAX))
+                {
+                    throw new IOException("Failed to get file name");
+                }
                 return name;
             }
-        }
-
-        internal NormFile(long handle) : base(handle) 
-        {
-            
         }
 
         public void Rename(string filePath)
