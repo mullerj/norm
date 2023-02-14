@@ -8,10 +8,9 @@ namespace Mil.Navy.Nrl.Norm
         {
         }
 
-        public int Write(byte[] buffer, int offset, int length)
+        public int Write(byte[] buffer, int length)
         {
-            var bytes = buffer.Skip(offset).ToArray();
-            return NormApi.NormStreamWrite(_handle, bytes, length);
+            return NormApi.NormStreamWrite(_handle, buffer, length);
         }
 
         public void MarkEom()
@@ -37,6 +36,15 @@ namespace Mil.Navy.Nrl.Norm
         public void Close()
         {
             Close(false);
+        }
+
+        public int Read(byte[] buffer, int length)
+        {
+            if (!NormApi.NormStreamRead(_handle, buffer, ref length))
+            {
+                return -1;
+            }
+            return length;
         }
     }
 }

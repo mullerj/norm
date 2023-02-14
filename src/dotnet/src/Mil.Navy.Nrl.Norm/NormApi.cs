@@ -105,6 +105,9 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormStreamClose(long streamHandle, bool graceful);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern bool NormStreamRead(long streamHandle, byte[] buffer, ref int numBytes);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern int NormGetDescriptor(long instanceHandle);
 
         [DllImport(NORM_LIBRARY)]
@@ -120,7 +123,7 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormFileRename(long fileHandle, string fileName);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormFileGetName(long fileHandle, out string nameBuffer, int bufferLen);
+        public static extern bool NormFileGetName(long fileHandle, [Out] char[] nameBuffer, int bufferLen);
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormStartReceiver(long sessionHandle, long bufferSpace);

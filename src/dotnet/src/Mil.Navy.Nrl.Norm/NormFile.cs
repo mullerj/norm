@@ -11,11 +11,13 @@
         {
             get
             {
-                if (!NormApi.NormFileGetName(_handle, out string name, NormApi.FILENAME_MAX))
+                var buffer = new char[NormApi.FILENAME_MAX];
+                if (!NormApi.NormFileGetName(_handle, buffer, NormApi.FILENAME_MAX))
                 {
                     throw new IOException("Failed to get file name");
                 }
-                return name;
+                buffer = buffer.Where(c => c != 0).ToArray();
+                return new string(buffer);
             }
         }
 
