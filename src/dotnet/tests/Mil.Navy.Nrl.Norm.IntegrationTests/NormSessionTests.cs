@@ -146,6 +146,25 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             StopSender();
         }
 
+        private IEnumerable<NormEvent> GetEvents()
+        {
+            var normEvents = new List<NormEvent>();
+            while (_normInstance.HasNextEvent(TimeSpan.FromMilliseconds(30)))
+            {
+                var normEvent = _normInstance.GetNextEvent(false);
+                if (normEvent != null)
+                {
+                    normEvents.Add(normEvent);
+                }
+            }
+            return normEvents;
+        }
+
+        private void WaitForEvents()
+        {
+            GetEvents();
+        }
+
         [Fact]
         public void EnqueuesFile()
         {
@@ -161,15 +180,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var normFile = _normSession.FileEnqueue(filePath);
                 Assert.NotNull(normFile);
                 var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY};
-                var actualEventTypes = new List<NormEventType>();
-                while (_normInstance.HasNextEvent(TimeSpan.FromMilliseconds(30)))
-                {
-                    var normEvent = _normInstance.GetNextEvent(false);
-                    if (normEvent != null)
-                    {
-                        actualEventTypes.Add(normEvent.Type);
-                    }
-                }
+                var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
                 Assert.Equal(expectedEventTypes, actualEventTypes);
             }
             catch (Exception)
@@ -219,12 +230,8 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 //Enqueue file
                 var normFile = _normSession.FileEnqueue(filePath);
-
-                var actualEventTypes = new List<NormEventType>();
-                while (_normInstance.HasNextEvent(TimeSpan.FromMilliseconds(30)))
-                {
-                    _normInstance.GetNextEvent(false);
-                }
+                //Wait for events
+                WaitForEvents();
 
                 //Check that file exists
                 var expectedFileCount = 1;
