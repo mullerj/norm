@@ -1,6 +1,5 @@
 ﻿using Mil.Navy.Nrl.Norm.Enums;
-using System.Net.Sockets;
-using System.Reflection.PortableExecutable;
+using System.Text;
 
 namespace Mil.Navy.Nrl.Norm.IntegrationTests
 {
@@ -191,6 +190,44 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 StopSender();
                 File.Delete(filePath);
+            }
+        }
+
+        [Fact]
+        public void SendsStream()
+        {
+            StartSender();
+
+            var fileContent = "Hello to the other norm node!!!!!!";
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+                using var dataStream = new MemoryStream(data);
+                var readBuffer = new byte[data.Length];
+                var length = dataStream.Read(readBuffer, 0, readBuffer.Length);
+
+                var offset = 0;
+                var expectedBytesWritten = data.Length;
+                var actualBytesWritten = normStream.Write(readBuffer, offset, length);
+
+                WaitForEvents();
+                normStream.MarkEom();
+                normStream.Flush();
+
+                Assert.Equal(expectedBytesWritten, actualBytesWritten);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
             }
         }
 

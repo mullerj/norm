@@ -90,6 +90,21 @@ namespace Mil.Navy.Nrl.Norm
         public static extern long NormFileEnqueue(long sessionHandle, string fileName, byte[]? infoPtr, int infoLen);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern long NormStreamOpen(long sessionHandle, long bufferSize, byte[]? infoPtr, int infoLen);
+
+        [DllImport(NORM_LIBRARY)]
+        internal static extern int NormStreamWrite(long streamHandle, byte[] buffer, int numBytes);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormStreamMarkEom(long streamHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormStreamFlush(long streamHandle, bool eom, NormFlushMode flushMode);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormStreamClose(long streamHandle, bool graceful);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern int NormGetDescriptor(long instanceHandle);
 
         [DllImport(NORM_LIBRARY)]

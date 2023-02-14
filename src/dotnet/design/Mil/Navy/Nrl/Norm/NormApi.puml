@@ -103,7 +103,7 @@ class NormApi
     + {static} NormStreamClose(streamHandle:long) : void 
     + {static} NormStreamClose(streamHandle:long, graceful:bool) : void 
     + {static} NormGetStreamBufferSegmentCount(bufferBytes:uint, segmentSize:ushort, blockSize:ushort) : uint
-    + {static} NormStreamWrite(streamHandle:long, buffer:string, numBytes:uint) : uint
+    + {static} NormStreamWrite(streamHandle:long, buffer:byte[], numBytes:int) : int
     + {static} NormStreamFlush(streamHandle:long) : void 
     + {static} NormStreamFlush(streamHandle:long, eom:bool, flushMode:NormFlushMode) : void 
     + {static} NormStreamSetAutoFlush(streamHandle:long, flushMode: NormFlushMode) : void

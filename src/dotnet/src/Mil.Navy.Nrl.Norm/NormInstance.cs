@@ -94,6 +94,11 @@ namespace Mil.Navy.Nrl.Norm
             return new NormEvent(normEvent.Type, normEvent.Session, normEvent.Sender, normEvent.Object);
         }
 
+        public NormEvent? GetNextEvent()
+        {
+            return GetNextEvent(true);
+        }
+
         public void SetCacheDirectory(string cachePath)
         {
             if(!NormApi.NormSetCacheDirectory(_handle, cachePath))

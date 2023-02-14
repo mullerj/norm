@@ -83,6 +83,21 @@ namespace Mil.Navy.Nrl.Norm
             return FileEnqueue(filename, info, info.Length);
         }
 
+        public NormStream StreamOpen(long bufferSize, byte[]? info, int infoLength)
+        {
+            var objectHandle = NormApi.NormStreamOpen(_handle, bufferSize, info, infoLength);
+            if (objectHandle == NormApi.NORM_OBJECT_INVALID)
+            {
+                throw new IOException("Failed to open stream");
+            }
+            return new NormStream(objectHandle);
+        }
+
+        public NormStream StreamOpen(long bufferSize)
+        {
+            return StreamOpen(bufferSize, null, 0);
+        }
+
         public void StartReceiver(long bufferSpace)
         {
             if(!NormApi.NormStartReceiver(_handle, bufferSpace))
