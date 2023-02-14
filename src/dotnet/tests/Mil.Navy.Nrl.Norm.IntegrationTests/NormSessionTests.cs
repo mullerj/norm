@@ -206,13 +206,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 var repairWindowSize = 1024 * 1024;
                 normStream = _normSession.StreamOpen(repairWindowSize);
-                using var dataStream = new MemoryStream(data);
-                var readBuffer = new byte[data.Length];
-                var length = dataStream.Read(readBuffer, 0, readBuffer.Length);
 
-                var offset = 0;
                 var expectedBytesWritten = data.Length;
-                var actualBytesWritten = normStream.Write(readBuffer, offset, length);
+                var actualBytesWritten = normStream.Write(data, data.Length);
 
                 WaitForEvents();
                 normStream.MarkEom();
@@ -290,6 +286,63 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 StopSender();
                 StopReceiver();
                 File.Delete(filePath);
+                Directory.Delete(cachePath, true);
+            }
+        }
+
+        [Fact]
+        public void ReceivesStream()
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+
+            //Set up cache directory
+            var folderName = Guid.NewGuid().ToString();
+            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            Directory.CreateDirectory(cachePath);
+            _normInstance.SetCacheDirectory(cachePath);
+
+            var fileContent = "Hello to the other norm node!!!!!!";
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+
+                var expectedBytesWritten = data.Length;
+                normStream.Write(data, data.Length);
+
+                normStream.MarkEom();
+                normStream.Flush();
+                var normEvents = GetEvents();
+                Assert.Contains(NormEventType.NORM_RX_OBJECT_UPDATED, normEvents.Select(e => e.Type));
+                var normObjectUpdatedEvent = normEvents.First(e => e.Type == NormEventType.NORM_RX_OBJECT_UPDATED);
+                
+                var receivedNormStream = Assert.IsType<NormStream>(normObjectUpdatedEvent.Object);
+                var numRead = 0;
+                var receiveBuffer = new byte[65536];
+                while ((numRead = receivedNormStream.Read(receiveBuffer, receiveBuffer.Length)) > 0)
+                {
+                    if (numRead != -1)
+                    {
+                        var receivedData = receiveBuffer.Take(numRead).ToArray();
+                        var receivedContent = Encoding.ASCII.GetString(receivedData);
+                        Assert.Equal(fileContent, receivedContent);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
+                StopReceiver();
                 Directory.Delete(cachePath, true);
             }
         }

@@ -148,7 +148,7 @@ class NormApi
     + {static} NormNodeSetRxRobustFactor(remoteSenderremoteSender, robustFactor:int) : void
     + {static} NormPreallocateRemoteSender(sessionHandle:long, bufferSize:ulong, segmentSize:ushort, numData:ushort, numParity:ushort) : bool
     + {static} NormPreallocateRemoteSender(sessionHandle:long, bufferSize:ulong, segmentSize:ushort, numData:ushort, numParity:ushort, streamBufferSize:uint) : bool
-    + {static} NormStreamRead(streamHandle:long, buffer:string, numBytes:uint) : bool
+    + {static} NormStreamRead(streamHandle:long, buffer:byte[], numBytes:int) : bool
     + {static} NormStreamSeekMsgStart(streamHandle:long) : bool
     + {static} NormStreamGetReadOffset(streamHandle:long) : uint
     + {static} NormStreamGetBufferUsage(streamHandle:long) : uint
