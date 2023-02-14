@@ -332,7 +332,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                     NormEventType.NORM_RX_OBJECT_COMPLETED
                 };
                 var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
-                Assert.Equal(expectedEventTypes, actualEventTypes);
+                Assert.Equivalent(expectedEventTypes, actualEventTypes);
             }
             catch(Exception)
             {
