@@ -323,10 +323,10 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var normData = _normSession.DataEnqueue(data, 0, data.Length);
                 var expectedEventTypes = new List<NormEventType> 
                 { 
-                    NormEventType.NORM_TX_OBJECT_SENT,
-                    NormEventType.NORM_TX_QUEUE_EMPTY,
                     NormEventType.NORM_REMOTE_SENDER_NEW,
                     NormEventType.NORM_REMOTE_SENDER_ACTIVE,
+                    NormEventType.NORM_TX_OBJECT_SENT,
+                    NormEventType.NORM_TX_QUEUE_EMPTY,
                     NormEventType.NORM_RX_OBJECT_NEW,
                     NormEventType.NORM_RX_OBJECT_UPDATED,
                     NormEventType.NORM_RX_OBJECT_COMPLETED
