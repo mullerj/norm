@@ -60,6 +60,9 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport (NORM_LIBRARY)]
         public static extern bool NormSuspendInstance(long instanceHandle);
 
+        [DllImport (NORM_LIBRARY)]
+        public static extern bool NormResumeInstance(long instanceHandle);
+
         /// <summary>
         /// This function creates a NORM protocol session (NormSession) using the address (multicast or unicast) and port
         /// parameters provided.While session state is allocated and initialized, active session participation does not begin

@@ -135,5 +135,19 @@
           var actual = _normInstance.SuspendInstance();
          Assert.Equal(expected,actual);
         }
+        [Fact]
+        public void ResumeInstance()
+        {
+            var sessionAddress = "224.1.2.3";
+            var sessionPort = 6003;
+            var localNodeId = NormNode.NORM_NODE_ANY;
+            var expected = true;
+            _normSession = _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId);
+        
+            _normInstance.StopInstance();
+
+             _normInstance.ResumeInstance();
+            Assert.NotNull(_normInstance);
+        }
     }
 }

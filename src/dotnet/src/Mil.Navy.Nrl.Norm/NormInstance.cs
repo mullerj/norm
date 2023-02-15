@@ -121,5 +121,10 @@ namespace Mil.Navy.Nrl.Norm
         {
             return NormApi.NormSuspendInstance(_handle);
         }
+
+        public void ResumeInstance()
+        {
+            NormApi.NormResumeInstance(_handle);
+        }
     }
 }
