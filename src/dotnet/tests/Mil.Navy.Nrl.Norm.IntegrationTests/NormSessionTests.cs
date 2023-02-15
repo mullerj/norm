@@ -1,4 +1,5 @@
-﻿using Mil.Navy.Nrl.Norm.Enums;
+﻿using Bogus;
+using Mil.Navy.Nrl.Norm.Enums;
 using System.Text;
 
 namespace Mil.Navy.Nrl.Norm.IntegrationTests
@@ -20,8 +21,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         /// </summary>
         private NormSession CreateSession()
         {
+            var faker = new Faker();
             var sessionAddress = "224.1.2.3";
-            var sessionPort = 6003;
+            var sessionPort = faker.Internet.Port();
             var localNodeId = NormNode.NORM_NODE_ANY;
 
             return _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId);

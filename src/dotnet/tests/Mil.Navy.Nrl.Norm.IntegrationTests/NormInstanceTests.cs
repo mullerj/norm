@@ -1,4 +1,6 @@
-﻿namespace Mil.Navy.Nrl.Norm.IntegrationTests
+﻿using Bogus;
+
+namespace Mil.Navy.Nrl.Norm.IntegrationTests
 {
     /// <summary>
     /// Tests for NORM instance
@@ -73,8 +75,9 @@
         [Fact]
         public void CreatesSession()
         {
+            var faker = new Faker();
             var sessionAddress = "224.1.2.3";
-            var sessionPort = 6003;
+            var sessionPort = faker.Internet.Port();
             var localNodeId = NormNode.NORM_NODE_ANY;
 
             _normSession = _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId);
