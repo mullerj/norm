@@ -163,8 +163,8 @@ class NormApi
     + {static} NormObjectRelease(objectHandle:long) : void
     + {static} NormFileGetName(fileHandle:long, nameBuffer:string, bufferLen:int) : bool
     + {static} NormFileRename(fileHandle:long, fileName:string) : bool
-    + {static} NormDataAccessData(objectHandle:long) : IntPtr
-    + {static} NormDataDetachData(objectHandle:long) : IntPtr
+    + {static} NormDataAccessData(objectHandle:long) : nint
+    + {static} NormDataDetachData(objectHandle:long) : nint
     + {static} NormObjectGetSender(objectHandle:long) : long
     + {static} NormNodeGetId(nodeHandle:long) : uint
     + {static} NormNodeGetAddress(nodeHandle:long, addrBuffer:string, bufferLen: uint) : bool

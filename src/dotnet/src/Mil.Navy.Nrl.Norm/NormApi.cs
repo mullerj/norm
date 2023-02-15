@@ -165,12 +165,12 @@ namespace Mil.Navy.Nrl.Norm
         public static extern long NormDataEnqueue(long sessionHandle, byte[] dataPtr, int dataLen, byte[]? infoPtr, int infoLen);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern IntPtr NormDataAccessData(long objectHandle);
+        public static extern nint NormDataAccessData(long objectHandle);
 
         [DllImport(NORM_LIBRARY)]
         public static extern int NormObjectGetSize(long objectHandle);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern IntPtr NormDataDetachData(long objectHandle);
+        public static extern nint NormDataDetachData(long objectHandle);
     }
 }
