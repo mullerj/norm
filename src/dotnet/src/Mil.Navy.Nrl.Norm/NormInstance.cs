@@ -119,7 +119,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public bool SuspendInstance()
         {
-            return NormApi.NormRestartInstance(_handle);
+            return NormApi.NormSuspendInstance(_handle);
         }
     }
 }
