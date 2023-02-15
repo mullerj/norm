@@ -111,5 +111,10 @@ namespace Mil.Navy.Nrl.Norm
         {
             NormApi.NormStopInstance(_handle);
         }
+
+        public bool RestartInstance()
+        {
+            return NormApi.NormRestartInstance(_handle);
+        }
     }
 }

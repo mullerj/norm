@@ -45,6 +45,14 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="instanceHandle">The NORM protocol engine instance referred to by the instanceHandle parameter</param>
         [DllImport (NORM_LIBRARY)]
         public static extern void NormStopInstance(long instanceHandle);
+      
+        /// <summary>
+        /// The NormRestartInstance() this function creates and starts an operating system threadto resume NORM protocol engine operation for the given instanceHandle that was previously stopped by a call to NormStopInstance().
+        /// </summary>
+        /// <param name="instanceHandle">The NORM protocol engine instance referred to by the instanceHandle parameter</param>
+        [DllImport (NORM_LIBRARY)]
+        public static extern bool NormRestartInstance(long instanceHandle);
+
         /// <summary>
         /// This function creates a NORM protocol session (NormSession) using the address (multicast or unicast) and port
         /// parameters provided.While session state is allocated and initialized, active session participation does not begin
