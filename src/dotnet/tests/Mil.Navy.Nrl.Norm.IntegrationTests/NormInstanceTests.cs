@@ -93,5 +93,17 @@
 
             Assert.Throws<IOException>(() => _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId));
         }
+
+        [Fact]
+        public void StopInstance()
+        {
+            var sessionAddress = "224.1.2.3";
+            var sessionPort = 6003;
+            var localNodeId = NormNode.NORM_NODE_ANY;
+
+            _normSession = _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId);
+        
+            _normInstance.StopInstance();
+        }
     }
 }

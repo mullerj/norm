@@ -40,6 +40,12 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormDestroyInstance(long instanceHandle);
 
         /// <summary>
+        /// The NormStopInstance() this function immediately stops the NORM protocol engine thread corresponding to the given instanceHandler parameter.
+        /// </summary>
+        /// <param name="instanceHandle">The NORM protocol engine instance referred to by the instanceHandle parameter</param>
+        [DllImport (NORM_LIBRARY)]
+        public static extern void NormStopInstance(long instanceHandle);
+        /// <summary>
         /// This function creates a NORM protocol session (NormSession) using the address (multicast or unicast) and port
         /// parameters provided.While session state is allocated and initialized, active session participation does not begin
         /// until a call is made to NormStartSender() and/or NormStartReceiver() to join the specified multicast group
