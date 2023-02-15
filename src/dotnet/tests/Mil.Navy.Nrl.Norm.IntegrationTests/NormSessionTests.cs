@@ -273,15 +273,19 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         {
             StartSender();
             //Create data to write to the stream
-            UnicodeEncoding unicodeEncoding = new UnicodeEncoding();
-            byte[] data = unicodeEncoding.GetBytes("Data string to be transmitted");
+            var expectedContent = "Data string to be transmitted";
+            byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
 
             try
             {
-                _normSession.DataEnqueue(data, 0, data.Length);
+                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
                 var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY };
                 var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
                 Assert.Equal(expectedEventTypes, actualEventTypes);
+                var actualData = normData.Data;
+                Assert.Equal(expectedData, actualData);
+                var actualContent = Encoding.ASCII.GetString(actualData);
+                Assert.Equal(expectedContent, actualContent);
             }
             catch(Exception)
             {
@@ -308,11 +312,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Create data to be sent
             var expectedContent = "Data string to be transmitted";
-            var data = Encoding.ASCII.GetBytes(expectedContent);
+            var expectedData = Encoding.ASCII.GetBytes(expectedContent);
 
             try
             {
-                var normData = _normSession.DataEnqueue(data, 0, data.Length);
+                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
                 var expectedEventTypes = new List<NormEventType> 
                 { 
                     NormEventType.NORM_REMOTE_SENDER_NEW,
@@ -326,7 +330,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
                 Assert.Equivalent(expectedEventTypes, actualEventTypes);
 
-                var actualContent = Encoding.Default.GetString(normData.Data);
+                var actualData = normData.Data;
+                Assert.Equal(expectedData, actualData);
+                var actualContent = Encoding.ASCII.GetString(actualData);
                 Assert.Equal(expectedContent, actualContent);
             }
             catch(Exception)
