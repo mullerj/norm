@@ -106,5 +106,10 @@ namespace Mil.Navy.Nrl.Norm
                 throw new IOException("Failed to set the cache directory");
             }
         }
+
+        public void StopInstance()
+        {
+            NormApi.NormStopInstance(_handle);
+        }
     }
 }
