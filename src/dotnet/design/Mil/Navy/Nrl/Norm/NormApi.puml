@@ -95,8 +95,8 @@ class NormApi
     + {static} NormSetTxRobustFactor(sessionHandle:long, robustFactor:int) : void
     + {static} NormFileEnqueue(sessionHandle:long, fileName:string): long
     + {static} NormFileEnqueue(sessionHandle:long, fileName:string, infoPtr:string, infoLen:int): long 
-    + {static} NormDataEnqueue(sessionHandle:long, dataPtr:string, dataLen:int) : long
-    + {static} NormDataEnqueue(sessionHandle:long, dataPtr:string, dataLen:int, infoPtr:string, infoLen:int) : long 
+    + {static} NormDataEnqueue(sessionHandle:long, dataPtr:byte[], dataLen:int) : long
+    + {static} NormDataEnqueue(sessionHandle:long, dataPtr:byte[], dataLen:int, infoPtr:byte[], infoLen:int) : long 
     + {static} NormRequeueObject(sessionHandle:long, objectHandle:long) : bool
     + {static} NormStreamOpen(sessionHandle:long, bufferSize:long) : long 
     + {static} NormStreamOpen(sessionHandle:long, bufferSize:long, infoPtr:string, infoLen:int) : long 
@@ -163,7 +163,7 @@ class NormApi
     + {static} NormObjectRelease(objectHandle:long) : void
     + {static} NormFileGetName(fileHandle:long, nameBuffer:string, bufferLen:int) : bool
     + {static} NormFileRename(fileHandle:long, fileName:string) : bool
-    + {static} NormDataAccessData(objectHandle:long) : string
+    + {static} NormDataAccessData(objectHandle:long) : IntPtr
     + {static} NormDataDetachData(objectHandle:long) : string
     + {static} NormObjectGetSender(objectHandle:long) : long
     + {static} NormNodeGetId(nodeHandle:long) : uint
