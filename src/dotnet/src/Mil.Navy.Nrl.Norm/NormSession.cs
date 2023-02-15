@@ -85,8 +85,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength, byte[] info, int infoOffset, int infoLength)
         {
-            var dataPtr = Encoding.ASCII.GetString(dataBuffer.ToArray());
-            var objectHadle = NormApi.NormDataEnqueue(_handle, dataPtr, dataLength, info, infoLength);
+            var objectHadle = NormApi.NormDataEnqueue(_handle, dataBuffer, dataLength, info, infoLength);
             if(objectHadle == NormApi.NORM_OBJECT_INVALID)
             {
                 throw new IOException("Failed to enqueue data");

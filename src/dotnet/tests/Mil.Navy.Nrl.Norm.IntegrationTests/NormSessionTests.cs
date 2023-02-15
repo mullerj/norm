@@ -276,12 +276,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             UnicodeEncoding unicodeEncoding = new UnicodeEncoding();
             byte[] data = unicodeEncoding.GetBytes("Data string to be transmitted");
 
-            //Create memoryStream
-            MemoryStream memStream = new MemoryStream();
-
-            //Write data to the stream
-            memStream.Write(data, 0, data.Length);
-
             try
             {
                 _normSession.DataEnqueue(data, 0, data.Length);
@@ -295,8 +289,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
             finally
             {
-                memStream.Dispose();
-                memStream.Close();
                 StopSender();
             }
         }
@@ -333,6 +325,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 };
                 var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
                 Assert.Equivalent(expectedEventTypes, actualEventTypes);
+
+                var actualContent = Encoding.Default.GetString(normData.Data);
+                Assert.Equal(expectedContent, actualContent);
             }
             catch(Exception)
             {

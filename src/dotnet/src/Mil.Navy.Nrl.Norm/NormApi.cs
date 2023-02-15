@@ -149,10 +149,10 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormSetCacheDirectory(long instanceHandle, string cachePath);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern long NormDataEnqueue(long sessionHandle, string dataPtr, int dataLen);
+        public static extern long NormDataEnqueue(long sessionHandle, byte[] dataPtr, int dataLen);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern long NormDataEnqueue(long sessionHandle, string dataPtr, int dataLen, byte[]? infoPtr, int infoLen);
+        public static extern long NormDataEnqueue(long sessionHandle, byte[] dataPtr, int dataLen, byte[]? infoPtr, int infoLen);
 
         [DllImport(NORM_LIBRARY)]
         public static extern IntPtr NormDataAccessData(long objectHandle);
@@ -161,6 +161,6 @@ namespace Mil.Navy.Nrl.Norm
         public static extern int NormObjectGetSize(long objectHandle);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern string NormDataDetachData(long objectHandle);
+        public static extern IntPtr NormDataDetachData(long objectHandle);
     }
 }
