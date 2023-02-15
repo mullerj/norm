@@ -141,9 +141,6 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormSetCacheDirectory(long instanceHandle, string cachePath);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern long NormDataEnqueue(long sessionHandle, byte[] dataPtr, int dataLen);
-
-        [DllImport(NORM_LIBRARY)]
         public static extern long NormDataEnqueue(long sessionHandle, byte[] dataPtr, int dataLen, byte[]? infoPtr, int infoLen);
 
         [DllImport(NORM_LIBRARY)]
@@ -154,5 +151,41 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern IntPtr NormDataDetachData(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetTxPort(long sessionHandle, ushort txPortNumber, bool enableReuse, string txBindAddress);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetRxPortReuse(long sessionHandle, bool enableReuse, string rxBindAddress, string senderAddress, ushort senderPort);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetMulticastInterface(long sessionHandle, string interfaceName);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetSSM(long sessionHandle, string sourceAddress);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetTTL(long sessionHandle, byte ttl);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetTOS(long sessionHandle, byte tos);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetMessageTrace(long sessionHandle, bool flag);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetTxLoss(long sessionHandle, double precent);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetRxLoss(long sessionHandle, double precent);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetTxOnly(long sessionHandle, bool txOnly, bool connectToSessionAddress);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetFlowControl(long sessionHandle, double flowControlFactor);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetTxSocketBuffer(long sessionHandle, long bufferSize);
     }
 }

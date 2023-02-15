@@ -30,11 +30,104 @@ namespace Mil.Navy.Nrl.Norm
             NormApi.NormDestroySession(_handle);
         }
 
+        public void SetTxPort(ushort port)
+        {
+            SetTxPort(port, false, String.Empty);
+        }
+
+        public void SetTxPort(ushort port, bool enableReuse, string txBindAddress)
+        {
+            if (!NormApi.NormSetTxPort(_handle, port, enableReuse, txBindAddress))
+            {
+                throw new IOException("Failed to set Tx Port");
+            }
+        }
+
+        public void SetTxOnly(bool txOnly)
+        {
+            SetTxOnly(txOnly, false);
+        }
+
+        public void SetTxOnly(bool txOnly, bool connectToSessionAddress)
+        {
+            NormApi.NormSetTxOnly(_handle, txOnly, connectToSessionAddress);
+        }
+
+        public void SetRxPortReuse(bool enable)
+        {
+            SetRxPortReuse(enable, string.Empty, string.Empty, ushort.MinValue);
+        }
+
+        public void SetRxPortReuse(bool enable, string rxBindAddress, string senderAddress, ushort senderPort)
+        {
+            NormApi.NormSetRxPortReuse(_handle, enable, rxBindAddress, senderAddress, senderPort);
+        }
+
+        public void SetMulticastInterface(string interfaceName)
+        {
+            if(!NormApi.NormSetMulticastInterface(_handle, interfaceName))
+            {
+                throw new IOException("Failed to set multicast interface");
+            }
+        }
+
+        public void SetSSM(string sourceAddress)
+        {
+            if(!NormApi.NormSetSSM(_handle, sourceAddress))
+            {
+                throw new IOException("Failed to set SSM");
+            }
+        }
+
+        public void SetTTL(byte ttl)
+        {
+            if (!NormApi.NormSetTTL(_handle, ttl))
+            {
+                throw new IOException("Failed to set TTL");
+            }
+        }
+
+        public void SetTOS(byte tos)
+        {
+            if(!NormApi.NormSetTOS(_handle, tos))
+            {
+                throw new IOException("Failed to set TOS");
+            }
+        }
+
         public void SetLoopback(bool loopbackEnable)
         {
             if (!NormApi.NormSetLoopback(_handle, loopbackEnable))
             {
                 throw new IOException("Failed to set loopback");
+            }
+        }
+
+        public void SetMessageTrace(bool flag)
+        {
+            NormApi.NormSetMessageTrace(_handle, flag);
+        }
+
+        public void SetTxLoss(double precent)
+        {
+            NormApi.NormSetTxLoss(_handle, precent);
+        }
+
+        public void SetRxLoss(double precent)
+        {
+            NormApi.NormSetRxLoss(_handle, precent);
+        }
+
+        public void SetFlowControl(double precent)
+        {
+            NormApi.NormSetFlowControl(_handle, precent);
+        }
+
+        public void SetTxSocketBuffer(long bufferSize)
+        {
+            if(!NormApi.NormSetTxSocketBuffer(_handle, bufferSize))
+            {
+                throw new IOException("Failed to set tx socket buffer");
             }
         }
 

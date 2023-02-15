@@ -432,5 +432,92 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 Directory.Delete(cachePath, true);
             }
         }
+
+        [Fact]
+        public void SetsTxPort()
+        {
+            _normSession.SetTxPort(Convert.ToUInt16(6003));
+        }
+
+        [Fact]
+        public void SetsRxPortReuseTrue()
+        {
+            _normSession.SetRxPortReuse(true);
+        }
+
+        [Fact]
+        public void SetsRxPortReuseFalse()
+        {
+            _normSession.SetRxPortReuse(false);
+        }
+
+        [Fact]
+        public void SetsMulticastInterface()
+        {
+            _normSession.SetMulticastInterface("interface_name");
+        }
+
+        [Fact]
+        public void SetsSSM()
+        {
+            var sourceAddress = "224.1.2.3";
+            _normSession.SetSSM(sourceAddress);
+        }
+
+        [Fact]
+        public void SetsSSMThrowsIOException()
+        {
+            var sourceAddress = "999.999.999.999";
+            Assert.Throws<IOException>(() => _normSession.SetSSM(sourceAddress));
+        }
+
+        [Fact]
+        public void SetsTTL()
+        {
+            var ttl = (byte)200;
+            _normSession.SetTTL(ttl);
+        }
+
+        [Fact]
+        public void SetsTOS()
+        {
+            var tos = (byte)200;
+            _normSession.SetTOS(tos);
+        }
+
+        [Fact]
+        public void SetsMessageTrace()
+        {
+            var flag = true;
+            _normSession.SetMessageTrace(flag);
+        }
+
+        [Fact]
+        public void SetsTxLoss()
+        {
+            var txLoss = .50;
+            _normSession.SetTxLoss(txLoss);
+        }
+
+        [Fact]
+        public void SetsTxOnly()
+        {
+            var txOnly = true;
+            _normSession.SetTxOnly(txOnly);
+        }
+
+        [Fact]
+        public void SetsFlowControl()
+        {
+            var flowControlFactor = .50;
+            _normSession.SetFlowControl(flowControlFactor);
+        }
+
+        [Fact]
+        public void SetsTxSocketBuffer()
+        {
+            var bufferSize = (long)100;
+            _normSession.SetTxSocketBuffer(bufferSize);
+        }
     }
 }
