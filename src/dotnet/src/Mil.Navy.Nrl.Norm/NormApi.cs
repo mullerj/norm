@@ -45,6 +45,24 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="instanceHandle">The NORM protocol engine instance referred to by the instanceHandle parameter</param>
         [DllImport (NORM_LIBRARY)]
         public static extern void NormStopInstance(long instanceHandle);
+      
+        /// <summary>
+        /// The NormRestartInstance() this function creates and starts an operating system threadto resume NORM protocol engine operation for the given instanceHandle that was previously stopped by a call to NormStopInstance().
+        /// </summary>
+        /// <param name="instanceHandle">The NORM protocol engine instance referred to by the instanceHandle parameter</param>
+        [DllImport (NORM_LIBRARY)]
+        public static extern bool NormRestartInstance(long instanceHandle);
+
+        /// <summary>
+        /// The NormRestartInstance() this function creates and starts an operating system threadto resume NORM protocol engine operation for the given instanceHandle that was previously stopped by a call to NormStopInstance().
+        /// </summary>
+        /// <param name="instanceHandle">The NORM protocol engine instance referred to by the instanceHandle parameter</param>
+        [DllImport (NORM_LIBRARY)]
+        public static extern bool NormSuspendInstance(long instanceHandle);
+
+        [DllImport (NORM_LIBRARY)]
+        public static extern bool NormResumeInstance(long instanceHandle);
+
         /// <summary>
         /// This function creates a NORM protocol session (NormSession) using the address (multicast or unicast) and port
         /// parameters provided.While session state is allocated and initialized, active session participation does not begin
@@ -141,10 +159,13 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormSetCacheDirectory(long instanceHandle, string cachePath);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern long NormDataEnqueue(long sessionHandle, byte[] dataPtr, int dataLen);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern long NormDataEnqueue(long sessionHandle, byte[] dataPtr, int dataLen, byte[]? infoPtr, int infoLen);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern IntPtr NormDataAccessData(long objectHandle);
+        public static extern nint NormDataAccessData(long objectHandle);
 
         [DllImport(NORM_LIBRARY)]
         public static extern int NormObjectGetSize(long objectHandle);
@@ -187,5 +208,6 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetTxSocketBuffer(long sessionHandle, long bufferSize);
+        public static extern nint NormDataDetachData(long objectHandle);
     }
 }
