@@ -8,7 +8,7 @@ class NormNode {
     + SetRepairBoundary(repairBoundary:NormRepairBoundary) : void
     + SetRxRobustFactor(robustFactor:int) : void
     + Id : long <<get>>
-    + Address : SocketAddress <<get>>
+    + Address : IPEndPoint <<get>>
     + Grtt : double <<get>>
     + GetCommand(buffer:byte[], offset:int, length:int) : int
     + FreeBuffers() : void

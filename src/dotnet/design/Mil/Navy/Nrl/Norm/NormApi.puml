@@ -167,8 +167,8 @@ class NormApi
     + {static} NormDataDetachData(objectHandle:long) : nint
     + {static} NormObjectGetSender(objectHandle:long) : long
     + {static} NormNodeGetId(nodeHandle:long) : uint
-    + {static} NormNodeGetAddress(nodeHandle:long, addrBuffer:string, bufferLen: uint) : bool
-    + {static} NormNodeGetAddress(nodeHandle:long, addrBuffer:string, bufferLen: uint, port:ushort) : bool
+    + {static} NormNodeGetAddress(nodeHandle:long, addrBuffer:byte[], bufferLen: int) : bool
+    + {static} NormNodeGetAddress(nodeHandle:long, addrBuffer:byte[], bufferLen: int, port:int) : bool
     + {static} NormNodeGetGrtt(remoteSender:long) : double
     + {static} NormNodeGetCommand(remoteSender:long, :string, buflen:uint) : bool
     + {static} NormNodeSendAckEx(remoteSender:long, buffer:string, numBytes:uint) : bool
