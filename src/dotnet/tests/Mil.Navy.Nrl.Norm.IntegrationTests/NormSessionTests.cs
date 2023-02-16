@@ -1,4 +1,5 @@
-﻿using Mil.Navy.Nrl.Norm.Enums;
+﻿using Bogus;
+using Mil.Navy.Nrl.Norm.Enums;
 using System.Text;
 
 namespace Mil.Navy.Nrl.Norm.IntegrationTests
@@ -20,8 +21,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         /// </summary>
         private NormSession CreateSession()
         {
+            var faker = new Faker();
             var sessionAddress = "224.1.2.3";
-            var sessionPort = 6003;
+            var sessionPort = faker.Internet.Port();
             var localNodeId = NormNode.NORM_NODE_ANY;
 
             return _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId);
@@ -158,6 +160,16 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             StopReceiver();
         }
 
+        /// <summary>
+        /// Generates text content
+        /// </summary>
+        /// <returns>The generated text content</returns>
+        private string GenerateTextContent()
+        {
+            var faker = new Faker();
+            return faker.Lorem.Paragraph();
+        }
+
         private IEnumerable<NormEvent> GetEvents()
         {
             var normEvents = new List<NormEvent>();
@@ -182,7 +194,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         {
             StartSender();
 
-            var fileContent = "Hello to the other norm node!!!!!!";
+            var fileContent = GenerateTextContent();
             var fileName = Guid.NewGuid().ToString();
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
             File.WriteAllText(filePath, fileContent);
@@ -224,7 +236,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up file to send
             var fileName = Guid.NewGuid().ToString();
-            var fileContent = "Hello to the other norm node!!!!!!";
+            var fileContent = GenerateTextContent();
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
             File.WriteAllText(filePath, fileContent);
 
@@ -273,7 +285,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         {
             StartSender();
             //Create data to write to the stream
-            var expectedContent = "Data string to be transmitted";
+            var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
 
             try
@@ -311,7 +323,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normInstance.SetCacheDirectory(cachePath);
 
             //Create data to be sent
-            var expectedContent = "Data string to be transmitted";
+            var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
 
             try
@@ -352,7 +364,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         {
             StartSender();
 
-            var fileContent = "Hello to the other norm node!!!!!!";
+            var fileContent = GenerateTextContent();
             var data = Encoding.ASCII.GetBytes(fileContent);
             NormStream? normStream = null;
 
@@ -394,7 +406,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
-            var fileContent = "Hello to the other norm node!!!!!!";
+            var fileContent = GenerateTextContent();
             var data = Encoding.ASCII.GetBytes(fileContent);
             NormStream? normStream = null;
 
