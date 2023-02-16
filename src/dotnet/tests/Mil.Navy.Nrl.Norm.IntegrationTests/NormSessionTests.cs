@@ -191,6 +191,21 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             GetEvents();
         }
 
+        private void AssertNormEvents(IEnumerable<NormEvent> normEvents)
+        {
+            foreach (var normEvent in normEvents)
+            {
+                var normNode = normEvent.Node;
+                if (normNode != null)
+                {
+                    var actualAddress = normNode.Address;
+                    Assert.NotNull(actualAddress);
+                    var actualGrtt = normNode.Grtt;
+                    Assert.NotEqual(-1, actualGrtt);
+                }
+            }
+        }
+
         [Fact]
         public void EnqueuesFile()
         {
@@ -249,16 +264,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var normFile = _normSession.FileEnqueue(filePath);
                 //Wait for events
                 var normEvents = GetEvents();
-
-                foreach (var normEvent in normEvents)
-                {
-                    var normNode = normEvent.Node;
-                    if (normNode != null)
-                    {
-                        var actualAddress = normNode.Address;
-                        Assert.NotNull(actualAddress);
-                    }
-                }
+                AssertNormEvents(normEvents);
 
                 var expectedNormEventType = NormEventType.NORM_RX_OBJECT_COMPLETED;
                 Assert.Contains(expectedNormEventType, normEvents.Select(e => e.Type));
@@ -353,15 +359,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                     NormEventType.NORM_RX_OBJECT_COMPLETED
                 };
                 var actualEvents = GetEvents();
-                foreach (var normEvent in actualEvents)
-                {
-                    var normNode = normEvent.Node;
-                    if (normNode != null)
-                    {
-                        var actualAddress = normNode.Address;
-                        Assert.NotNull(actualAddress);
-                    }
-                }
+                AssertNormEvents(actualEvents);
 
                 var actualEventTypes = actualEvents.Select(e => e.Type).ToList();
                 Assert.Equivalent(expectedEventTypes, actualEventTypes);
@@ -445,15 +443,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 normStream.MarkEom();
                 normStream.Flush();
                 var normEvents = GetEvents();
-                foreach (var normEvent in normEvents)
-                {
-                    var normNode = normEvent.Node;
-                    if (normNode != null)
-                    {
-                        var actualAddress = normNode.Address;
-                        Assert.NotNull(actualAddress);
-                    }
-                }
+                AssertNormEvents(normEvents);
 
                 var expectedNormEventType = NormEventType.NORM_RX_OBJECT_UPDATED;
                 Assert.Contains(expectedNormEventType, normEvents.Select(e => e.Type));

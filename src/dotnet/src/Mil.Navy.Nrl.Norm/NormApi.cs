@@ -175,5 +175,8 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormNodeGetAddress(long nodeHandle, [Out] byte[] addrBuffer, ref int bufferLen, out int port);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern double NormNodeGetGrtt(long nodeHandle);
     }
 }

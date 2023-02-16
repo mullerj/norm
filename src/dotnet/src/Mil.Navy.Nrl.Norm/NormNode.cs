@@ -29,5 +29,7 @@ namespace Mil.Navy.Nrl.Norm
                 return new IPEndPoint(ipAddress, port);
             }
         }
+
+        public double Grtt => NormApi.NormNodeGetGrtt(_handle);
     }
 }
