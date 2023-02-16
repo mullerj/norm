@@ -29,7 +29,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             return _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId);
         }
 
-        public NormSessionTests() 
+        public NormSessionTests()
         {
             _normInstance = new NormInstance();
             _normSession = CreateSession();
@@ -59,17 +59,17 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
         private void StartReceiver()
         {
-            if(!_isReceiverStarted)
+            if (!_isReceiverStarted)
             {
                 //The appropriate bufferSpace to use is a function of expected network delay * bandwidth product and packet loss characteristics
-                _normSession.StartReceiver(10*10);
+                _normSession.StartReceiver(10 * 10);
                 _isReceiverStarted = true;
             }
         }
 
         private void StopReceiver()
         {
-            if(_isReceiverStarted && ! _isReceiverStopped)
+            if (_isReceiverStarted && !_isReceiverStopped)
             {
                 _normSession.StopReceiver();
                 _isSenderStopped = true;
@@ -299,7 +299,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var actualContent = Encoding.ASCII.GetString(actualData);
                 Assert.Equal(expectedContent, actualContent);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
@@ -329,8 +329,8 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             try
             {
                 var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
-                var expectedEventTypes = new List<NormEventType> 
-                { 
+                var expectedEventTypes = new List<NormEventType>
+                {
                     NormEventType.NORM_REMOTE_SENDER_NEW,
                     NormEventType.NORM_REMOTE_SENDER_ACTIVE,
                     NormEventType.NORM_TX_OBJECT_SENT,
@@ -347,7 +347,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var actualContent = Encoding.ASCII.GetString(actualData);
                 Assert.Equal(expectedContent, actualContent);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw;
             }
@@ -536,6 +536,268 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         {
             var bufferSize = (long)100;
             _normSession.SetTxSocketBuffer(bufferSize);
+        }
+
+        [Fact]
+        public void SetsCongestionControl()
+        {
+            var enable = true;
+            _normSession.SetCongestionControl(enable);
+        }
+
+        [Fact]
+        public void SetsTxRateBounds()
+        {
+            var rateMin = 1.0;
+            var rateMax = 100.0;
+            _normSession.SetTxRateBounds(rateMin, rateMax);
+        }
+
+        [Fact]
+        public void SetsTxCacheBounds()
+        {
+            var sizeMax = (long)100;
+            var countMin = (long)1;
+            var countMax = (long)99;
+
+            _normSession.SetTxCacheBounds(sizeMax, countMin, countMax);
+        }
+
+        [Fact]
+        public void SetsAutoParity()
+        {
+            var autoParity = (short)123;
+            _normSession.SetAutoParity(autoParity);
+        }
+
+        [Fact]
+        public void SetsTxRate()
+        {
+            double txRate = 20.0;
+            _normSession.TxRate = txRate;
+        }
+
+        [Fact]
+        public void GetsTxRate()
+        {
+            double expectedTxRate = 10.0;
+            _normSession.TxRate = expectedTxRate;
+
+            var actualTxRate = _normSession.TxRate;
+            Assert.Equal(expectedTxRate, actualTxRate);
+        }
+
+        [Fact]
+        public void SetsGrttEstimate()
+        {
+            double grttEstimate = 10.0;
+            _normSession.GrttEstimate = grttEstimate;
+        }
+
+        [Fact]
+        public void GetsGrttEstimate()
+        {
+            double expetedGrttEstimate = 10.0;
+            _normSession.GrttEstimate = expetedGrttEstimate;
+
+            var actualGrttEstimate = _normSession.GrttEstimate;
+            Assert.InRange<double>(actualGrttEstimate, expetedGrttEstimate - 1.0, expetedGrttEstimate + 1.0);
+        }
+
+        [Fact]
+        public void SetsGrttMax()
+        {
+            double grttMax = 20.0;
+            _normSession.SetGrttMax(grttMax);
+        }
+
+        [Fact]
+        public void SetsGrttProbingMode_NORM_PROBE_NONE()
+        {
+            var probingMode = NormProbingMode.NORM_PROBE_NONE;
+            _normSession.SetGrttProbingMode(probingMode);
+        }
+
+        [Fact]
+        public void SetsGrttProbingMode_NORM_PROBE_PASSIVE()
+        {
+            var probingMode = NormProbingMode.NORM_PROBE_PASSIVE;
+            _normSession.SetGrttProbingMode(probingMode);
+        }
+
+        [Fact]
+        public void SetsGrttProbingMode_NORM_PROBE_ACTIVE()
+        {
+            var probingMode = NormProbingMode.NORM_PROBE_ACTIVE;
+            _normSession.SetGrttProbingMode(probingMode);
+        }
+
+        [Fact]
+        public void SetsGrttProbingInterval()
+        {
+            var intervalMin = 1.0;
+            var intervalMax = 10.0;
+            _normSession.SetGrttProbingInterval(intervalMin, intervalMax);
+        }
+
+        [Fact]
+        public void SetsBackoffFactor()
+        {
+            var backoffFactor = 10.0;
+            _normSession.SetBackoffFactor(backoffFactor);
+        }
+
+        [Fact]
+        public void SetsGroupSize()
+        {
+            var groupSize = (long)100;
+            _normSession.SetGroupSize(groupSize);
+        }
+
+        [Fact]
+        public void SetsTxRobustFactor()
+        {
+            var txRobustFactor = 2;
+            _normSession.SetTxRobustFactor(txRobustFactor);
+        }
+
+        [Fact]
+        public void RequeuesObject()
+        {
+            //TODO
+        }
+
+        [Fact]
+        public void SetsWatermark()
+        {
+            //TODO
+        }
+
+        [Fact]
+        public void CancelsWatermark()
+        {
+            //TODO
+        }
+
+        [Fact]
+        public void ResetsWatermark()
+        {
+            //TODO
+        }
+
+        [Fact]
+        public void AddsAckingNode()
+        {
+            //TODO
+        }
+
+        [Fact]
+        public void RemovesAckingNode()
+        {
+            //TODO
+        }
+
+        [Fact]
+        public void SendsCommand()
+        {
+            //TODO
+        }
+
+        [Fact]
+        public void CancelsCommand()
+        {
+            //TODO
+        }
+
+        [Fact]
+        public void SetsRxCacheLimit()
+        {
+            var countMax = 5;
+            _normSession.SetRxCacheLimit(countMax);
+        }
+
+        [Fact]
+        public void SetsRxSocketBuffer()
+        {
+            var bufferSize = (long)8;
+            _normSession.SetRxSocketBuffer(bufferSize);
+        }
+
+        [Fact]
+        public void SetsSilentReceiver()
+        {
+            var silent = true;
+            _normSession.SetSilentReceiver(silent);
+        }
+
+        [Fact]
+        public void SetsDefaultUnicastNack()
+        {
+            var enable = true;
+            _normSession.SetDefaultUnicastNack(enable);
+        }
+
+        [Fact]
+        public void SetsDefaultSyncPolicy_NORM_SYNC_CURRENT()
+        {
+            var syncPolicy = NormSyncPolicy.NORM_SYNC_CURRENT;
+            _normSession.SetDefaultSyncPolicy(syncPolicy);
+        }
+
+        [Fact]
+        public void SetsDefaultSyncPolicy_NORM_SYNC_STREAM()
+        {
+            var syncPolicy = NormSyncPolicy.NORM_SYNC_STREAM;
+            _normSession.SetDefaultSyncPolicy(syncPolicy);
+        }
+
+        [Fact]
+        public void SetsDefaultSyncPolicy_NORM_SYNC_ALL()
+        {
+            var syncPolicy = NormSyncPolicy.NORM_SYNC_ALL;
+            _normSession.SetDefaultSyncPolicy(syncPolicy);
+        }
+
+        [Fact]
+        public void SetsDefaultNackingMode_ORM_NACK_NONE()
+        {
+            var nackingMode = NormNackingMode.ORM_NACK_NONE;
+            _normSession.SetDefaultNackingMode(nackingMode);
+        }
+
+        [Fact]
+        public void SetsDefaultNackingMode_NORM_NACK_INFO_ONLY()
+        {
+            var nackingMode = NormNackingMode.NORM_NACK_INFO_ONLY;
+            _normSession.SetDefaultNackingMode(nackingMode);
+        }
+
+        [Fact]
+        public void SetsDefaultNackingMode_NORM_NACK_NORMAL()
+        {
+            var nackingMode = NormNackingMode.NORM_NACK_NORMAL;
+            _normSession.SetDefaultNackingMode(nackingMode);
+        }
+
+        [Fact]
+        public void SetsDefaultRepairBoundary_NORM_BOUNDARY_BLOCK()
+        {
+            var repairBoundary = NormRepairBoundary.NORM_BOUNDARY_BLOCK;
+            _normSession.SetDefaultRepairBoundary(repairBoundary);
+        }
+
+        [Fact]
+        public void SetsDefaultRepairBoundary_NORM_BOUNDARY_OBJECT()
+        {
+            var repairBoundary = NormRepairBoundary.NORM_BOUNDARY_OBJECT;
+            _normSession.SetDefaultRepairBoundary(repairBoundary);
+        }
+
+        [Fact]
+        public void SetsDefaultRxRobustFactor()
+        {
+            var rxRobustFactor = 2;
+            _normSession.SetDefaultRxRobustFactor(rxRobustFactor);
         }
     }
 }
