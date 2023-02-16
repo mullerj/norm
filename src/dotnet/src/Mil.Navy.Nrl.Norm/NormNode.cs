@@ -12,6 +12,8 @@ namespace Mil.Navy.Nrl.Norm
             _handle = handle;
         }
 
+        public long Id => NormApi.NormNodeGetId(_handle);
+
         public IPEndPoint Address
         {
             get

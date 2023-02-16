@@ -198,6 +198,8 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var normNode = normEvent.Node;
                 if (normNode != null)
                 {
+                    var actualId = normNode.Id;
+                    Assert.NotEqual(NORM_NODE_NONE, actualId);
                     var actualAddress = normNode.Address;
                     Assert.NotNull(actualAddress);
                     var actualGrtt = normNode.Grtt;

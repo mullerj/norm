@@ -12,6 +12,7 @@ namespace Mil.Navy.Nrl.Norm
         public const int NORM_SESSION_INVALID = 0;
         public const int NORM_OBJECT_INVALID = 0;
         public const int NORM_NODE_INVALID = 0;
+        public const int NORM_NODE_NONE = 0;
         public const int NORM_DESCRIPTOR_INVALID = 0;
         public const int FILENAME_MAX = 260;
 
@@ -172,6 +173,9 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern nint NormDataDetachData(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern long NormNodeGetId(long nodeHandle);
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormNodeGetAddress(long nodeHandle, [Out] byte[] addrBuffer, ref int bufferLen, out int port);
