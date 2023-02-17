@@ -54,7 +54,7 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormRestartInstance(long instanceHandle);
 
         /// <summary>
-        /// The NormRestartInstance() this function creates and starts an operating system threadto resume NORM protocol engine operation for the given instanceHandle that was previously stopped by a call to NormStopInstance().
+        /// The NormSuspendtInstance()
         /// </summary>
         /// <param name="instanceHandle">The NORM protocol engine instance referred to by the instanceHandle parameter</param>
         [DllImport (NORM_LIBRARY)]
@@ -89,6 +89,18 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern int NormGetRandomSessionId();
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern NormOpenDebugLog(long instanceHandle, string path);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern NormCloseDebugLog(long instanceHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern NormOpenDebugPipe(long instanceHandle, string pipeName);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern NormCloseDebugPipe(long instanceHandle);
 
         /// <summary>
         /// The application's participation as a sender within a specified NormSession begins when this function is called.

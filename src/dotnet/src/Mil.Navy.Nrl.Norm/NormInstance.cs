@@ -126,5 +126,20 @@ namespace Mil.Navy.Nrl.Norm
         {
             NormApi.NormResumeInstance(_handle);
         }
+
+        public void OpenDebugLog(string fileName)
+        {
+            NormApi.NormOpenDebugLog(_handle, fileName);
+        }
+
+        public void CloseDebugLog()
+        {
+            NormApi.NormCloseDebugLog(_handle);
+        }
+
+        public void OpenDebugPipe(string pipeName)
+        {
+            NormApi.NormOpenDebugPipe(pipeName);
+        }
     }
 }
