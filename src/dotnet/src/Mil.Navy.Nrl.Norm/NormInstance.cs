@@ -139,7 +139,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void OpenDebugPipe(string pipeName)
         {
-            NormApi.NormOpenDebugPipe(pipeName);
+            NormApi.NormOpenDebugPipe(_handle, pipeName);
         }
     }
 }
