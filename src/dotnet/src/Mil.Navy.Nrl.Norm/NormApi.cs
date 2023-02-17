@@ -91,16 +91,16 @@ namespace Mil.Navy.Nrl.Norm
         public static extern int NormGetRandomSessionId();
 
         [DllImport(NORM_LIBRARY)]
-        public static extern NormOpenDebugLog(long instanceHandle, string path);
+        public static extern bool NormOpenDebugLog(long instanceHandle, string path);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern NormCloseDebugLog(long instanceHandle);
+        public static extern bool NormCloseDebugLog(long instanceHandle);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern NormOpenDebugPipe(long instanceHandle, string pipeName);
+        public static extern bool NormOpenDebugPipe(long instanceHandle, string pipeName);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern NormCloseDebugPipe(long instanceHandle);
+        public static extern bool NormCloseDebugPipe(long instanceHandle);
 
         /// <summary>
         /// The application's participation as a sender within a specified NormSession begins when this function is called.
