@@ -7,7 +7,10 @@ namespace Mil.Navy.Nrl.Norm
     {
         private static Dictionary<long, NormSession> _normSessions = new Dictionary<long, NormSession>();
         private long _handle;
-        public long LocalNodeId { get; }
+        public long LocalNodeId
+        {
+            get { return NormApi.NormGetLocalNodeId(_handle); }
+        }
         public double ReportInterval { get; set; }
         public double TxRate
         {
@@ -340,12 +343,15 @@ namespace Mil.Navy.Nrl.Norm
 
         public void AddAckingNode(long nodeId)
         {
-            //TODO
+            if(!NormApi.NormAddAckingNode(_handle, nodeId))
+            {
+                throw new IOException("Failed to add acking node");
+            }
         }
 
         public void RemoveAckingNode(long nodeId)
         {
-            //TODO
+            NormApi.NormRemoveAckingNode(_handle, nodeId);
         }
 
         public void SendCommand(byte[] cmdBuffer, int cmdLength)

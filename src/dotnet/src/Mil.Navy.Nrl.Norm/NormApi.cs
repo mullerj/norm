@@ -310,5 +310,11 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetDefaultRxRobustFactor(long sessionHandle, int rxRobustFactor);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern double NormNodeGetId(long nodeHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern long NormGetLocalNodeId(long sessionHandle);
     }
 }
