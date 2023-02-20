@@ -919,7 +919,27 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         [Fact]
         public void CancelsCommand()
         {
-            //TODO: Implement CancelsCommand
+            StartSender();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedCommand = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                _normSession.SendCommand(expectedCommand, expectedCommand.Length);
+                _normSession.CancelCommand();
+                var expectedEventTypes = new List<NormEventType>();
+                var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
+                Assert.Equal(expectedEventTypes, actualEventTypes);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
         }
 
         [Fact]
