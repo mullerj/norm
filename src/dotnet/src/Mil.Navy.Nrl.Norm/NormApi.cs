@@ -98,10 +98,10 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormCloseDebugLog(long instanceHandle);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormOpenDebugPipe(long instanceHandle, string pipeName);
+        public static extern void NormSetDebugLevel(int level);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormCloseDebugPipe(long instanceHandle);
+        public static extern int NormGetDebugLevel();
 
         /// <summary>
         /// The application's participation as a sender within a specified NormSession begins when this function is called.

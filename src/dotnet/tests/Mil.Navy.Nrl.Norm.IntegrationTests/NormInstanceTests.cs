@@ -10,7 +10,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         /// <summary>
         /// The NORM instance
         /// </summary>
-        private readonly NormInstance _normInstance;
+        private NormInstance _normInstance;
         private NormSession? _normSession;
         /// <summary>
         /// Determines if the NORM instance has been destroyed
@@ -57,6 +57,17 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         [Fact]
         public void CreatesNormInstance()
         {
+            Assert.NotNull(_normInstance);
+        }
+
+        /// <summary>
+        /// Test for creating a NORM instance
+        /// </summary>
+        [Fact]
+        public void CreatesNormInstanceWithPriorityBoost()
+        {
+            _normInstance.DestroyInstance();
+            _normInstance = new NormInstance(true);
             Assert.NotNull(_normInstance);
         }
 
@@ -119,9 +130,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normSession = _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId);
         
             _normInstance.StopInstance();
-
-          var actual = _normInstance.RestartInstance();
-         Assert.Equal(expected,actual);
+            
+            var actual = _normInstance.RestartInstance();
+            Assert.Equal(expected,actual);
         }
 
          [Fact]
@@ -134,9 +145,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normSession = _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId);
         
             _normInstance.StopInstance();
-
-          var actual = _normInstance.SuspendInstance();
-         Assert.Equal(expected,actual);
+            
+            var actual = _normInstance.SuspendInstance();
+            Assert.Equal(expected,actual);
         }
         [Fact]
         public void ResumeInstance()
@@ -144,7 +155,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             var sessionAddress = "224.1.2.3";
             var sessionPort = 6003;
             var localNodeId = NormNode.NORM_NODE_ANY;
-            var expected = true;
             _normSession = _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId);
         
             _normInstance.StopInstance();
@@ -157,8 +167,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             var fileName = Guid.NewGuid().ToString();
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
 
-            _normInstance.OpenDebugLog(fileName);
-            
+            _normInstance.OpenDebugLog(filePath);
         }
 
         [Fact]
@@ -168,9 +177,12 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         }
 
         [Fact]
-        public void OpenDebugPipe()
+        public void SetsDebugLevel()
         {
-            
+            var expectedDebugLevel = 12;
+            _normInstance.DebugLevel = expectedDebugLevel;
+            var actualDebugLevel = _normInstance.DebugLevel;
+            Assert.Equal(expectedDebugLevel, actualDebugLevel);
         }
     }
 }

@@ -14,12 +14,16 @@ namespace Mil.Navy.Nrl.Norm
         /// </summary>
         private long _handle;
 
+        public NormInstance(bool priorityBoost)
+        {
+            CreateInstance(priorityBoost);
+        }
+
         /// <summary>
         /// Default constructor for NormInstance
         /// </summary>
-        public NormInstance()
+        public NormInstance() : this(false)
         {
-            CreateInstance(false);
         }
 
         /// <summary>
@@ -129,7 +133,10 @@ namespace Mil.Navy.Nrl.Norm
 
         public void OpenDebugLog(string fileName)
         {
-            NormApi.NormOpenDebugLog(_handle, fileName);
+            if (!NormApi.NormOpenDebugLog(_handle, fileName))
+            {
+                throw new IOException("Failed to open debug log");
+            }
         }
 
         public void CloseDebugLog()
@@ -137,9 +144,10 @@ namespace Mil.Navy.Nrl.Norm
             NormApi.NormCloseDebugLog(_handle);
         }
 
-        public void OpenDebugPipe(string pipeName)
-        {
-            NormApi.NormOpenDebugPipe(_handle, pipeName);
+        public int DebugLevel 
+        { 
+            get => NormApi.NormGetDebugLevel(); 
+            set => NormApi.NormSetDebugLevel(value); 
         }
     }
 }
