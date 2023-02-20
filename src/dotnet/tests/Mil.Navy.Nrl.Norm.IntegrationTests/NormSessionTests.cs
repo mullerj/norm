@@ -774,8 +774,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                     NormEventType.NORM_RX_OBJECT_NEW,
                     NormEventType.NORM_RX_OBJECT_UPDATED,
                     NormEventType.NORM_RX_OBJECT_COMPLETED,
-                    NormEventType.NORM_TX_WATERMARK_COMPLETED,
-                    NormEventType.NORM_TX_FLUSH_COMPLETED
+                    NormEventType.NORM_TX_WATERMARK_COMPLETED
                 };
                 var actualEvents = GetEvents(TimeSpan.FromSeconds(1));
                 var actualEventTypes = actualEvents.Select(e => e.Type).ToList();
@@ -881,8 +880,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 _normSession.ResetWatermark();
                 expectedEventTypes = new List<NormEventType>
                 {
-                    NormEventType.NORM_TX_WATERMARK_COMPLETED,
-                    NormEventType.NORM_TX_FLUSH_COMPLETED
+                    NormEventType.NORM_TX_WATERMARK_COMPLETED
                 };
                 actualEvents = GetEvents(TimeSpan.FromSeconds(1));
                 actualEventTypes = actualEvents.Select(e => e.Type).ToList();

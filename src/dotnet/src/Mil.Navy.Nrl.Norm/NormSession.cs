@@ -315,7 +315,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetWatermark(NormObject normObject)
         {
-            SetWatermark(normObject, true);
+            SetWatermark(normObject, false);
         }
 
         public void SetWatermark(NormObject normObject, bool overrideFlush)

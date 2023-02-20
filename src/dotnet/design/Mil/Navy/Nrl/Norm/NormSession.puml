@@ -50,6 +50,7 @@ class NormSession {
     + RequeueObject(object:NormObject) : void
     + StreamOpen(bufferSize:long) : NormStream
     + StreamOpen(bufferSize:long, info:byte[], infoLength:int) : NormStream
+    + SetWatermark(object:NormObject) : void
     + SetWatermark(object:NormObject, overrideFlush:bool) : void
     + CancelWatermark() : void
     + ResetWatermark() : void
