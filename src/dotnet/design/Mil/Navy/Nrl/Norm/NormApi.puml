@@ -152,8 +152,8 @@ class NormApi
     + {static} NormStreamGetBufferUsage(streamHandle:long) : uint
     + {static} NormObjectGetType(objectHandle:long) : NormObjectType
     + {static} NormObjectHasInfo(objectHandle:long) : bool
-    + {static} NormObjectGetInfoLength(objectHandle:long) : ushort
-    + {static} NormObjectGetInfo(objectHandle:long, buffer:char, bufferLen:ushort) : ushort
+    + {static} NormObjectGetInfoLength(objectHandle:long) : int
+    + {static} NormObjectGetInfo(objectHandle:long, buffer:byte[], bufferLen:int) : int
     + {static} NormObjectGetSize(objectHandle:long) : int
     + {static} NormObjectGetBytesPending(objectHandle:long) : int
     + {static} NormObjectCancel(objectHandle:long) : void

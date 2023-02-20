@@ -315,6 +315,75 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         }
 
         [Fact]
+        public void ReceivesFileWithRename()
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+
+            //Set up cache directory
+            var folderName = Guid.NewGuid().ToString();
+            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            Directory.CreateDirectory(cachePath);
+            _normInstance.SetCacheDirectory(cachePath);
+
+            //Set up file to send
+            var fileName = Guid.NewGuid().ToString();
+            var fileContent = GenerateTextContent();
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            File.WriteAllText(filePath, fileContent);
+
+            try
+            {
+                //Enqueue file
+                var fileNameBytes = Encoding.ASCII.GetBytes(fileName);
+                var normFile = _normSession.FileEnqueue(filePath, fileNameBytes, fileNameBytes.Length);
+                //Wait for events
+                var normEvents = GetEvents();
+                AssertNormEvents(normEvents);
+
+                var expectedNormEventType = NormEventType.NORM_RX_OBJECT_COMPLETED;
+                Assert.Contains(expectedNormEventType, normEvents.Select(e => e.Type));
+                var normObjectEvent = normEvents.First(e => e.Type == expectedNormEventType);
+
+                var receivedNormFile = Assert.IsType<NormFile>(normObjectEvent.Object);
+                var actualInfo = receivedNormFile.Info;
+                Assert.NotNull(actualInfo);
+
+                var expectedFileName = fileName;
+                var actualFileName = Encoding.ASCII.GetString(actualInfo);
+                Assert.Equal(expectedFileName, actualFileName);
+
+                var expectedFilePath = Path.Combine(cachePath, actualFileName);
+                receivedNormFile.Rename(expectedFilePath);
+
+                //Check that file exists
+                var expectedFileCount = 1;
+                var actualFiles = Directory.GetFiles(cachePath);
+                var actualFileCount = actualFiles.Length;
+                Assert.Equal(expectedFileCount, actualFileCount);
+
+                //Check file content
+                var actualFilePath = actualFiles.First();
+                Assert.Equal(expectedFilePath, actualFilePath);
+                var actualContent = File.ReadAllText(actualFilePath);
+                Assert.Equal(fileContent, actualContent);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+                File.Delete(filePath);
+                Directory.Delete(cachePath, true);
+            }
+        }
+
+        [Fact]
         public void EnqueuesData()
         {
             StartSender();

@@ -157,6 +157,15 @@ namespace Mil.Navy.Nrl.Norm
         public static extern NormObjectType NormObjectGetType(long objectHandle);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern bool NormObjectHasInfo(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern int NormObjectGetInfoLength(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern int NormObjectGetInfo(long objectHandle, [Out] byte[] buffer, int bufferLen);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern bool NormFileRename(long fileHandle, string fileName);
 
         [DllImport(NORM_LIBRARY)]
