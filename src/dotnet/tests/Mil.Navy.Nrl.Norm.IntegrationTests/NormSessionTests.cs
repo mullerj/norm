@@ -894,7 +894,26 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         [Fact]
         public void SendsCommand()
         {
-            //TODO: Implement SendsCommand
+            StartSender();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedCommand = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                _normSession.SendCommand(expectedCommand, expectedCommand.Length);
+                var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_CMD_SENT };
+                var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
+                Assert.Equal(expectedEventTypes, actualEventTypes);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
         }
 
         [Fact]
