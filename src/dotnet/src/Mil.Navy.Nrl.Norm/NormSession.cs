@@ -352,6 +352,11 @@ namespace Mil.Navy.Nrl.Norm
             NormApi.NormRemoveAckingNode(_handle, nodeId);
         }
 
+        public NormAckingStatus GetAckingStatus(long nodeId)
+        {
+            return NormApi.NormGetAckingStatus(_handle, nodeId);
+        }
+
         public void SendCommand(byte[] cmdBuffer, int cmdLength)
         {
             SendCommand(cmdBuffer, cmdLength, false);

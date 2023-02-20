@@ -120,7 +120,6 @@ class NormApi
     + {static} NormRemoveAckingNode(sessionHandle:long, nodeId:long) : void
     + {static} NormGetAckingNodeHandle(sessionHandle:long, nodeId:long) : long
     + {static} NormSetAutoAckingNodes(sessionHandle:long, trackingStatus:NormTrackingStatus) : void
-    + {static} NormGetAckingStatus(sessionHandle:long) : NormAckingStatus
     + {static} NormGetAckingStatus(sessionHandle:long, nodeId:long) : NormAckingStatus
     + {static} NormGetNextAckingNode(sessionHandle:long, nodeId:long) : bool
     + {static} NormGetNextAckingNode(sessionHandle:long, nodeId:long, ackingStatus:NormAckingStatus) : bool

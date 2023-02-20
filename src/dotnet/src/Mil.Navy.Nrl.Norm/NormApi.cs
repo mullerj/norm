@@ -292,6 +292,9 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormRemoveAckingNode(long sessionHandle, long nodeId);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern NormAckingStatus NormGetAckingStatus(long sessionHandle, long nodeId);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern bool NormSendCommand(long sessionHandle, byte[] cmdBuffer, int cmdLength, bool robust);
 
         [DllImport(NORM_LIBRARY)]

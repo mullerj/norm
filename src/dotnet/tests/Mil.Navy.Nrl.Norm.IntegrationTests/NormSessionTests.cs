@@ -191,6 +191,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             return GetEvents(TimeSpan.FromMilliseconds(30));
         }
 
+        private void WaitForEvents(TimeSpan delayTime)
+        {
+            GetEvents(delayTime);
+        }
+
         private void WaitForEvents()
         {
             GetEvents();
@@ -909,6 +914,45 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         {
             _normSession.AddAckingNode(_normSession.LocalNodeId);
             _normSession.RemoveAckingNode(_normSession.LocalNodeId);
+        }
+
+        [Fact]
+        public void GetsAckingStatus()
+        {
+            _normSession.AddAckingNode(_normSession.LocalNodeId);
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+
+            //Set up cache directory
+            var folderName = Guid.NewGuid().ToString();
+            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            Directory.CreateDirectory(cachePath);
+            _normInstance.SetCacheDirectory(cachePath);
+
+            //Create data to be sent
+            var expectedContent = GenerateTextContent();
+            var expectedData = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
+                _normSession.SetWatermark(normData);
+                WaitForEvents(TimeSpan.FromSeconds(1));
+                var expectedAckingStatus = NormAckingStatus.NORM_ACK_SUCCESS;
+                var actualAckingStatus = _normSession.GetAckingStatus(_normSession.LocalNodeId);
+                Assert.Equal(expectedAckingStatus, actualAckingStatus);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+                Directory.Delete(cachePath, true);
+            }
         }
 
         [Fact]
