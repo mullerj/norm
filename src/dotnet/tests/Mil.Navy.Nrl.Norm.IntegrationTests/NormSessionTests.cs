@@ -823,7 +823,59 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         [Fact]
         public void ResetsWatermark()
         {
-            //TODO: Implement ResetsWatermark
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+
+            //Set up cache directory
+            var folderName = Guid.NewGuid().ToString();
+            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            Directory.CreateDirectory(cachePath);
+            _normInstance.SetCacheDirectory(cachePath);
+
+            //Create data to be sent
+            var expectedContent = GenerateTextContent();
+            var expectedData = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                _normSession.SetWatermark(normData);
+                var expectedEventTypes = new List<NormEventType>
+                {
+                    NormEventType.NORM_REMOTE_SENDER_NEW,
+                    NormEventType.NORM_REMOTE_SENDER_ACTIVE,
+                    NormEventType.NORM_TX_OBJECT_SENT,
+                    NormEventType.NORM_TX_QUEUE_EMPTY,
+                    NormEventType.NORM_RX_OBJECT_NEW,
+                    NormEventType.NORM_RX_OBJECT_UPDATED,
+                    NormEventType.NORM_RX_OBJECT_COMPLETED
+                };
+                var actualEvents = GetEvents(TimeSpan.FromSeconds(1));
+                var actualEventTypes = actualEvents.Select(e => e.Type).ToList();
+                Assert.Equivalent(expectedEventTypes, actualEventTypes);
+
+                _normSession.AddAckingNode(_normSession.LocalNodeId);
+                _normSession.ResetWatermark();
+                expectedEventTypes = new List<NormEventType>
+                {
+                    NormEventType.NORM_TX_WATERMARK_COMPLETED,
+                    NormEventType.NORM_TX_FLUSH_COMPLETED
+                };
+                actualEvents = GetEvents(TimeSpan.FromSeconds(1));
+                actualEventTypes = actualEvents.Select(e => e.Type).ToList();
+                Assert.Equivalent(expectedEventTypes, actualEventTypes);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+                Directory.Delete(cachePath, true);
+            }
         }
 
         [Fact]
