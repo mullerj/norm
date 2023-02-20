@@ -322,6 +322,9 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormSetDefaultUnicastNack(long sessionHandle, bool enable);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern void NormNodeSetUnicastNack(long remoteSender, bool unicastNacks);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern void NormSetDefaultSyncPolicy(long sessionHandle, NormSyncPolicy syncPolicy);
 
         [DllImport(NORM_LIBRARY)]

@@ -33,5 +33,10 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         public double Grtt => NormApi.NormNodeGetGrtt(_handle);
+
+        public void SetUnicastNack(bool state)
+        {
+            NormApi.NormNodeSetUnicastNack(_handle, state);
+        }
     }
 }

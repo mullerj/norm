@@ -1108,6 +1108,38 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         }
 
         [Fact]
+        public void SetsUnicastNack()
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedCommand = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                _normSession.SendCommand(expectedCommand, expectedCommand.Length, false);
+                var normEventType = NormEventType.NORM_RX_CMD_NEW;
+                var actualEvents = GetEvents();
+                Assert.Contains(normEventType, actualEvents.Select(e => e.Type));
+                var actualEvent = actualEvents.First(e => e.Type == normEventType);
+                var actualNode = actualEvent.Node;
+                Assert.NotNull(actualNode);
+                actualNode.SetUnicastNack(true);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+            }
+        }
+
+        [Fact]
         public void SetsDefaultSyncPolicy_NORM_SYNC_CURRENT()
         {
             var syncPolicy = NormSyncPolicy.NORM_SYNC_CURRENT;
