@@ -168,7 +168,7 @@ class NormApi
     + {static} NormNodeGetAddress(nodeHandle:long, addrBuffer:byte[], bufferLen: int) : bool
     + {static} NormNodeGetAddress(nodeHandle:long, addrBuffer:byte[], bufferLen: int, port:int) : bool
     + {static} NormNodeGetGrtt(remoteSender:long) : double
-    + {static} NormNodeGetCommand(remoteSender:long, :string, buflen:uint) : bool
+    + {static} NormNodeGetCommand(remoteSender:long, buffer:byte[], buflen:int) : bool
     + {static} NormNodeSendAckEx(remoteSender:long, buffer:string, numBytes:uint) : bool
     + {static} NormNodeGetWatermarkEx(remoteSender:long, buffer:string, buflen:uint) : bool
     + {static} NormNodeFreeBuffers(remoteSender:long) : void

@@ -35,6 +35,20 @@ namespace Mil.Navy.Nrl.Norm
 
         public double Grtt => NormApi.NormNodeGetGrtt(_handle);
 
+        public byte[] Command
+        {
+            get
+            {
+                var buffer = new byte[256];
+                var bufferLength = buffer.Length;
+                if (!NormApi.NormNodeGetCommand(_handle, buffer, ref bufferLength))
+                {
+                    throw new IOException("Failed to get command");
+                }
+                return buffer.Take(bufferLength).ToArray();
+            }
+        }
+
         public void SetUnicastNack(bool state)
         {
             NormApi.NormNodeSetUnicastNack(_handle, state);

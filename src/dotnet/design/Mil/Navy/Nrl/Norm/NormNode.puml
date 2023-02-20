@@ -10,7 +10,7 @@ class NormNode {
     + Id : long <<get>>
     + Address : IPEndPoint <<get>>
     + Grtt : double <<get>>
-    + GetCommand(buffer:byte[], offset:int, length:int) : int
+    + Command : byte[] <<get>>
     + FreeBuffers() : void
     + Retain() : void
     + Release(): void
