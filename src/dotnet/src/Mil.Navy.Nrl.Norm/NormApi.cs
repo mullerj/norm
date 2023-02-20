@@ -359,5 +359,8 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormNodeGetCommand(long remoteSender, [Out] byte[] buffer, ref int buflen);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormNodeFreeBuffers(long remoteSender);
     }
 }

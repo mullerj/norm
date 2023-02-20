@@ -68,5 +68,14 @@ namespace Mil.Navy.Nrl.Norm
         {
             NormApi.NormNodeSetRxRobustFactor(_handle, robustFactor);
         }
+
+        public void FreeBuffers()
+        {
+            NormApi.NormNodeFreeBuffers(_handle);
+        }
+
+        //TODO: Implement Retain()
+
+        //TODO: Implement Release()
     }
 }
