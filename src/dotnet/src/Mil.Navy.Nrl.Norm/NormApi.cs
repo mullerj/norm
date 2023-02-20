@@ -271,7 +271,7 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormSetWatermark(long sessionHandle, long objectHandle, bool overrideFlush);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormCancelWatermark(long sessionHandle);
+        public static extern void NormCancelWatermark(long sessionHandle);
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormResetWatermark(long sessionHandle);

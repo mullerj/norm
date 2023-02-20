@@ -324,10 +324,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void CancelWatermark()
         {
-            if(!NormApi.NormCancelWatermark(_handle))
-            {
-                throw new IOException("Failed to cancel watermark");
-            }
+            NormApi.NormCancelWatermark(_handle);
         }
 
         public void ResetWatermark()
