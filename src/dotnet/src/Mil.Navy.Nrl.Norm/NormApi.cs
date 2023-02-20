@@ -187,7 +187,7 @@ namespace Mil.Navy.Nrl.Norm
         public static extern nint NormDataDetachData(long objectHandle);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormSetTxPort(long sessionHandle, ushort txPortNumber, bool enableReuse, string txBindAddress);
+        public static extern bool NormSetTxPort(long sessionHandle, int txPortNumber, bool enableReuse, string? txBindAddress);
 
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetRxPortReuse(long sessionHandle, bool enableReuse, string rxBindAddress, string senderAddress, ushort senderPort);

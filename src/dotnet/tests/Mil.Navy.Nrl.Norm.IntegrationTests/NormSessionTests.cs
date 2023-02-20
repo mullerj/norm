@@ -485,7 +485,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         [Fact]
         public void SetsTxPort()
         {
-            _normSession.SetTxPort(Convert.ToUInt16(6003));
+            _normSession.SetTxPort(6003);
         }
 
         [Fact]

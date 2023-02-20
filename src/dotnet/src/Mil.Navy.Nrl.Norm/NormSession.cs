@@ -57,12 +57,12 @@ namespace Mil.Navy.Nrl.Norm
             NormApi.NormDestroySession(_handle);
         }
 
-        public void SetTxPort(ushort port)
+        public void SetTxPort(int port)
         {
-            SetTxPort(port, false, String.Empty);
+            SetTxPort(port, false, null);
         }
 
-        public void SetTxPort(ushort port, bool enableReuse, string txBindAddress)
+        public void SetTxPort(int port, bool enableReuse, string? txBindAddress)
         {
             if (!NormApi.NormSetTxPort(_handle, port, enableReuse, txBindAddress))
             {

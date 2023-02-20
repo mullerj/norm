@@ -36,8 +36,8 @@ class NormApi
     + {static} NormGetAddress(sessionHandle:long, addrBuffer:string, bufferLen:uint)  : bool
     + {static} NormGetAddress(sessionHandle:long, addrBuffer:string, bufferLen:uint, port:ushort)  : bool
     + {static} NormGetRxPort(sessionHandle:long) : ushort
-    + {static} NormSetTxPort(sessionHandle:long, txPortNumber:ushort) : bool
-    + {static} NormSetTxPort(sessionHandle:long, txPortNumber:ushort, enableReuse:bool, txBindAddress:string) : bool 
+    + {static} NormSetTxPort(sessionHandle:long, txPortNumber:int) : bool
+    + {static} NormSetTxPort(sessionHandle:long, txPortNumber:int, enableReuse:bool, txBindAddress:string) : bool 
     + {static} NormGetTxPort(sessionHandle:long) : ushort
     + {static} NormSetTxOnly(sessionHandle:long, txOnly:bool) : void 
     + {static} NormSetTxOnly(sessionHandle:long, txOnly:bool, connectToSessionAddress:bool) : void 
