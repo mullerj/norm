@@ -316,7 +316,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
                 var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY };
                 var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
                 Assert.Equal(expectedEventTypes, actualEventTypes);
@@ -354,7 +354,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
                 var expectedEventTypes = new List<NormEventType>
                 {
                     NormEventType.NORM_REMOTE_SENDER_NEW,
@@ -725,7 +725,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
                 var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY };
                 var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
                 Assert.Equal(expectedEventTypes, actualEventTypes);
@@ -763,7 +763,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
                 _normSession.SetWatermark(normData);
                 var expectedEventTypes = new List<NormEventType>
                 {
@@ -813,7 +813,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
                 _normSession.SetWatermark(normData);
                 _normSession.CancelWatermark();
                 var expectedEventTypes = new List<NormEventType>
@@ -861,7 +861,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
                 _normSession.SetWatermark(normData);
                 var expectedEventTypes = new List<NormEventType>
                 {

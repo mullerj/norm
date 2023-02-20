@@ -227,7 +227,7 @@ namespace Mil.Navy.Nrl.Norm
             return FileEnqueue(filename, info, info.Length);
         }
 
-        public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength, byte[] info, int infoOffset, int infoLength)
+        public NormData DataEnqueue(byte[] dataBuffer, int dataLength, byte[]? info, int infoLength)
         {
             var objectHadle = NormApi.NormDataEnqueue(_handle, dataBuffer, dataLength, info, infoLength);
             if(objectHadle == NormApi.NORM_OBJECT_INVALID)
@@ -237,9 +237,9 @@ namespace Mil.Navy.Nrl.Norm
             return new NormData(objectHadle);
         }
 
-        public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength)
+        public NormData DataEnqueue(byte[] dataBuffer, int dataLength)
         {
-            return DataEnqueue(dataBuffer, dataOffset, dataLength, null, 0, 0);
+            return DataEnqueue(dataBuffer, dataLength, null, 0);
         }
 
         public NormStream StreamOpen(long bufferSize, byte[]? info, int infoLength)
