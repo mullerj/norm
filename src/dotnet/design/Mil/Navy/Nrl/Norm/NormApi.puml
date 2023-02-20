@@ -49,7 +49,7 @@ class NormApi
     + {static} NormSetServerListner(sessionHandle:long, state:bool) : void
     + {static} NormTransferSender(sessionHandle:long, sender:long) : bool 
     + {static} NormSetRxPortReuse(sessionHandle:long, enableReuse:bool) : void
-    + {static} NormSetRxPortReuse(sessionHandle:long, enableReuse:bool, rxBindAddress:string, senderAddress:string, senderPort:ushort) : void 
+    + {static} NormSetRxPortReuse(sessionHandle:long, enableReuse:bool, rxBindAddress:string, senderAddress:string, senderPort:int) : void 
     + {static} NormGetRxBindAddress(sessionHandle:long, addr:string, addrLen:uint, port:ushort) : bool 
     + {static} NormSetEcnSupport(sessionHandle:long, ecnEnable:bool) : void
     + {static} NormSetEcnSupport(sessionHandle:long, ecnEnable:bool, ignoreLoss:bool, tolerateLoss:bool) : void 

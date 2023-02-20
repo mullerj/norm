@@ -190,7 +190,7 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormSetTxPort(long sessionHandle, int txPortNumber, bool enableReuse, string? txBindAddress);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern void NormSetRxPortReuse(long sessionHandle, bool enableReuse, string rxBindAddress, string senderAddress, ushort senderPort);
+        public static extern void NormSetRxPortReuse(long sessionHandle, bool enableReuse, string? rxBindAddress, string? senderAddress, int senderPort);
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetMulticastInterface(long sessionHandle, string interfaceName);

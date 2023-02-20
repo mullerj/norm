@@ -82,10 +82,10 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetRxPortReuse(bool enable)
         {
-            SetRxPortReuse(enable, string.Empty, string.Empty, ushort.MinValue);
+            SetRxPortReuse(enable, null, null, 0);
         }
 
-        public void SetRxPortReuse(bool enable, string rxBindAddress, string senderAddress, ushort senderPort)
+        public void SetRxPortReuse(bool enable, string? rxBindAddress, string? senderAddress, int senderPort)
         {
             NormApi.NormSetRxPortReuse(_handle, enable, rxBindAddress, senderAddress, senderPort);
         }
