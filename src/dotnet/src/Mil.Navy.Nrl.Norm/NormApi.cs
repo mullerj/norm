@@ -337,6 +337,9 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormSetDefaultRepairBoundary(long sessionHandle, NormRepairBoundary repairBoundary);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern void NormNodeSetRepairBoundary(long remoteSender, NormRepairBoundary repairBoundary);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern void NormSetDefaultRxRobustFactor(long sessionHandle, int rxRobustFactor);
 
         [DllImport(NORM_LIBRARY)]

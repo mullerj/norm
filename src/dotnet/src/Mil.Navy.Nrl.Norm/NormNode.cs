@@ -44,5 +44,10 @@ namespace Mil.Navy.Nrl.Norm
         {
             NormApi.NormNodeSetNackingMode(_handle, nackingMode);
         }
+
+        public void SetRepairBoundary(NormRepairBoundary repairBoundary)
+        {
+            NormApi.NormNodeSetRepairBoundary(_handle, repairBoundary);
+        }
     }
 }
