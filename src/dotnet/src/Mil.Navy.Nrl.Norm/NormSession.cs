@@ -309,14 +309,14 @@ namespace Mil.Navy.Nrl.Norm
             }
         }
 
-        public void SetWatermark(long objectHandle)
+        public void SetWatermark(NormObject normObject)
         {
-            SetWatermark(objectHandle, true);
+            SetWatermark(normObject, true);
         }
 
-        public void SetWatermark(long objectHandle, bool overrideFlush)
+        public void SetWatermark(NormObject normObject, bool overrideFlush)
         {
-            if(!NormApi.NormSetWatermark(_handle, objectHandle, overrideFlush))
+            if(!NormApi.NormSetWatermark(_handle, normObject.Handle, overrideFlush))
             {
                 throw new IOException("Failed to set watermark");
             }
