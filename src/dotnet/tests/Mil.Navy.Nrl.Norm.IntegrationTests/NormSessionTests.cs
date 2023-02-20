@@ -1261,6 +1261,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normSession.SetDefaultRepairBoundary(repairBoundary);
         }
 
+        [Fact]
         public void SetsRepairBoundary()
         {
             _normSession.SetLoopback(true);
