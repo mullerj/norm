@@ -9,7 +9,7 @@ namespace Mil.Navy.Nrl.Norm
         private long _handle;
         public long LocalNodeId
         {
-            get { return NormApi.NormGetLocalNodeId(_handle); }
+            get => NormApi.NormGetLocalNodeId(_handle);
         }
 
         public double ReportInterval 
@@ -20,25 +20,13 @@ namespace Mil.Navy.Nrl.Norm
 
         public double TxRate
         {
-            get
-            {
-                return NormApi.NormGetTxRate(_handle);
-            }
-            set
-            {
-                NormApi.NormSetTxRate(_handle, value);
-            }
+            get => NormApi.NormGetTxRate(_handle);
+            set => NormApi.NormSetTxRate(_handle, value);
         }
         public double GrttEstimate
         {
-            get
-            {
-                return NormApi.NormGetGrttEstimate(_handle);
-            }
-            set
-            {
-                NormApi.NormSetGrttEstimate(_handle, value);
-            }
+            get => NormApi.NormGetGrttEstimate(_handle);
+            set => NormApi.NormSetGrttEstimate(_handle, value);
         }
         
         internal NormSession(long handle)
