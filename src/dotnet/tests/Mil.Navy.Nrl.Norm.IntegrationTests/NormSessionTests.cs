@@ -214,6 +214,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                     Assert.NotNull(actualAddress);
                     var actualGrtt = normNode.Grtt;
                     Assert.NotEqual(-1, actualGrtt);
+                    var expectedEventString = $"NormEvent [type={normEvent.Type}]";
+                    var actualEventString = normEvent.ToString();
+                    Assert.Equal(expectedEventString, actualEventString);
                 }
             }
         }

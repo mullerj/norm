@@ -67,5 +67,10 @@ namespace Mil.Navy.Nrl.Norm
                 return normObject;
             } 
         }
+
+        public override string ToString()
+        {
+            return $"NormEvent [type={_type}]";
+        }
     }
 }
