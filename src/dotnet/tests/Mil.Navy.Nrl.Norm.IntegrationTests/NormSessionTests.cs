@@ -1053,6 +1053,40 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         }
 
         [Fact]
+        public void ReceivesCommand()
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedCommand = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                _normSession.SendCommand(expectedCommand, expectedCommand.Length, false);
+                var expectedEventTypes = new List<NormEventType> 
+                { 
+                    NormEventType.NORM_TX_CMD_SENT, 
+                    NormEventType.NORM_REMOTE_SENDER_NEW,
+                    NormEventType.NORM_REMOTE_SENDER_ACTIVE,
+                    NormEventType.NORM_RX_CMD_NEW 
+                };
+                var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
+                Assert.Equivalent(expectedEventTypes, actualEventTypes);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+            }
+        }
+
+        [Fact]
         public void CancelsCommand()
         {
             StartSender();
