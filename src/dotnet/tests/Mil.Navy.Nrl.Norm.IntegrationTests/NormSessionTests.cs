@@ -965,7 +965,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             try
             {
-                _normSession.SendCommand(expectedCommand, expectedCommand.Length);
+                _normSession.SendCommand(expectedCommand, expectedCommand.Length, false);
                 var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_CMD_SENT };
                 var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
                 Assert.Equal(expectedEventTypes, actualEventTypes);
@@ -990,7 +990,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             try
             {
-                _normSession.SendCommand(expectedCommand, expectedCommand.Length);
+                _normSession.SendCommand(expectedCommand, expectedCommand.Length, false);
                 _normSession.CancelCommand();
                 var expectedEventTypes = new List<NormEventType>();
                 var actualEventTypes = GetEvents().Select(e => e.Type).ToList();

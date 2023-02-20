@@ -357,11 +357,6 @@ namespace Mil.Navy.Nrl.Norm
             return NormApi.NormGetAckingStatus(_handle, nodeId);
         }
 
-        public void SendCommand(byte[] cmdBuffer, int cmdLength)
-        {
-            SendCommand(cmdBuffer, cmdLength, false);
-        }
-
         public void SendCommand(byte[] cmdBuffer, int cmdLength, bool robust)
         {
             if(!NormApi.NormSendCommand(_handle, cmdBuffer, cmdLength, robust))
