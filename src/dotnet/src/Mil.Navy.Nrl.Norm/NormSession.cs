@@ -383,11 +383,6 @@ namespace Mil.Navy.Nrl.Norm
             }
         }
 
-        public void SetSilentReceiver(bool silent)
-        {
-            SetSilentReceiver(silent, -1);
-        }
-
         public void SetSilentReceiver(bool silent, int maxDelay)
         {
             NormApi.NormSetSilentReceiver(_handle, silent, maxDelay);

@@ -1025,7 +1025,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         public void SetsSilentReceiver()
         {
             var silent = true;
-            _normSession.SetSilentReceiver(silent);
+            _normSession.SetSilentReceiver(silent, -1);
         }
 
         [Fact]
