@@ -562,6 +562,15 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         }
 
         [Fact]
+        public void SetsReportInterval()
+        {
+            var expectedReportInterval = .50;
+            _normSession.ReportInterval = expectedReportInterval;
+            var actualReportInterval = _normSession.ReportInterval;
+            Assert.Equal(expectedReportInterval, actualReportInterval);
+        }
+
+        [Fact]
         public void SetsTxOnly()
         {
             var txOnly = true;

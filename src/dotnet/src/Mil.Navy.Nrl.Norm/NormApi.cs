@@ -217,6 +217,12 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormSetRxLoss(long sessionHandle, double precent);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetReportInterval(long sessionHandle, double interval);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern double NormGetReportInterval(long sessionHandle);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern void NormSetTxOnly(long sessionHandle, bool txOnly, bool connectToSessionAddress);
 
         [DllImport(NORM_LIBRARY)]

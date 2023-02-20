@@ -11,7 +11,13 @@ namespace Mil.Navy.Nrl.Norm
         {
             get { return NormApi.NormGetLocalNodeId(_handle); }
         }
-        public double ReportInterval { get; set; }
+
+        public double ReportInterval 
+        {
+            get => NormApi.NormGetReportInterval(_handle); 
+            set => NormApi.NormSetReportInterval(_handle, value); 
+        }
+
         public double TxRate
         {
             get
