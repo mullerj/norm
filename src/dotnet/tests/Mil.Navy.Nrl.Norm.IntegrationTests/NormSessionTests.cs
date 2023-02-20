@@ -501,6 +501,12 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         }
 
         [Fact]
+        public void SetsEcnSupport()
+        {
+            _normSession.SetEcnSupport(true, true);
+        }
+
+        [Fact]
         public void SetsMulticastInterface()
         {
             _normSession.SetMulticastInterface("interface_name");

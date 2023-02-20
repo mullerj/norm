@@ -193,6 +193,9 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormSetRxPortReuse(long sessionHandle, bool enableReuse, string? rxBindAddress, string? senderAddress, int senderPort);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetEcnSupport(long sessionHandle, bool ecnEnable, bool ignoreLoss, bool tolerateLoss);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetMulticastInterface(long sessionHandle, string interfaceName);
 
         [DllImport(NORM_LIBRARY)]

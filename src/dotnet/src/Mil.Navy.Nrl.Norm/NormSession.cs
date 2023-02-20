@@ -90,6 +90,16 @@ namespace Mil.Navy.Nrl.Norm
             NormApi.NormSetRxPortReuse(_handle, enable, rxBindAddress, senderAddress, senderPort);
         }
 
+        public void SetEcnSupport(bool ecnEnable, bool ignoreLoss)
+        {
+            SetEcnSupport(ecnEnable, ignoreLoss, false);
+        }
+
+        public void SetEcnSupport(bool ecnEnable, bool ignoreLoss, bool tolerateLoss)
+        {
+            NormApi.NormSetEcnSupport(_handle, ecnEnable, ignoreLoss, tolerateLoss);
+        }
+
         public void SetMulticastInterface(string interfaceName)
         {
             if(!NormApi.NormSetMulticastInterface(_handle, interfaceName))
