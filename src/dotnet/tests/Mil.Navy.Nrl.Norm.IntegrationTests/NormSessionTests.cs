@@ -1195,9 +1195,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         }
 
         [Fact]
-        public void SetsDefaultNackingMode_ORM_NACK_NONE()
+        public void SetsDefaultNackingMode_NORM_NACK_NONE()
         {
-            var nackingMode = NormNackingMode.ORM_NACK_NONE;
+            var nackingMode = NormNackingMode.NORM_NACK_NONE;
             _normSession.SetDefaultNackingMode(nackingMode);
         }
 
@@ -1213,6 +1213,38 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         {
             var nackingMode = NormNackingMode.NORM_NACK_NORMAL;
             _normSession.SetDefaultNackingMode(nackingMode);
+        }
+
+        [Fact]
+        public void SetsNackingMode()
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedCommand = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                _normSession.SendCommand(expectedCommand, expectedCommand.Length, false);
+                var normEventType = NormEventType.NORM_RX_CMD_NEW;
+                var actualEvents = GetEvents();
+                Assert.Contains(normEventType, actualEvents.Select(e => e.Type));
+                var actualEvent = actualEvents.First(e => e.Type == normEventType);
+                var actualNode = actualEvent.Node;
+                Assert.NotNull(actualNode);
+                actualNode.SetNackingMode(NormNackingMode.NORM_NACK_NONE);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+            }
         }
 
         [Fact]

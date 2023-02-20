@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Mil.Navy.Nrl.Norm.Enums;
+using System.Net;
 
 namespace Mil.Navy.Nrl.Norm
 {
@@ -37,6 +38,11 @@ namespace Mil.Navy.Nrl.Norm
         public void SetUnicastNack(bool state)
         {
             NormApi.NormNodeSetUnicastNack(_handle, state);
+        }
+
+        public void SetNackingMode(NormNackingMode nackingMode)
+        {
+            NormApi.NormNodeSetNackingMode(_handle, nackingMode);
         }
     }
 }

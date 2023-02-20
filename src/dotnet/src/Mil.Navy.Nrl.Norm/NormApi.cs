@@ -331,6 +331,9 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormSetDefaultNackingMode(long sessionHandle, NormNackingMode nackingMode);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern void NormNodeSetNackingMode(long remoteSender, NormNackingMode nackingMode);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern void NormSetDefaultRepairBoundary(long sessionHandle, NormRepairBoundary repairBoundary);
 
         [DllImport(NORM_LIBRARY)]
