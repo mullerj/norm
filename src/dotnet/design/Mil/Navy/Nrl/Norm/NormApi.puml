@@ -143,7 +143,7 @@ class NormApi
     + {static} NormSetDefaultRepairBoundary(sessionHandle:long, repairBoundary:NormRepairBoundary) : void
     + {static} NormNodeSetRepairBoundary(remoteSender:long, repairBoundary:NormRepairBoundary) : void
     + {static} NormSetDefaultRxRobustFactor(sessionHandle:long, robustFactor:int) : void
-    + {static} NormNodeSetRxRobustFactor(remoteSenderremoteSender, robustFactor:int) : void
+    + {static} NormNodeSetRxRobustFactor(remoteSender:long, robustFactor:int) : void
     + {static} NormPreallocateRemoteSender(sessionHandle:long, bufferSize:ulong, segmentSize:ushort, numData:ushort, numParity:ushort) : bool
     + {static} NormPreallocateRemoteSender(sessionHandle:long, bufferSize:ulong, segmentSize:ushort, numData:ushort, numParity:ushort, streamBufferSize:uint) : bool
     + {static} NormStreamRead(streamHandle:long, buffer:byte[], numBytes:int) : bool

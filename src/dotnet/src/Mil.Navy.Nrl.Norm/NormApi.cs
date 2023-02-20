@@ -340,7 +340,10 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormNodeSetRepairBoundary(long remoteSender, NormRepairBoundary repairBoundary);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern void NormSetDefaultRxRobustFactor(long sessionHandle, int rxRobustFactor);
+        public static extern void NormSetDefaultRxRobustFactor(long sessionHandle, int robustFactor);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormNodeSetRxRobustFactor(long remoteSender, int robustFactor);
 
         [DllImport(NORM_LIBRARY)]
         public static extern long NormGetLocalNodeId(long sessionHandle);

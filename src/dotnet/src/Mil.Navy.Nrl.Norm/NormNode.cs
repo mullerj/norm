@@ -49,5 +49,10 @@ namespace Mil.Navy.Nrl.Norm
         {
             NormApi.NormNodeSetRepairBoundary(_handle, repairBoundary);
         }
+
+        public void SetRxRobustFactor(int robustFactor)
+        {
+            NormApi.NormNodeSetRxRobustFactor(_handle, robustFactor);
+        }
     }
 }
