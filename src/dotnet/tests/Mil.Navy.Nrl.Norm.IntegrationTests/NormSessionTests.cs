@@ -555,6 +555,13 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         }
 
         [Fact]
+        public void SetsRxLoss()
+        {
+            var rxLoss = .50;
+            _normSession.SetRxLoss(rxLoss);
+        }
+
+        [Fact]
         public void SetsTxOnly()
         {
             var txOnly = true;
