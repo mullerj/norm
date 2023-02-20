@@ -149,8 +149,28 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         
             _normInstance.StopInstance();
 
-             _normInstance.ResumeInstance();
+            _normInstance.ResumeInstance();
             Assert.NotNull(_normInstance);
+        }
+        [Fact]
+        public void OpenDebugLog(){
+            var fileName = Guid.NewGuid().ToString();
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+
+            _normInstance.OpenDebugLog(fileName);
+            
+        }
+
+        [Fact]
+        public void CloseDebugLog()
+        {
+            _normInstance.CloseDebugLog();
+        }
+
+        [Fact]
+        public void OpenDebugPipe()
+        {
+            
         }
     }
 }

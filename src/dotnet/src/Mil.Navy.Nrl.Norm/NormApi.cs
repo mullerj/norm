@@ -55,7 +55,7 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormRestartInstance(long instanceHandle);
 
         /// <summary>
-        /// The NormRestartInstance() this function creates and starts an operating system threadto resume NORM protocol engine operation for the given instanceHandle that was previously stopped by a call to NormStopInstance().
+        /// The NormSuspendtInstance()
         /// </summary>
         /// <param name="instanceHandle">The NORM protocol engine instance referred to by the instanceHandle parameter</param>
         [DllImport (NORM_LIBRARY)]
@@ -90,6 +90,18 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern int NormGetRandomSessionId();
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormOpenDebugLog(long instanceHandle, string path);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormCloseDebugLog(long instanceHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormOpenDebugPipe(long instanceHandle, string pipeName);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormCloseDebugPipe(long instanceHandle);
 
         /// <summary>
         /// The application's participation as a sender within a specified NormSession begins when this function is called.
@@ -173,6 +185,135 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern nint NormDataDetachData(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetTxPort(long sessionHandle, ushort txPortNumber, bool enableReuse, string txBindAddress);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetRxPortReuse(long sessionHandle, bool enableReuse, string rxBindAddress, string senderAddress, ushort senderPort);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetMulticastInterface(long sessionHandle, string interfaceName);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetSSM(long sessionHandle, string sourceAddress);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetTTL(long sessionHandle, byte ttl);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetTOS(long sessionHandle, byte tos);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetMessageTrace(long sessionHandle, bool flag);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetTxLoss(long sessionHandle, double precent);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetRxLoss(long sessionHandle, double precent);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetTxOnly(long sessionHandle, bool txOnly, bool connectToSessionAddress);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetFlowControl(long sessionHandle, double flowControlFactor);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetTxSocketBuffer(long sessionHandle, long bufferSize);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetCongestionControl(long sessionHandle, bool enable, bool adjustRate);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetTxRateBounds(long sessionHandle, double rateMin, double rateMax);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetTxCacheBounds(long sessionHandle, long sizeMax, long countMin, long countMax);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern double NormGetTxRate(long sessionHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetTxRate(long sessionHandle, double rate);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern double NormGetGrttEstimate(long sessionHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetGrttEstimate(long sessionHandle, double grtt);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetAutoParity(long sesssionHandle, short autoParity);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetGrttMax(long sessionHandle, double grttMax);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetGrttProbingMode(long sesssionHandle, NormProbingMode probingMode);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetGrttProbingInterval(long sessionHandle, double intervalMin, double intervalMax);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetBackoffFactor(long sessionHandle, double backoffFactor);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetGroupSize(long sessiionHandle, long groupSize);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetTxRobustFactor(long sessionHandle, int txRobustFactor);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormRequeueObject(long sessionHandle, long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetWatermark(long sessionHandle, long objectHandle, bool overrideFlush);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormCancelWatermark(long sessionHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormResetWatermark(long sessionHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormAddAckingNode(long sessionHandle, long nodeId);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormRemoveAckingNode(long sessionHandle, long nodeId);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSendCommand(long sessionHandle, byte[] cmdBuffer, int cmdLength, bool robust);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormCancelCommand(long sessionHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetRxCacheLimit(long sessionHandle, int countMax);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetRxSocketBuffer(long sessionHandle, long bufferSize);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetSilentReceiver(long sessionHandle, bool silent, int maxDelay);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetDefaultUnicastNack(long sessionHandle, bool enable);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetDefaultSyncPolicy(long sessionHandle, NormSyncPolicy syncPolicy);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetDefaultNackingMode(long sessionHandle, NormNackingMode nackingMode);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetDefaultRepairBoundary(long sessionHandle, NormRepairBoundary repairBoundary);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetDefaultRxRobustFactor(long sessionHandle, int rxRobustFactor);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern long NormGetLocalNodeId(long sessionHandle);
 
         [DllImport(NORM_LIBRARY)]
         public static extern long NormNodeGetId(long nodeHandle);
