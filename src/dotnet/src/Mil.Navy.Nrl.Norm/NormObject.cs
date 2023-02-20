@@ -8,5 +8,7 @@
         {
             _handle = handle;
         }
+
+        public long Handle => _handle;
     }
 }

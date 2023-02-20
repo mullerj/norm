@@ -691,7 +691,29 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         [Fact]
         public void RequeuesObject()
         {
-            //TODO: Implement RequeuesObject
+            StartSender();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY };
+                var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
+                Assert.Equal(expectedEventTypes, actualEventTypes);
+                _normSession.RequeueObject(normData);
+                actualEventTypes = GetEvents().Select(e => e.Type).ToList();
+                Assert.Equal(expectedEventTypes, actualEventTypes);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
         }
 
         [Fact]

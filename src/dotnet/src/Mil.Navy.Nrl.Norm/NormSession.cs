@@ -301,9 +301,9 @@ namespace Mil.Navy.Nrl.Norm
             NormApi.NormSetTxRobustFactor(_handle, txRobustFactor);
         }
 
-        public void RequeueObject(long objectHandle)
+        public void RequeueObject(NormObject normObject)
         {
-            if(!NormApi.NormRequeueObject(_handle, objectHandle))
+            if(!NormApi.NormRequeueObject(_handle, normObject.Handle))
             {
                 throw new IOException("Failed to requeue object");
             }
