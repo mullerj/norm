@@ -74,8 +74,14 @@ namespace Mil.Navy.Nrl.Norm
             NormApi.NormNodeFreeBuffers(_handle);
         }
 
-        //TODO: Implement Retain()
+        public void Retain()
+        {
+            NormApi.NormNodeRetain(_handle);
+        }
 
-        //TODO: Implement Release()
+        public void Release()
+        {
+            NormApi.NormNodeRelease(_handle);
+        }
     }
 }

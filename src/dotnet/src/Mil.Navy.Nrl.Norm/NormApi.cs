@@ -362,5 +362,11 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern void NormNodeFreeBuffers(long remoteSender);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormNodeRetain(long nodeHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormNodeRelease(long nodeHandle);
     }
 }

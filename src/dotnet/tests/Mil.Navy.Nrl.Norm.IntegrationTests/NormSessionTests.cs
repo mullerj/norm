@@ -1398,5 +1398,38 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 StopReceiver();
             }
         }
+
+        [Fact]
+        public void RetainsAndReleases()
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedCommand = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                _normSession.SendCommand(expectedCommand, expectedCommand.Length, false);
+                var normEventType = NormEventType.NORM_RX_CMD_NEW;
+                var actualEvents = GetEvents();
+                Assert.Contains(normEventType, actualEvents.Select(e => e.Type));
+                var actualEvent = actualEvents.First(e => e.Type == normEventType);
+                var actualNode = actualEvent.Node;
+                Assert.NotNull(actualNode);
+                actualNode.Retain();
+                actualNode.Release();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+            }
+        }
     }
 }
