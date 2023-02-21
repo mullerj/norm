@@ -91,7 +91,7 @@
             {
                 return false;
             }
-            return (_handle == ((NormObject)obj).Handle);
+            return _handle == ((NormObject)obj).Handle;
         }
     }
 }
