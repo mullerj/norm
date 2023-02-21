@@ -43,6 +43,19 @@ namespace Mil.Navy.Nrl.Norm
             }
         }
 
+        public long Sender
+        {
+            get
+            {
+                var sender = NormApi.NormObjectGetSender(_handle);
+                if(sender == NormApi.NORM_NODE_INVALID)
+                {
+                    throw new IOException("Locally originated sender object");
+                }
+                return sender;
+            }
+        }
+
         public void SetNackingMode(NormNackingMode nackingMode)
         {
             NormApi.NormObjectSetNackingMode(_handle, nackingMode);

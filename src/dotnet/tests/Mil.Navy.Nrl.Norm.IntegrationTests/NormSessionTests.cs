@@ -1671,10 +1671,10 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-         [Fact]
+        [Fact]
         public void ReleasesObject()
         {
-             StartSender();
+            StartSender();
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
@@ -1692,6 +1692,68 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             finally
             {
                 StopSender();
+            }
+        }
+
+        [Fact]
+        public void GetsSenderThrowsException()
+        {
+            StartSender();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
+                Assert.Throws<IOException>(() => normData.Sender);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
+        }
+
+        [Fact]
+        public void GetsSender()
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+
+            //Set up cache directory
+            var folderName = Guid.NewGuid().ToString();
+            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            Directory.CreateDirectory(cachePath);
+            _normInstance.SetCacheDirectory(cachePath);
+
+            //Create data to be sent
+            var expectedContent = GenerateTextContent();
+            var expectedData = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
+                var normEventType = NormEventType.NORM_RX_OBJECT_COMPLETED;
+                var actualEvents = GetEvents();
+                Assert.Contains(normEventType, actualEvents.Select(e => e.Type));
+                var actualEvent = actualEvents.First(e => e.Type == normEventType);
+                var actualObject = actualEvent.Object;
+                Assert.NotEqual(NormApi.NORM_NODE_INVALID, actualObject.Sender);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+                Directory.Delete(cachePath, true);
             }
         }
     }

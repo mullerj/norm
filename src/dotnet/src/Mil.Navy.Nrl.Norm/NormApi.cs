@@ -383,5 +383,8 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern void NormObjectRelease(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern long NormObjectGetSender(long objectHandle);
     }
 }
