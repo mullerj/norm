@@ -1444,13 +1444,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
                 Assert.Equal(NormObjectType.NORM_OBJECT_DATA, normData.Type);
-                var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY };
-                var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
-                Assert.Equal(expectedEventTypes, actualEventTypes);
-                var actualData = normData.Data;
-                Assert.Equal(expectedData, actualData);
-                var actualContent = Encoding.ASCII.GetString(actualData);
-                Assert.Equal(expectedContent, actualContent);
             }
             catch (Exception)
             {
@@ -1458,6 +1451,58 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
             finally
             {
+                StopSender();
+            }
+        }
+
+        [Fact]
+        public void GetsObjectType_FILE()
+        {
+             StartSender();
+
+            var fileContent = GenerateTextContent();
+            var fileName = Guid.NewGuid().ToString();
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            File.WriteAllText(filePath, fileContent);
+
+            try
+            {
+                var normFile = _normSession.FileEnqueue(filePath);
+                Assert.Equal(NormObjectType.NORM_OBJECT_FILE, normFile.Type);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                File.Delete(filePath);
+            }
+        }
+
+        [Fact]
+        public void GetsobjectType_STREAM()
+        {
+             StartSender();
+
+            var fileContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+                Assert.Equal(NormObjectType.NORM_OBJECT_STREAM, normStream.Type);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
                 StopSender();
             }
         }
