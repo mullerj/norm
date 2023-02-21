@@ -1599,5 +1599,29 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 StopSender();
             }
         }
+
+        [Fact]
+        public void GetsBytesPending()
+        {
+              StartSender();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            var expectedBytesPending = (long)0;
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
+                Assert.Equal(expectedBytesPending, normData.GetBytesPending());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
+        }
     }
 }

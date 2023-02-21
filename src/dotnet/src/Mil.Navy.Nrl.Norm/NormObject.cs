@@ -47,5 +47,10 @@ namespace Mil.Navy.Nrl.Norm
         {
             NormApi.NormObjectSetNackingMode(_handle, nackingMode);
         }
+
+        public long GetBytesPending()
+        {
+            return NormApi.NormObjectGetBytesPending(_handle);
+        }
     }
 }

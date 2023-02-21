@@ -371,5 +371,8 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern void NormObjectSetNackingMode(long objectHandle, NormNackingMode nackingMode);
+        
+        [DllImport(NORM_LIBRARY)]
+        public static extern long NormObjectGetBytesPending(long objectHandle);
     }
 }
