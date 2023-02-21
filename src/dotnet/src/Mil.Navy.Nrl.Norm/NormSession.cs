@@ -9,24 +9,24 @@ namespace Mil.Navy.Nrl.Norm
         private long _handle;
         public long LocalNodeId
         {
-            get => NormApi.NormGetLocalNodeId(_handle);
+            get => NormGetLocalNodeId(_handle);
         }
 
         public double ReportInterval 
         {
-            get => NormApi.NormGetReportInterval(_handle); 
-            set => NormApi.NormSetReportInterval(_handle, value); 
+            get => NormGetReportInterval(_handle); 
+            set => NormSetReportInterval(_handle, value); 
         }
 
         public double TxRate
         {
-            get => NormApi.NormGetTxRate(_handle);
-            set => NormApi.NormSetTxRate(_handle, value);
+            get => NormGetTxRate(_handle);
+            set => NormSetTxRate(_handle, value);
         }
         public double GrttEstimate
         {
-            get => NormApi.NormGetGrttEstimate(_handle);
-            set => NormApi.NormSetGrttEstimate(_handle, value);
+            get => NormGetGrttEstimate(_handle);
+            set => NormSetGrttEstimate(_handle, value);
         }
         
         internal NormSession(long handle)
@@ -48,7 +48,7 @@ namespace Mil.Navy.Nrl.Norm
 
         private void DestroySessionNative()
         {
-            NormApi.NormDestroySession(_handle);
+            NormDestroySession(_handle);
         }
 
         public void SetTxPort(int port)
@@ -58,7 +58,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetTxPort(int port, bool enableReuse, string? txBindAddress)
         {
-            if (!NormApi.NormSetTxPort(_handle, port, enableReuse, txBindAddress))
+            if (!NormSetTxPort(_handle, port, enableReuse, txBindAddress))
             {
                 throw new IOException("Failed to set Tx Port");
             }
@@ -71,7 +71,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetTxOnly(bool txOnly, bool connectToSessionAddress)
         {
-            NormApi.NormSetTxOnly(_handle, txOnly, connectToSessionAddress);
+            NormSetTxOnly(_handle, txOnly, connectToSessionAddress);
         }
 
         public void SetRxPortReuse(bool enable)
@@ -81,7 +81,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetRxPortReuse(bool enable, string? rxBindAddress, string? senderAddress, int senderPort)
         {
-            NormApi.NormSetRxPortReuse(_handle, enable, rxBindAddress, senderAddress, senderPort);
+            NormSetRxPortReuse(_handle, enable, rxBindAddress, senderAddress, senderPort);
         }
 
         public void SetEcnSupport(bool ecnEnable, bool ignoreLoss)
@@ -91,12 +91,12 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetEcnSupport(bool ecnEnable, bool ignoreLoss, bool tolerateLoss)
         {
-            NormApi.NormSetEcnSupport(_handle, ecnEnable, ignoreLoss, tolerateLoss);
+            NormSetEcnSupport(_handle, ecnEnable, ignoreLoss, tolerateLoss);
         }
 
         public void SetMulticastInterface(string interfaceName)
         {
-            if(!NormApi.NormSetMulticastInterface(_handle, interfaceName))
+            if(!NormSetMulticastInterface(_handle, interfaceName))
             {
                 throw new IOException("Failed to set multicast interface");
             }
@@ -104,7 +104,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetSSM(string sourceAddress)
         {
-            if(!NormApi.NormSetSSM(_handle, sourceAddress))
+            if(!NormSetSSM(_handle, sourceAddress))
             {
                 throw new IOException("Failed to set SSM");
             }
@@ -112,7 +112,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetTTL(byte ttl)
         {
-            if (!NormApi.NormSetTTL(_handle, ttl))
+            if (!NormSetTTL(_handle, ttl))
             {
                 throw new IOException("Failed to set TTL");
             }
@@ -120,7 +120,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetTOS(byte tos)
         {
-            if(!NormApi.NormSetTOS(_handle, tos))
+            if(!NormSetTOS(_handle, tos))
             {
                 throw new IOException("Failed to set TOS");
             }
@@ -128,7 +128,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetLoopback(bool loopbackEnable)
         {
-            if (!NormApi.NormSetLoopback(_handle, loopbackEnable))
+            if (!NormSetLoopback(_handle, loopbackEnable))
             {
                 throw new IOException("Failed to set loopback");
             }
@@ -136,27 +136,27 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetMessageTrace(bool flag)
         {
-            NormApi.NormSetMessageTrace(_handle, flag);
+            NormSetMessageTrace(_handle, flag);
         }
 
         public void SetTxLoss(double precent)
         {
-            NormApi.NormSetTxLoss(_handle, precent);
+            NormSetTxLoss(_handle, precent);
         }
 
         public void SetRxLoss(double precent)
         {
-            NormApi.NormSetRxLoss(_handle, precent);
+            NormSetRxLoss(_handle, precent);
         }
 
         public void SetFlowControl(double precent)
         {
-            NormApi.NormSetFlowControl(_handle, precent);
+            NormSetFlowControl(_handle, precent);
         }
 
         public void SetTxSocketBuffer(long bufferSize)
         {
-            if(!NormApi.NormSetTxSocketBuffer(_handle, bufferSize))
+            if(!NormSetTxSocketBuffer(_handle, bufferSize))
             {
                 throw new IOException("Failed to set tx socket buffer");
             }
@@ -169,22 +169,22 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetCongestionControl(bool enable, bool adjustRate)
         {
-            NormApi.NormSetCongestionControl(_handle, enable, adjustRate);
+            NormSetCongestionControl(_handle, enable, adjustRate);
         }
 
         public void SetTxRateBounds(double rateMin, double rateMax)
         {
-            NormApi.NormSetTxRateBounds(_handle, rateMin, rateMax);
+            NormSetTxRateBounds(_handle, rateMin, rateMax);
         }
 
         public void SetTxCacheBounds(long sizeMax, long countMin, long countMax)
         {
-            NormApi.NormSetTxCacheBounds(_handle,sizeMax, countMin, countMax);
+            NormSetTxCacheBounds(_handle,sizeMax, countMin, countMax);
         }
 
         public void StartSender(int sessionId, long bufferSpace, int segmentSize, short blockSize, short numParity, NormFecType fecId)
         {
-            if (!NormApi.NormStartSender(_handle, sessionId, bufferSpace, segmentSize, blockSize, numParity, fecId))
+            if (!NormStartSender(_handle, sessionId, bufferSpace, segmentSize, blockSize, numParity, fecId))
             {
                 throw new IOException("Failed to start sender");
             }
@@ -197,7 +197,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void StartSender(long bufferSpace, int segmentSize, short blockSize, short numParity, NormFecType fecId)
         {
-            var sessionId = NormApi.NormGetRandomSessionId();
+            var sessionId = NormGetRandomSessionId();
             StartSender(sessionId, bufferSpace, segmentSize, blockSize, numParity, fecId);
         }
 
@@ -208,13 +208,13 @@ namespace Mil.Navy.Nrl.Norm
 
         public void StopSender()
         {
-            NormApi.NormStopSender(_handle);
+            NormStopSender(_handle);
         }
 
         public NormFile FileEnqueue(string filename, byte[] info, int infoLength)
         {
-            var objectHandle = NormApi.NormFileEnqueue(_handle, filename, info, infoLength);
-            if (objectHandle == NormApi.NORM_OBJECT_INVALID)
+            var objectHandle = NormFileEnqueue(_handle, filename, info, infoLength);
+            if (objectHandle == NORM_OBJECT_INVALID)
             {
                 throw new IOException("Failed to enqueue file");
             }
@@ -229,8 +229,8 @@ namespace Mil.Navy.Nrl.Norm
 
         public NormData DataEnqueue(byte[] dataBuffer, int dataLength, byte[]? info, int infoLength)
         {
-            var objectHadle = NormApi.NormDataEnqueue(_handle, dataBuffer, dataLength, info, infoLength);
-            if(objectHadle == NormApi.NORM_OBJECT_INVALID)
+            var objectHadle = NormDataEnqueue(_handle, dataBuffer, dataLength, info, infoLength);
+            if(objectHadle == NORM_OBJECT_INVALID)
             {
                 throw new IOException("Failed to enqueue data");
             }
@@ -244,8 +244,8 @@ namespace Mil.Navy.Nrl.Norm
 
         public NormStream StreamOpen(long bufferSize, byte[]? info, int infoLength)
         {
-            var objectHandle = NormApi.NormStreamOpen(_handle, bufferSize, info, infoLength);
-            if (objectHandle == NormApi.NORM_OBJECT_INVALID)
+            var objectHandle = NormStreamOpen(_handle, bufferSize, info, infoLength);
+            if (objectHandle == NORM_OBJECT_INVALID)
             {
                 throw new IOException("Failed to open stream");
             }
@@ -259,7 +259,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void StartReceiver(long bufferSpace)
         {
-            if(!NormApi.NormStartReceiver(_handle, bufferSpace))
+            if(!NormStartReceiver(_handle, bufferSpace))
             {
                 throw new IOException("Failed to start receiver");
             }
@@ -267,47 +267,47 @@ namespace Mil.Navy.Nrl.Norm
 
         public void StopReceiver()
         {
-            NormApi.NormStopReceiver(_handle);
+            NormStopReceiver(_handle);
         }
 
         public void SetAutoParity(short autoParity)
         {
-            NormApi.NormSetAutoParity(_handle, autoParity);
+            NormSetAutoParity(_handle, autoParity);
         }
 
         public void SetGrttMax(double grttMax)
         {
-            NormApi.NormSetGrttMax(_handle, grttMax);
+            NormSetGrttMax(_handle, grttMax);
         }
 
         public void SetGrttProbingMode(NormProbingMode probingMode)
         {
-            NormApi.NormSetGrttProbingMode(_handle, probingMode);
+            NormSetGrttProbingMode(_handle, probingMode);
         }
 
         public void SetGrttProbingInterval(double intervalMin, double intervalMax)
         {
-            NormApi.NormSetGrttProbingInterval(_handle, intervalMin, intervalMax);
+            NormSetGrttProbingInterval(_handle, intervalMin, intervalMax);
         }
 
         public void SetBackoffFactor(double backoffFactor)
         {
-            NormApi.NormSetBackoffFactor(_handle, backoffFactor);
+            NormSetBackoffFactor(_handle, backoffFactor);
         }
 
         public void SetGroupSize(long groupSize)
         {
-            NormApi.NormSetGroupSize(_handle, groupSize);
+            NormSetGroupSize(_handle, groupSize);
         }
 
         public void SetTxRobustFactor(int txRobustFactor)
         {
-            NormApi.NormSetTxRobustFactor(_handle, txRobustFactor);
+            NormSetTxRobustFactor(_handle, txRobustFactor);
         }
 
         public void RequeueObject(NormObject normObject)
         {
-            if(!NormApi.NormRequeueObject(_handle, normObject.Handle))
+            if(!NormRequeueObject(_handle, normObject.Handle))
             {
                 throw new IOException("Failed to requeue object");
             }
@@ -320,7 +320,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetWatermark(NormObject normObject, bool overrideFlush)
         {
-            if(!NormApi.NormSetWatermark(_handle, normObject.Handle, overrideFlush))
+            if(!NormSetWatermark(_handle, normObject.Handle, overrideFlush))
             {
                 throw new IOException("Failed to set watermark");
             }
@@ -328,12 +328,12 @@ namespace Mil.Navy.Nrl.Norm
 
         public void CancelWatermark()
         {
-            NormApi.NormCancelWatermark(_handle);
+            NormCancelWatermark(_handle);
         }
 
         public void ResetWatermark()
         {
-            if(!NormApi.NormResetWatermark(_handle))
+            if(!NormResetWatermark(_handle))
             {
                 throw new IOException("Failed to reset watermark");
             }
@@ -341,7 +341,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void AddAckingNode(long nodeId)
         {
-            if(!NormApi.NormAddAckingNode(_handle, nodeId))
+            if(!NormAddAckingNode(_handle, nodeId))
             {
                 throw new IOException("Failed to add acking node");
             }
@@ -349,17 +349,17 @@ namespace Mil.Navy.Nrl.Norm
 
         public void RemoveAckingNode(long nodeId)
         {
-            NormApi.NormRemoveAckingNode(_handle, nodeId);
+            NormRemoveAckingNode(_handle, nodeId);
         }
 
         public NormAckingStatus GetAckingStatus(long nodeId)
         {
-            return NormApi.NormGetAckingStatus(_handle, nodeId);
+            return NormGetAckingStatus(_handle, nodeId);
         }
 
         public void SendCommand(byte[] cmdBuffer, int cmdLength, bool robust)
         {
-            if(!NormApi.NormSendCommand(_handle, cmdBuffer, cmdLength, robust))
+            if(!NormSendCommand(_handle, cmdBuffer, cmdLength, robust))
             {
                 throw new IOException("Failed to send command");
             }
@@ -367,17 +367,17 @@ namespace Mil.Navy.Nrl.Norm
 
         public void CancelCommand()
         {
-            NormApi.NormCancelCommand(_handle);
+            NormCancelCommand(_handle);
         }
 
         public void SetRxCacheLimit(int countMax)
         {
-            NormApi.NormSetRxCacheLimit(_handle, countMax);
+            NormSetRxCacheLimit(_handle, countMax);
         }
 
         public void SetRxSocketBuffer(long bufferSize)
         {
-            if(!NormApi.NormSetRxSocketBuffer(_handle, bufferSize)) 
+            if(!NormSetRxSocketBuffer(_handle, bufferSize)) 
             {
                 throw new IOException("Failed to set rx socket buffer");
             }
@@ -385,32 +385,32 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetSilentReceiver(bool silent, int maxDelay)
         {
-            NormApi.NormSetSilentReceiver(_handle, silent, maxDelay);
+            NormSetSilentReceiver(_handle, silent, maxDelay);
         }
 
         public void SetDefaultUnicastNack(bool enable)
         {
-            NormApi.NormSetDefaultUnicastNack(_handle, enable);
+            NormSetDefaultUnicastNack(_handle, enable);
         }
 
         public void SetDefaultSyncPolicy(NormSyncPolicy syncPolicy)
         {
-            NormApi.NormSetDefaultSyncPolicy(_handle, syncPolicy);
+            NormSetDefaultSyncPolicy(_handle, syncPolicy);
         }
 
         public void SetDefaultNackingMode(NormNackingMode nackingMode)
         {
-            NormApi.NormSetDefaultNackingMode(_handle, nackingMode);
+            NormSetDefaultNackingMode(_handle, nackingMode);
         }
 
         public void SetDefaultRepairBoundary(NormRepairBoundary repairBoundary)
         {
-            NormApi.NormSetDefaultRepairBoundary(_handle, repairBoundary);
+            NormSetDefaultRepairBoundary(_handle, repairBoundary);
         }
 
         public void SetDefaultRxRobustFactor(int rxRobustFactor)
         {
-            NormApi.NormSetDefaultRxRobustFactor(_handle, rxRobustFactor);
+            NormSetDefaultRxRobustFactor(_handle, rxRobustFactor);
         }
     }
 }

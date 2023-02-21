@@ -8,8 +8,8 @@ namespace Mil.Navy.Nrl.Norm
         {
             get
             {
-                var dataPointer = NormApi.NormDataAccessData(_handle);
-                var length = NormApi.NormObjectGetSize(_handle);
+                var dataPointer = NormDataAccessData(_handle);
+                var length = NormObjectGetSize(_handle);
                 var data = new byte[length];
                 for (var i = 0; i < length; i++)
                 {

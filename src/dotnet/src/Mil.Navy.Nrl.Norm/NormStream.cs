@@ -10,17 +10,17 @@ namespace Mil.Navy.Nrl.Norm
 
         public int Write(byte[] buffer, int length)
         {
-            return NormApi.NormStreamWrite(_handle, buffer, length);
+            return NormStreamWrite(_handle, buffer, length);
         }
 
         public void MarkEom()
         {
-            NormApi.NormStreamMarkEom(_handle);
+            NormStreamMarkEom(_handle);
         }
 
         public void Flush(bool eom, NormFlushMode flushMode)
         {
-            NormApi.NormStreamFlush(_handle, eom, flushMode);
+            NormStreamFlush(_handle, eom, flushMode);
         }
 
         public void Flush()
@@ -30,7 +30,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void Close(bool graceful)
         {
-            NormApi.NormStreamClose(_handle, graceful);
+            NormStreamClose(_handle, graceful);
         }
 
         public void Close()
@@ -40,7 +40,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public int Read(byte[] buffer, int length)
         {
-            if (!NormApi.NormStreamRead(_handle, buffer, ref length))
+            if (!NormStreamRead(_handle, buffer, ref length))
             {
                 return -1;
             }

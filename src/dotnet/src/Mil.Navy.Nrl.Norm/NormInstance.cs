@@ -32,7 +32,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="priorityBoost">The priorityBoost parameter, when set to a value of true, specifies that the NORM protocol engine thread be run with higher priority scheduling.</param>
         private void CreateInstance(bool priorityBoost)
         {
-            var handle = NormApi.NormCreateInstance(priorityBoost);
+            var handle = NormCreateInstance(priorityBoost);
             _handle = handle;
         }
 
@@ -41,13 +41,13 @@ namespace Mil.Navy.Nrl.Norm
         /// </summary>
         public void DestroyInstance()
         {
-            NormApi.NormDestroyInstance(_handle);
+            NormDestroyInstance(_handle);
         }
 
         public NormSession CreateSession(string address, int port, long localNodeId)
         {
-            var session = NormApi.NormCreateSession(_handle, address, port, localNodeId);
-            if (session == NormApi.NORM_SESSION_INVALID)
+            var session = NormCreateSession(_handle, address, port, localNodeId);
+            if (session == NORM_SESSION_INVALID)
             {
                 throw new IOException("Failed to create session");
             }
@@ -61,8 +61,8 @@ namespace Mil.Navy.Nrl.Norm
         /// <returns></returns>
         public bool HasNextEvent(TimeSpan waitTime)
         {
-            var normDescriptor = NormApi.NormGetDescriptor(_handle);
-            if (normDescriptor == NormApi.NORM_DESCRIPTOR_INVALID)
+            var normDescriptor = NormGetDescriptor(_handle);
+            if (normDescriptor == NORM_DESCRIPTOR_INVALID)
             {
                 return false;
             }
@@ -90,7 +90,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <returns></returns>
         public NormEvent? GetNextEvent(bool waitForEvent)
         {
-            bool success = NormApi.NormGetNextEvent(_handle, out NormApi.NormEvent normEvent, waitForEvent);
+            bool success = NormGetNextEvent(_handle, out NormApi.NormEvent normEvent, waitForEvent);
             if (!success)
             {
                 return null;
@@ -105,7 +105,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetCacheDirectory(string cachePath)
         {
-            if(!NormApi.NormSetCacheDirectory(_handle, cachePath))
+            if(!NormSetCacheDirectory(_handle, cachePath))
             {
                 throw new IOException("Failed to set the cache directory");
             }
@@ -113,27 +113,27 @@ namespace Mil.Navy.Nrl.Norm
 
         public void StopInstance()
         {
-            NormApi.NormStopInstance(_handle);
+            NormStopInstance(_handle);
         }
 
         public bool RestartInstance()
         {
-            return NormApi.NormRestartInstance(_handle);
+            return NormRestartInstance(_handle);
         }
 
         public bool SuspendInstance()
         {
-            return NormApi.NormSuspendInstance(_handle);
+            return NormSuspendInstance(_handle);
         }
 
         public void ResumeInstance()
         {
-            NormApi.NormResumeInstance(_handle);
+            NormResumeInstance(_handle);
         }
 
         public void OpenDebugLog(string fileName)
         {
-            if (!NormApi.NormOpenDebugLog(_handle, fileName))
+            if (!NormOpenDebugLog(_handle, fileName))
             {
                 throw new IOException("Failed to open debug log");
             }
@@ -141,13 +141,13 @@ namespace Mil.Navy.Nrl.Norm
 
         public void CloseDebugLog()
         {
-            NormApi.NormCloseDebugLog(_handle);
+            NormCloseDebugLog(_handle);
         }
 
         public int DebugLevel 
         { 
-            get => NormApi.NormGetDebugLevel(); 
-            set => NormApi.NormSetDebugLevel(value); 
+            get => NormGetDebugLevel(); 
+            set => NormSetDebugLevel(value); 
         }
     }
 }

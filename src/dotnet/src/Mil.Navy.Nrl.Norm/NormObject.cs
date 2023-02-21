@@ -17,13 +17,13 @@ namespace Mil.Navy.Nrl.Norm
         {
             get
             {
-                if (!NormApi.NormObjectHasInfo(_handle))
+                if (!NormObjectHasInfo(_handle))
                 {
                     return null;
                 } 
-                var length = NormApi.NormObjectGetInfoLength(_handle);
+                var length = NormObjectGetInfoLength(_handle);
                 var buffer = new byte[length];
-                NormApi.NormObjectGetInfo(_handle, buffer, length);
+                NormObjectGetInfo(_handle, buffer, length);
                 return buffer;
             }
         }
@@ -32,7 +32,7 @@ namespace Mil.Navy.Nrl.Norm
         {
             get 
             {
-                return NormApi.NormObjectGetType(_handle);
+                return NormObjectGetType(_handle);
             }
         }
 
@@ -40,7 +40,7 @@ namespace Mil.Navy.Nrl.Norm
         {
             get
             {
-                return NormApi.NormObjectGetSize(_handle);
+                return NormObjectGetSize(_handle);
             }
         }
 
@@ -48,8 +48,8 @@ namespace Mil.Navy.Nrl.Norm
         {
             get
             {
-                var sender = NormApi.NormObjectGetSender(_handle);
-                if(sender == NormApi.NORM_NODE_INVALID)
+                var sender = NormObjectGetSender(_handle);
+                if(sender == NORM_NODE_INVALID)
                 {
                     throw new IOException("Locally originated sender object");
                 }
@@ -59,27 +59,27 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetNackingMode(NormNackingMode nackingMode)
         {
-            NormApi.NormObjectSetNackingMode(_handle, nackingMode);
+            NormObjectSetNackingMode(_handle, nackingMode);
         }
 
         public long GetBytesPending()
         {
-            return NormApi.NormObjectGetBytesPending(_handle);
+            return NormObjectGetBytesPending(_handle);
         }
 
         public void Cancel()
         {
-            NormApi.NormObjectCancel(_handle);
+            NormObjectCancel(_handle);
         }
 
         public void Retain()
         {
-            NormApi.NormObjectRetain(_handle);
+            NormObjectRetain(_handle);
         }
 
         public void Release()
         {
-            NormApi.NormObjectRelease(_handle);
+            NormObjectRelease(_handle);
         }
 
         public override int GetHashCode()

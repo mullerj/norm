@@ -13,7 +13,7 @@ namespace Mil.Navy.Nrl.Norm
             _handle = handle;
         }
 
-        public long Id => NormApi.NormNodeGetId(_handle);
+        public long Id => NormNodeGetId(_handle);
 
         public IPEndPoint Address
         {
@@ -21,7 +21,7 @@ namespace Mil.Navy.Nrl.Norm
             {
                 var buffer = new byte[256];
                 var bufferLength = buffer.Length;
-                if (!NormApi.NormNodeGetAddress(_handle, buffer, ref bufferLength, out var port))
+                if (!NormNodeGetAddress(_handle, buffer, ref bufferLength, out var port))
                 {
                     throw new IOException("Failed to get node address");
                 }
@@ -33,7 +33,7 @@ namespace Mil.Navy.Nrl.Norm
             }
         }
 
-        public double Grtt => NormApi.NormNodeGetGrtt(_handle);
+        public double Grtt => NormNodeGetGrtt(_handle);
 
         public byte[] Command
         {
@@ -41,7 +41,7 @@ namespace Mil.Navy.Nrl.Norm
             {
                 var buffer = new byte[256];
                 var bufferLength = buffer.Length;
-                if (!NormApi.NormNodeGetCommand(_handle, buffer, ref bufferLength))
+                if (!NormNodeGetCommand(_handle, buffer, ref bufferLength))
                 {
                     throw new IOException("Failed to get command");
                 }
@@ -51,37 +51,37 @@ namespace Mil.Navy.Nrl.Norm
 
         public void SetUnicastNack(bool state)
         {
-            NormApi.NormNodeSetUnicastNack(_handle, state);
+            NormNodeSetUnicastNack(_handle, state);
         }
 
         public void SetNackingMode(NormNackingMode nackingMode)
         {
-            NormApi.NormNodeSetNackingMode(_handle, nackingMode);
+            NormNodeSetNackingMode(_handle, nackingMode);
         }
 
         public void SetRepairBoundary(NormRepairBoundary repairBoundary)
         {
-            NormApi.NormNodeSetRepairBoundary(_handle, repairBoundary);
+            NormNodeSetRepairBoundary(_handle, repairBoundary);
         }
 
         public void SetRxRobustFactor(int robustFactor)
         {
-            NormApi.NormNodeSetRxRobustFactor(_handle, robustFactor);
+            NormNodeSetRxRobustFactor(_handle, robustFactor);
         }
 
         public void FreeBuffers()
         {
-            NormApi.NormNodeFreeBuffers(_handle);
+            NormNodeFreeBuffers(_handle);
         }
 
         public void Retain()
         {
-            NormApi.NormNodeRetain(_handle);
+            NormNodeRetain(_handle);
         }
 
         public void Release()
         {
-            NormApi.NormNodeRelease(_handle);
+            NormNodeRelease(_handle);
         }
     }
 }

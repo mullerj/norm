@@ -23,7 +23,7 @@ namespace Mil.Navy.Nrl.Norm
         { 
             get
             {
-                if (_sessionHandle == NormApi.NORM_SESSION_INVALID)
+                if (_sessionHandle == NORM_SESSION_INVALID)
                 {
                     return null;
                 }
@@ -48,7 +48,7 @@ namespace Mil.Navy.Nrl.Norm
             get
             {
                 NormObject? normObject = null;
-                var normObjectType = NormApi.NormObjectGetType(_objectHandle);
+                var normObjectType = NormObjectGetType(_objectHandle);
                 switch (normObjectType)
                 {
                     case NormObjectType.NORM_OBJECT_DATA:

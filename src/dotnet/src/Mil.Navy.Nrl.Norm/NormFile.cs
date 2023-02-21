@@ -11,8 +11,8 @@
         {
             get
             {
-                var buffer = new char[NormApi.FILENAME_MAX];
-                if (!NormApi.NormFileGetName(_handle, buffer, NormApi.FILENAME_MAX))
+                var buffer = new char[FILENAME_MAX];
+                if (!NormFileGetName(_handle, buffer, FILENAME_MAX))
                 {
                     throw new IOException("Failed to get file name");
                 }
@@ -23,7 +23,7 @@
 
         public void Rename(string filePath)
         {
-            if(!NormApi.NormFileRename(_handle, filePath))
+            if(!NormFileRename(_handle, filePath))
             {
                 throw new IOException("Failed to rename file");
             }
