@@ -1431,5 +1431,35 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 StopReceiver();
             }
         }
+
+        [Fact]
+        public void GetsObjectType_DATA()
+        {
+             StartSender();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
+                Assert.Equal(NormObjectType.NORM_OBJECT_DATA, normData.Type);
+                var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY };
+                var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
+                Assert.Equal(expectedEventTypes, actualEventTypes);
+                var actualData = normData.Data;
+                Assert.Equal(expectedData, actualData);
+                var actualContent = Encoding.ASCII.GetString(actualData);
+                Assert.Equal(expectedContent, actualContent);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
+        }
     }
 }

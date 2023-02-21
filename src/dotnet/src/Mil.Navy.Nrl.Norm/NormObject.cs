@@ -1,4 +1,5 @@
-﻿namespace Mil.Navy.Nrl.Norm
+﻿using  Mil.Navy.Nrl.Norm.Enums;
+namespace Mil.Navy.Nrl.Norm
 {
     public class NormObject
     {
@@ -23,6 +24,14 @@
                 var buffer = new byte[length];
                 NormApi.NormObjectGetInfo(_handle, buffer, length);
                 return buffer;
+            }
+        }
+
+        public NormObjectType Type 
+        {
+            get 
+            {
+                return NormApi.NormObjectGetType(_handle);
             }
         }
     }
