@@ -1,4 +1,5 @@
 ﻿using  Mil.Navy.Nrl.Norm.Enums;
+
 namespace Mil.Navy.Nrl.Norm
 {
     public class NormObject
@@ -39,7 +40,7 @@ namespace Mil.Navy.Nrl.Norm
         {
             get
             {
-                return (long)NormApi.NormObjectGetSize(_handle);
+                return NormApi.NormObjectGetSize(_handle);
             }
         }
 
