@@ -1,6 +1,5 @@
 ﻿using Bogus;
 using Mil.Navy.Nrl.Norm.Enums;
-using System.Net;
 using System.Text;
 using static Mil.Navy.Nrl.Norm.NormApi;
 
