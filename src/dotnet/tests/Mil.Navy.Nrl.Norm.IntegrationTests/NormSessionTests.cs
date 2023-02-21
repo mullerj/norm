@@ -1,7 +1,6 @@
 ﻿using Bogus;
 using Mil.Navy.Nrl.Norm.Enums;
 using System.Text;
-using static Mil.Navy.Nrl.Norm.NormApi;
 
 namespace Mil.Navy.Nrl.Norm.IntegrationTests
 {
@@ -208,7 +207,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 if (normNode != null)
                 {
                     var actualId = normNode.Id;
-                    Assert.NotEqual(NORM_NODE_NONE, actualId);
+                    Assert.NotEqual(NormApi.NORM_NODE_NONE, actualId);
                     var actualAddress = normNode.Address;
                     Assert.NotNull(actualAddress);
                     var actualGrtt = normNode.Grtt;

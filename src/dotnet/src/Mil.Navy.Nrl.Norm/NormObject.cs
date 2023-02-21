@@ -1,4 +1,4 @@
-﻿using  Mil.Navy.Nrl.Norm.Enums;
+﻿using Mil.Navy.Nrl.Norm.Enums;
 
 namespace Mil.Navy.Nrl.Norm
 {
