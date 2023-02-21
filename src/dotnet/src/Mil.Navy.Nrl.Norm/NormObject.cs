@@ -85,5 +85,14 @@ namespace Mil.Navy.Nrl.Norm
         {
             return (int)Handle;
         }
+
+        public override bool Equals(object obj)
+        {
+            if(obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+            return (_handle == ((NormObject)obj).Handle);
+        }
     }
 }
