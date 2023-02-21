@@ -1815,17 +1815,22 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
-                var normEventType = NormEventType.NORM_RX_OBJECT_COMPLETED;
-                var actualEvents = GetEvents();
-                Assert.Contains(normEventType, actualEvents.Select(e => e.Type));
-                var actualEvent = actualEvents.First(e => e.Type == normEventType);
-                var firstObject = actualEvent.Object;
+                _normSession.DataEnqueue(expectedData, expectedData.Length);
 
-                _normSession.RequeueObject(normData);
-                var secondEvents = GetEvents();
-                var secondEvent = secondEvents.First(e => e.Type == normEventType);
+                var actualEvents = GetEvents();
+
+                var firstNormEventType = NormEventType.NORM_RX_OBJECT_NEW;
+                Assert.Contains(firstNormEventType, actualEvents.Select(e => e.Type));
+                var firstEvent = actualEvents.First(e => e.Type == firstNormEventType);
+                var firstObject = firstEvent.Object;
+                Assert.NotNull(firstObject);
+
+                var secondNormEventType = NormEventType.NORM_RX_OBJECT_COMPLETED;
+                Assert.Contains(secondNormEventType, actualEvents.Select(e => e.Type));
+                var secondEvent = actualEvents.First(e => e.Type == secondNormEventType);
                 var secondObject = secondEvent.Object;
+                Assert.NotNull(secondObject);
+
                 Assert.True(firstObject.Equals(secondObject));
             }
             catch (Exception)
