@@ -1741,7 +1741,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 Assert.Contains(normEventType, actualEvents.Select(e => e.Type));
                 var actualEvent = actualEvents.First(e => e.Type == normEventType);
                 var actualObject = actualEvent.Object;
-                Assert.NotEqual(NormApi.NORM_NODE_INVALID, actualObject.Sender);
+                Assert.NotEqual(NormApi.NORM_NODE_INVALID, actualObject!.Sender);
             }
             catch (Exception)
             {
