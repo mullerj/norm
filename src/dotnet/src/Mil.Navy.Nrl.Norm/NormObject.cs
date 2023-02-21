@@ -80,5 +80,10 @@ namespace Mil.Navy.Nrl.Norm
         {
             NormApi.NormObjectRelease(_handle);
         }
+
+        public override int GetHashCode()
+        {
+            return (int)Handle;
+        }
     }
 }

@@ -1756,5 +1756,44 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 Directory.Delete(cachePath, true);
             }
         }
+
+        [Fact]
+        public void GetsObjectHashCode()
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+
+            //Set up cache directory
+            var folderName = Guid.NewGuid().ToString();
+            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            Directory.CreateDirectory(cachePath);
+            _normInstance.SetCacheDirectory(cachePath);
+
+            //Create data to be sent
+            var expectedContent = GenerateTextContent();
+            var expectedData = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
+                var normEventType = NormEventType.NORM_RX_OBJECT_COMPLETED;
+                var actualEvents = GetEvents();
+                Assert.Contains(normEventType, actualEvents.Select(e => e.Type));
+                var actualEvent = actualEvents.First(e => e.Type == normEventType);
+                var actualObject = actualEvent.Object;
+                Assert.Equal((int)actualObject.Handle, actualObject.GetHashCode());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+                Directory.Delete(cachePath, true);
+            }
+        }
     }
 }
