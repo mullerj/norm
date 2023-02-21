@@ -1,6 +1,4 @@
-﻿using Mil.Navy.Nrl.Norm.Enums;
-
-namespace Mil.Navy.Nrl.Norm
+﻿namespace Mil.Navy.Nrl.Norm
 {
     public class NormEvent
     {

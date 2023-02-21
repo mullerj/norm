@@ -1,5 +1,4 @@
-﻿using Mil.Navy.Nrl.Norm.Enums;
-using System.Net;
+﻿using System.Net;
 
 namespace Mil.Navy.Nrl.Norm
 {

@@ -1,5 +1,4 @@
-﻿using Mil.Navy.Nrl.Norm.Enums;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace Mil.Navy.Nrl.Norm
 {
