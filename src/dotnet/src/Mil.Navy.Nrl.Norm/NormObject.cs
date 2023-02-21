@@ -62,5 +62,10 @@ namespace Mil.Navy.Nrl.Norm
         {
             NormApi.NormObjectRetain(_handle);
         }
+
+        public void Release()
+        {
+            NormApi.NormObjectRelease(_handle);
+        }
     }
 }
