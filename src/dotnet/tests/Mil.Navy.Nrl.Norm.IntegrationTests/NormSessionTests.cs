@@ -1780,7 +1780,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 Assert.Contains(normEventType, actualEvents.Select(e => e.Type));
                 var actualEvent = actualEvents.First(e => e.Type == normEventType);
                 var actualObject = actualEvent.Object;
-                Assert.Equal((int)actualObject.Handle, actualObject.GetHashCode());
+                var expectedHashCode = (int)actualObject!.Handle;
+                var actualHashCode = actualObject.GetHashCode();
+                Assert.Equal(expectedHashCode, actualHashCode);
             }
             catch (Exception)
             {

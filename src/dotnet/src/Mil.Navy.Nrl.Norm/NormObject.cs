@@ -82,7 +82,7 @@
 
         public override int GetHashCode()
         {
-            return (int)Handle;
+            return (int)_handle;
         }
 
         public override bool Equals(object? obj)
