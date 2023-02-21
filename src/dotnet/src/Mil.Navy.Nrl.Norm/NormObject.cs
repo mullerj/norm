@@ -42,5 +42,10 @@ namespace Mil.Navy.Nrl.Norm
                 return (long)NormApi.NormObjectGetSize(_handle);
             }
         }
+
+        public void SetNackingMode(NormNackingMode nackingMode)
+        {
+            NormApi.NormObjectSetNackingMode(_handle, nackingMode);
+        }
     }
 }

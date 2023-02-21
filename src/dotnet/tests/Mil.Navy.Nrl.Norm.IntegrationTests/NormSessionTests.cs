@@ -1530,5 +1530,74 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 StopSender();
             }
         }
+
+        [Fact]
+        public void SetsObjectNackingMode_NORM_NACK_NONE()
+        {
+            StartSender();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
+                normData.SetNackingMode(NormNackingMode.NORM_NACK_NONE);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
+        }
+
+        [Fact]
+        public void SetsObjectNackingMode_NORM_NACK_INFO_ONLY()
+        {
+            StartSender();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
+                normData.SetNackingMode(NormNackingMode.NORM_NACK_INFO_ONLY);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
+        }
+
+        [Fact]
+        public void SetsObjectNackingMode_NORM_NACK_NORMAL()
+        {
+            StartSender();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
+                normData.SetNackingMode(NormNackingMode.NORM_NACK_NORMAL);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
+        }
     }
 }
