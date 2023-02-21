@@ -1647,5 +1647,28 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 StopSender();
             }
         }
+
+        [Fact]
+        public void RetainsObject()
+        {
+             StartSender();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
+                normData.Retain();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
+        }
     }
 }

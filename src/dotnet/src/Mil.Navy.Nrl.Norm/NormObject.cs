@@ -57,5 +57,10 @@ namespace Mil.Navy.Nrl.Norm
         {
             NormApi.NormObjectCancel(_handle);
         }
+
+        public void Retain()
+        {
+            NormApi.NormObjectRetain(_handle);
+        }
     }
 }
