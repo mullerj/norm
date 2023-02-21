@@ -1603,7 +1603,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         [Fact]
         public void GetsBytesPending()
         {
-              StartSender();
+            StartSender();
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
@@ -1612,7 +1612,31 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             try
             {
                 var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
+                WaitForEvents();
                 Assert.Equal(expectedBytesPending, normData.GetBytesPending());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
+        }
+
+        [Fact]
+        public void CancelsObject()
+        {
+            StartSender();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
+                normData.Cancel();
             }
             catch (Exception)
             {

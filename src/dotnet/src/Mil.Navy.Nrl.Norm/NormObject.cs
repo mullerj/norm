@@ -52,5 +52,10 @@ namespace Mil.Navy.Nrl.Norm
         {
             return NormApi.NormObjectGetBytesPending(_handle);
         }
+
+        public void Cancel()
+        {
+            NormApi.NormObjectCancel(_handle);
+        }
     }
 }

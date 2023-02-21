@@ -374,5 +374,8 @@ namespace Mil.Navy.Nrl.Norm
         
         [DllImport(NORM_LIBRARY)]
         public static extern long NormObjectGetBytesPending(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormObjectCancel(long objectHandle);
     }
 }
