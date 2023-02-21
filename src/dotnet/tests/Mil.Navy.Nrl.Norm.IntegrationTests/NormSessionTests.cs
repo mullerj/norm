@@ -1482,7 +1482,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         }
 
         [Fact]
-        public void GetsobjectType_STREAM()
+        public void GetsObjectType_STREAM()
         {
              StartSender();
 
@@ -1503,6 +1503,30 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             finally
             {
                 normStream?.Close(true);
+                StopSender();
+            }
+        }
+
+        [Fact]
+        public void GetsObjectSize()
+        {
+             StartSender();
+            //Create data to write to the stream
+            var expectedContent = GenerateTextContent();
+            byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            var expectedSize = System.Text.ASCIIEncoding.ASCII.GetByteCount(expectedContent);
+
+            try
+            {
+                var normData = _normSession.DataEnqueue(expectedData, expectedData.Length);
+                Assert.Equal(expectedSize, normData.Size);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
                 StopSender();
             }
         }

@@ -34,5 +34,13 @@ namespace Mil.Navy.Nrl.Norm
                 return NormApi.NormObjectGetType(_handle);
             }
         }
+
+        public long Size
+        {
+            get
+            {
+                return (long)NormApi.NormObjectGetSize(_handle);
+            }
+        }
     }
 }
