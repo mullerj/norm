@@ -65,5 +65,10 @@
         {
             return NormApi.NormStreamSeekMsgStart(_handle);
         }
+
+        public void SetPushEnable(bool pushEnable)
+        {
+            NormApi.NormStreamSetPushEnable(_handle, pushEnable);
+        }
     }
 }
