@@ -1977,5 +1977,86 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 StopSender();
             }
         }
+
+        [Fact]
+        public void NormStreamSetsAutoFlush_FLUSH_NONE()
+        {
+            StartSender();
+
+            var fileContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+
+                normStream.SetAutoFlush(NormFlushMode.NORM_FLUSH_NONE);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
+            }
+        }
+
+        [Fact]
+        public void NormStreamSetsAutoFlush_FLUSH_PASSIVE()
+        {
+            StartSender();
+
+            var fileContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+
+                normStream.SetAutoFlush(NormFlushMode.NORM_FLUSH_PASSIVE);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
+            }
+        }
+
+        [Fact]
+        public void NormStreamSetsAutoFlush_FLUSH_ACTIVE()
+        {
+            StartSender();
+
+            var fileContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+
+                normStream.SetAutoFlush(NormFlushMode.NORM_FLUSH_ACTIVE);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
+            }
+        }
     }
 }

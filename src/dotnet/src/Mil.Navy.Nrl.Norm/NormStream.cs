@@ -70,5 +70,10 @@
         {
             NormApi.NormStreamSetPushEnable(_handle, pushEnable);
         }
+
+        public void SetAutoFlush(NormFlushMode flushMode)
+        {
+            NormApi.NormStreamSetAutoFlush(_handle, flushMode);
+        }
     }
 }

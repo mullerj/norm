@@ -397,5 +397,8 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern void NormStreamSetPushEnable(long streamHandle, bool pushEnable);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormStreamSetAutoFlush(long streamHandle, NormFlushMode flushMode);
     }
 }
