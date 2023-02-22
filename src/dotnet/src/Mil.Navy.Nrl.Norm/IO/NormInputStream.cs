@@ -17,7 +17,7 @@ namespace Mil.Navy.Nrl.Norm
         {
             _normInstance = new NormInstance();
 
-            _normSession = _normInstance.CreateSession(address,port,NormNode.NORM_NODE_ANY);       
+            _normSession = _normInstance.CreateSession(address, port, NormNode.NORM_NODE_ANY);       
             _normStream = null;
        
             normEventListener = new List<INormEventListener>();
