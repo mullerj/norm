@@ -17,7 +17,7 @@ class NormOutputStream {
     + SetTtl(ttl:byte) : void
     + SetTos(tos:byte) : void
     + SetCongestionControl(ccEnabled:bool, ccAdjustRate: bool) : void
-    + SetTxRateBounds(rateMin:double, rateMax:double) : void
+    + SetTxRateBounds(minTxRate:double, maxTxRate:double) : void
     + TxRate:double <<get>> <<set>>
     + GrttEstimate:double <<get>> <<set>>
     + SetGroupSize(groupSize:long) : void
@@ -30,7 +30,7 @@ class NormOutputStream {
     + RemoveNormEventListener(normEventListener:INormEventListener): void
     - FireNormEventOccured(normEvent:NormEvent) : void
     + Open(sessionId:int, bufferSpace:long, segmentSize:int, blockSize:short, numParity:short, repairWindow:long) : void
-    + <<override>> Dispose() : void
+    + <<override>> Close() : void
     + IsClosed : bool <<get>>
     + Write(b:int) : void
     + <<override>> Write(buffer:byte[], offset:int, count:int)
