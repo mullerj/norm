@@ -87,11 +87,11 @@
 
         public override bool Equals(object? obj)
         {
-            if(obj?.GetType() != GetType())
+            if(obj is NormObject)
             {
-                return false;
+                return _handle == ((NormObject)obj).Handle;
             }
-            return _handle == ((NormObject)obj).Handle;
+            return false;
         }
     }
 }
