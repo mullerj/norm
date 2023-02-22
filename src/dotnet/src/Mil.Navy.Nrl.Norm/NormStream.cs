@@ -60,5 +60,10 @@
             }
             return length;
         }
+
+        public bool SeekMsgStart()
+        {
+            return NormApi.NormStreamSeekMsgStart(_handle);
+        }
     }
 }

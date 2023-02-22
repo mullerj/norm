@@ -391,5 +391,8 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern long NormStreamGetReadOffset(long streamHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormStreamSeekMsgStart(long streamHandle);
     }
 }
