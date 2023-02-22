@@ -6,7 +6,7 @@
         {
             get
             {
-                return NormApi.NormStreamHasVacancy(_handle);
+                return NormStreamHasVacancy(_handle);
             }
         }
 
@@ -14,7 +14,7 @@
         {
             get
             {
-                return NormApi.NormStreamGetReadOffset(_handle);
+                return NormStreamGetReadOffset(_handle);
             }
         }
 
@@ -59,6 +59,21 @@
                 return -1;
             }
             return length;
+        }
+
+        public bool SeekMsgStart()
+        {
+            return NormStreamSeekMsgStart(_handle);
+        }
+
+        public void SetPushEnable(bool pushEnable)
+        {
+            NormStreamSetPushEnable(_handle, pushEnable);
+        }
+
+        public void SetAutoFlush(NormFlushMode flushMode)
+        {
+            NormStreamSetAutoFlush(_handle, flushMode);
         }
     }
 }

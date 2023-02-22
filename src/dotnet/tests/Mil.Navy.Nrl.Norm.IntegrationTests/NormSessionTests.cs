@@ -1899,5 +1899,164 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 StopSender();
             }
         }
+
+        [Fact]
+        public void NormStreamSeeksMsgStart()
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+
+            //Set up cache directory
+            var folderName = Guid.NewGuid().ToString();
+            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            Directory.CreateDirectory(cachePath);
+            _normInstance.SetCacheDirectory(cachePath);
+
+            var fileContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+
+                var expectedBytesWritten = data.Length;
+                normStream.Write(data, data.Length);
+
+                normStream.MarkEom();
+                normStream.Flush();
+                var normEvents = GetEvents();
+                AssertNormEvents(normEvents);
+
+                var expectedNormEventType = NormEventType.NORM_RX_OBJECT_UPDATED;
+                Assert.Contains(expectedNormEventType, normEvents.Select(e => e.Type));
+                var normObjectEvent = normEvents.First(e => e.Type == expectedNormEventType);
+
+                var receivedNormStream = Assert.IsType<NormStream>(normObjectEvent.Object);
+
+                Assert.True(receivedNormStream.SeekMsgStart());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
+                StopReceiver();
+                Directory.Delete(cachePath, true);
+            }
+        }
+
+        [Fact]
+        public void NormStreamSetsPushEnable()
+        {
+            StartSender();
+
+            var fileContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+
+                normStream.SetPushEnable(true);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
+            }
+        }
+
+        [Fact]
+        public void NormStreamSetsAutoFlush_FLUSH_NONE()
+        {
+            StartSender();
+
+            var fileContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+
+                normStream.SetAutoFlush(NormFlushMode.NORM_FLUSH_NONE);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
+            }
+        }
+
+        [Fact]
+        public void NormStreamSetsAutoFlush_FLUSH_PASSIVE()
+        {
+            StartSender();
+
+            var fileContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+
+                normStream.SetAutoFlush(NormFlushMode.NORM_FLUSH_PASSIVE);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
+            }
+        }
+
+        [Fact]
+        public void NormStreamSetsAutoFlush_FLUSH_ACTIVE()
+        {
+            StartSender();
+
+            var fileContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+
+                normStream.SetAutoFlush(NormFlushMode.NORM_FLUSH_ACTIVE);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
+            }
+        }
     }
 }
