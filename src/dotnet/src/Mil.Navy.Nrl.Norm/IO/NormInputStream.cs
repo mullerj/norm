@@ -7,7 +7,7 @@ namespace Mil.Navy.Nrl.Norm
         private NormInputStream _normInputStream;
         private List<INormEventListener> normEventListener;
         private bool _closed;
-        private  object _closedLock;
+        private object _closedLock;
         private bool _bufferIsEmpty;
         private bool _receivedEof;
 
