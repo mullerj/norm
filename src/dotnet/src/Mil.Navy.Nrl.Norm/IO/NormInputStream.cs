@@ -5,7 +5,7 @@ namespace Mil.Navy.Nrl.Norm
         private NormInstance _normInstance;
         private NormSession _normSession;
         private NormInputStream _normInputStream;
-       private List<INormEventListener> normEventListener;
+        private List<INormEventListener> normEventListener;
         private bool _closed;
         private  object _closedLock;
         private bool _bufferIsEmpty;
