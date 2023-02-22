@@ -1848,7 +1848,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         [Fact]
         public void NormStreamHasVacancy()
         {
-             StartSender();
+            StartSender();
 
             var fileContent = GenerateTextContent();
             var data = Encoding.ASCII.GetBytes(fileContent);
@@ -1860,6 +1860,34 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 normStream = _normSession.StreamOpen(repairWindowSize);
 
                 Assert.True(normStream.HasVacancy);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
+            }
+        }
+
+        [Fact]
+        public void NormStreamGetsReadOffset()
+        {
+            StartSender();
+
+            var fileContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+            var expectedReadOffset = 0;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+
+                Assert.Equal(expectedReadOffset, normStream.ReadOffset);
             }
             catch (Exception)
             {

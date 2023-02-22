@@ -9,6 +9,15 @@
                 return NormApi.NormStreamHasVacancy(_handle);
             }
         }
+
+        public long ReadOffset
+        {
+            get
+            {
+                return NormApi.NormStreamGetReadOffset(_handle);
+            }
+        }
+
         internal NormStream(long handle) : base(handle)
         {
         }
