@@ -2,6 +2,13 @@
 {
     public class NormStream : NormObject
     {
+        public bool HasVacancy
+        {
+            get
+            {
+                return NormApi.NormStreamHasVacancy(_handle);
+            }
+        }
         internal NormStream(long handle) : base(handle)
         {
         }

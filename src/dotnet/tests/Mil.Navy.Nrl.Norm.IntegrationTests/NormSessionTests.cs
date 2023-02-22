@@ -1844,5 +1844,32 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 Directory.Delete(cachePath, true);
             }
         }
+
+        [Fact]
+        public void NormStreamHasVacancy()
+        {
+             StartSender();
+
+            var fileContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+
+                Assert.True(normStream.HasVacancy);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
+            }
+        }
     }
 }

@@ -385,5 +385,8 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern long NormObjectGetSender(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormStreamHasVacancy(long streamHandle);
     }
 }
