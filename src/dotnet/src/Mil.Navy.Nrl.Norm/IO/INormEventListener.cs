@@ -1,7 +1,7 @@
 namespace Mil.Navy.Nrl.Nor
 {
-    interface INormEventListener
+    public interface INormEventListener
     {
-        public void NormEventOccurred(NormEvent normEvent);
+        void NormEventOccurred(NormEvent normEvent);
     }
 }
