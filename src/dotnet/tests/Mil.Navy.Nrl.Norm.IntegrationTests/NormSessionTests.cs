@@ -584,7 +584,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 normStream = _normSession.StreamOpen(repairWindowSize);
 
                 var expectedBytesWritten = data.Length;
-                normStream.Write(data, dataOffset, data.Length-dataOffset);
+                normStream.Write(data, dataOffset, data.Length);
 
                 normStream.MarkEom();
                 normStream.Flush();
