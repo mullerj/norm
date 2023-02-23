@@ -32,9 +32,10 @@ namespace Mil.Navy.Nrl.Norm
                 Marshal.Copy(buffer, 0, ptr, buffer.Length);
             }
             IntPtr newPtr = IntPtr.Add(ptr, offset);
-            byte[] managedArray = new byte[length];
-            Marshal.Copy(newPtr, managedArray, 0, length);
-            return NormStreamWrite(_handle, managedArray, length);
+            var size = length - offset;
+            byte[] managedArray = new byte[size];
+            Marshal.Copy(newPtr, managedArray, 0, size);
+            return NormStreamWrite(_handle, managedArray, size);
         }
 
         public void MarkEom()
