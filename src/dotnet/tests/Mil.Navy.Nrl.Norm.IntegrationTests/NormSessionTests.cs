@@ -470,6 +470,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             var fileContent = GenerateTextContent();
             var data = Encoding.ASCII.GetBytes(fileContent);
+            var dataOffset = 0;
             NormStream? normStream = null;
 
             try
@@ -478,7 +479,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 normStream = _normSession.StreamOpen(repairWindowSize);
 
                 var expectedBytesWritten = data.Length;
-                var actualBytesWritten = normStream.Write(data, data.Length);
+                var actualBytesWritten = normStream.Write(data,  dataOffset, data.Length);
 
                 WaitForEvents();
                 normStream.MarkEom();
@@ -512,6 +513,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             var fileContent = GenerateTextContent();
             var data = Encoding.ASCII.GetBytes(fileContent);
+            var dataOffset = 0;
             NormStream? normStream = null;
 
             try
@@ -520,7 +522,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 normStream = _normSession.StreamOpen(repairWindowSize);
 
                 var expectedBytesWritten = data.Length;
-                normStream.Write(data, data.Length);
+                normStream.Write(data, dataOffset, data.Length);
 
                 normStream.MarkEom();
                 normStream.Flush();
@@ -541,6 +543,68 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                         var receivedData = receiveBuffer.Take(numRead).ToArray();
                         var receivedContent = Encoding.ASCII.GetString(receivedData);
                         Assert.Equal(fileContent, receivedContent);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
+                StopReceiver();
+                Directory.Delete(cachePath, true);
+            }
+        }
+
+        [Fact]
+        public void ReceivesStreamWithOffset()
+        {
+             _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+
+            //Set up cache directory
+            var folderName = Guid.NewGuid().ToString();
+            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            Directory.CreateDirectory(cachePath);
+            _normInstance.SetCacheDirectory(cachePath);
+
+            var fileContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            var dataOffset = 1;
+            var expectedContent = fileContent.Remove(0, dataOffset);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+                normStream = _normSession.StreamOpen(repairWindowSize);
+
+                var expectedBytesWritten = data.Length;
+                normStream.Write(data, dataOffset, data.Length-dataOffset);
+
+                normStream.MarkEom();
+                normStream.Flush();
+                var normEvents = GetEvents();
+                AssertNormEvents(normEvents);
+
+                var expectedNormEventType = NormEventType.NORM_RX_OBJECT_UPDATED;
+                Assert.Contains(expectedNormEventType, normEvents.Select(e => e.Type));
+                var normObjectEvent = normEvents.First(e => e.Type == expectedNormEventType);
+
+                var receivedNormStream = Assert.IsType<NormStream>(normObjectEvent.Object);
+                var numRead = 0;
+                var receiveBuffer = new byte[65536];
+                while ((numRead = receivedNormStream.Read(receiveBuffer, receiveBuffer.Length)) > 0)
+                {
+                    if (numRead != -1)
+                    {
+                        var receivedData = receiveBuffer.Take(numRead).ToArray();
+                        var receivedContent = Encoding.ASCII.GetString(receivedData);
+                        Assert.Equal(expectedContent, receivedContent);
                     }
                 }
             }
@@ -1915,6 +1979,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             var fileContent = GenerateTextContent();
             var data = Encoding.ASCII.GetBytes(fileContent);
+            var dataOffset = 0;
             NormStream? normStream = null;
 
             try
@@ -1923,7 +1988,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 normStream = _normSession.StreamOpen(repairWindowSize);
 
                 var expectedBytesWritten = data.Length;
-                normStream.Write(data, data.Length);
+                normStream.Write(data, dataOffset, data.Length);
 
                 normStream.MarkEom();
                 normStream.Flush();
