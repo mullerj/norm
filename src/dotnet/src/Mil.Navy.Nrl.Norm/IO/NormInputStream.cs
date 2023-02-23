@@ -46,7 +46,7 @@ public class NormInputStream : Stream
 
     public void NormSetDebugLevel(int level)
     {
-        //_normInstance.DebugLevel();
+        //_normInstance.DebugLevel;
     }
 
     public void SetMessageTrace(bool messageTrace) 
@@ -193,7 +193,29 @@ public class NormInputStream : Stream
 
     public override int Read(byte[] buffer, int offset, int count)
     {
-        throw new NotImplementedException();
+        int n = 0;
+
+        if (IsClosed)
+        {
+            throw new IOException("Stream is closed");
+        }
+
+        do 
+        {
+            while ( _bufferIsEmpty || _normInstance.HasNextEvent(TimeSpan.FromTicks(0))) 
+            {
+                ProcessEvent();
+                if (_receivedEof){return -1;}
+                if (_normStream == null){return -1;}
+                if ((n = _normStream.Read(buffer, count)) < 0) 
+                {
+                    throw new IOException("Break in stream integrity");
+                }
+            }
+            _bufferIsEmpty = (n == 0);
+        } while (_bufferIsEmpty);
+        
+        return n;
     }
 
     public override void Write(byte[] buffer, int offset, int count)
