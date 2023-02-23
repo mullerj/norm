@@ -222,7 +222,7 @@ public class NormOutputStream : Stream
             }
 
             // Write some data
-            if ((n = _normStream.Write(buffer, count)) < 0)
+            if ((n = _normStream.Write(buffer, offset, count)) < 0)
             {
                 throw new IOException("Failed to write to stream");
             }

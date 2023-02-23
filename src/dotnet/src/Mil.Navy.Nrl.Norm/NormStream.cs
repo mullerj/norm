@@ -1,4 +1,5 @@
-﻿namespace Mil.Navy.Nrl.Norm
+﻿using System.Runtime.InteropServices;
+namespace Mil.Navy.Nrl.Norm
 {
     public class NormStream : NormObject
     {
@@ -22,9 +23,18 @@
         {
         }
 
-        public int Write(byte[] buffer, int length)
+        public int Write(byte[] buffer, int offset, int length)
         {
-            return NormStreamWrite(_handle, buffer, length);
+            IntPtr ptr = IntPtr.Zero;
+            if(buffer != null && buffer.Length > 0)
+            {
+                ptr = Marshal.AllocHGlobal(buffer.Length);
+                Marshal.Copy(buffer, 0, ptr, buffer.Length);
+            }
+            IntPtr newPtr = IntPtr.Add(ptr, offset);
+            byte[] managedArray = new byte[length];
+            Marshal.Copy(newPtr, managedArray, 0, length);
+            return NormStreamWrite(_handle, managedArray, length);
         }
 
         public void MarkEom()
