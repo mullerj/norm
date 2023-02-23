@@ -4,7 +4,7 @@ public class NormInputStream : Stream
     private NormInstance _normInstance;
     private NormSession _normSession;
     private NormInputStream _normInputStream;
-    private List<INormEventListener> _normEventListener;
+    private List<INormEventListener> _normEventListeners;
     private bool _closed;
     private object _closedLock;
     private bool _bufferIsEmpty;
@@ -21,7 +21,7 @@ public class NormInputStream : Stream
         _normSession = _normInstance.CreateSession(address, port, NormNode.NORM_NODE_ANY);       
         _normStream = null;
     
-        _normEventListener = new List<INormEventListener>();
+        _normEventListeners = new List<INormEventListener>();
     
         _closed = true;
         _closedLock = new Object();
@@ -109,20 +109,20 @@ public class NormInputStream : Stream
 
     public void AddNormEventListener(INormEventListener normEventListener) 
     {
-        _normEventListener.Add(normEventListener);
+        _normEventListeners.Add(normEventListener);
     }
 
     /// <param name="normEventListener">The INormEventListener to remove.</param>
     public void RemoveNormEventListener(INormEventListener normEventListener)
     {
-        _normEventListener.Remove(normEventListener);
+        _normEventListeners.Remove(normEventListener);
     }
 
     private void FireNormEventOccured(NormEvent normEvent)
     {
-        foreach (var normEventListener in _normEventListener)
+        foreach (var normEventListener in _normEventListeners)
         {
-            _normEventListener.NormEventOccurred(normEvent);
+            normEventListener.NormEventOccurred(normEvent);
         }
     }
 
@@ -192,6 +192,11 @@ public class NormInputStream : Stream
     }
 
     public override int Read(byte[] buffer, int offset, int count)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Write(byte[] buffer, int offset, int count)
     {
         throw new NotImplementedException();
     }
