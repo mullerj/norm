@@ -522,7 +522,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 normStream = _normSession.StreamOpen(repairWindowSize);
 
                 var expectedBytesWritten = data.Length;
-                normStream.Write(data, dataOffset, data.Length);
+                normStream.Write(data, dataOffset, data.Length-dataOffset);
 
                 normStream.MarkEom();
                 normStream.Flush();
@@ -536,7 +536,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var receivedNormStream = Assert.IsType<NormStream>(normObjectEvent.Object);
                 var numRead = 0;
                 var receiveBuffer = new byte[65536];
-                while ((numRead = receivedNormStream.Read(receiveBuffer, receiveBuffer.Length)) > 0)
+                while ((numRead = receivedNormStream.Read(receiveBuffer, dataOffset, receiveBuffer.Length-dataOffset)) > 0)
                 {
                     if (numRead != -1)
                     {
@@ -562,7 +562,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         [Fact]
         public void ReceivesStreamWithOffset()
         {
-             _normSession.SetLoopback(true);
+            _normSession.SetLoopback(true);
             StartSender();
             StartReceiver();
 
@@ -573,9 +573,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normInstance.SetCacheDirectory(cachePath);
 
             var fileContent = GenerateTextContent();
-            var data = Encoding.ASCII.GetBytes(fileContent);
-            var dataOffset = 1;
-            var expectedContent = fileContent.Remove(0, dataOffset);
+            var content_1 = fileContent.Remove(0, 5);
+            var content_2 = fileContent.Remove(5, fileContent.Length-5);
+            var data_1 = Encoding.ASCII.GetBytes(content_1);
+            var data_2 = Encoding.ASCII.GetBytes(content_2);
+            var dataOffset = 5;
             NormStream? normStream = null;
 
             try
@@ -583,8 +585,8 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var repairWindowSize = 1024 * 1024;
                 normStream = _normSession.StreamOpen(repairWindowSize);
 
-                var expectedBytesWritten = data.Length;
-                normStream.Write(data, dataOffset, data.Length);
+                normStream.Write(data_1, 0, data_1.Length);
+                normStream.Write(data_2, 0, data_2.Length);
 
                 normStream.MarkEom();
                 normStream.Flush();
@@ -592,21 +594,29 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 AssertNormEvents(normEvents);
 
                 var expectedNormEventType = NormEventType.NORM_RX_OBJECT_UPDATED;
-                Assert.Contains(expectedNormEventType, normEvents.Select(e => e.Type));
-                var normObjectEvent = normEvents.First(e => e.Type == expectedNormEventType);
-
-                var receivedNormStream = Assert.IsType<NormStream>(normObjectEvent.Object);
-                var numRead = 0;
+                var normObjectEvents = normEvents.Where(e => e.Type == expectedNormEventType).ToArray();
+                Assert.Equal(2, normObjectEvents.Length);
                 var receiveBuffer = new byte[65536];
-                while ((numRead = receivedNormStream.Read(receiveBuffer, receiveBuffer.Length)) > 0)
+                var totalNumRead = 0;
+                foreach(var normObjectEvent in normObjectEvents)
                 {
-                    if (numRead != -1)
+                    var receivedNormStream = Assert.IsType<NormStream>(normObjectEvent.Object);
+                    var numRead = 0;
+                    while ((numRead = receivedNormStream.Read(receiveBuffer, 0, receiveBuffer.Length)) > 0)
                     {
-                        var receivedData = receiveBuffer.Take(numRead).ToArray();
-                        var receivedContent = Encoding.ASCII.GetString(receivedData);
-                        Assert.Equal(expectedContent, receivedContent);
+                        if (numRead != -1)
+                        {
+                            totalNumRead += numRead;
+                         
+                        }
                     }
+                  
                 }
+                var receivedData = receiveBuffer.Take(totalNumRead).ToArray();
+                var receivedContent = Encoding.ASCII.GetString(receivedData);
+                Assert.Equal(fileContent, receivedContent);
+               
+              
             }
             catch (Exception)
             {

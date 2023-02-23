@@ -32,10 +32,9 @@ namespace Mil.Navy.Nrl.Norm
                 Marshal.Copy(buffer, 0, ptr, buffer.Length);
             }
             IntPtr newPtr = IntPtr.Add(ptr, offset);
-            var size = length - offset;
-            byte[] managedArray = new byte[size];
-            Marshal.Copy(newPtr, managedArray, 0, size);
-            return NormStreamWrite(_handle, managedArray, size);
+            byte[] managedArray = new byte[length];
+            Marshal.Copy(newPtr, managedArray, 0, length);
+            return NormStreamWrite(_handle, managedArray, length);
         }
 
         public void MarkEom()
@@ -63,9 +62,13 @@ namespace Mil.Navy.Nrl.Norm
             Close(false);
         }
 
-        public int Read(byte[] buffer, int length)
+        public int Read(byte[] buffer, int offset, int length)
         {
-            if (!NormStreamRead(_handle, buffer, ref length))
+            GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+            IntPtr ptr = gch.AddrOfPinnedObject();
+            ptr = IntPtr.Add(ptr, offset);
+
+            if (!NormStreamRead(_handle, ptr, ref length))
             {
                 return -1;
             }
