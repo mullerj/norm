@@ -605,13 +605,29 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormNodeGetCommand(long remoteSender, [Out] byte[] buffer, ref int buflen);
 
+        /// <summary>
+        /// This function releases memory resources that were allocated for a remote sender. 
+        /// </summary>
+        /// <param name="remoteSender">notification for a given remote sender when multiple senders may be providing content</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormNodeFreeBuffers(long remoteSender);
 
+        /// <summary>
+        /// this function allows the application to retain state associated with a given nodeHandle 
+        /// value even when the underlying NORM protocol engine might normally 
+        /// free the associated state and thus invalidate the NormNodeHandle.
+        /// </summary>
+        /// <param name="nodeHandle"> This type is used to reference state kept by the NORM implementation with respect to other participants within a NormSession.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormNodeRetain(long nodeHandle);
-
-        [DllImport(NORM_LIBRARY)]
+        
+        /// <summary>
+        /// In complement to the NormNodeRetain() function, this API call releases the specified nodeHandle so that the
+        /// NORM protocol engine may free associated resources as needed.Once this call is made, the application should
+        /// no longer reference the specified NormNodeHandle, unless it is still valid.
+        /// </summary>
+        /// <param name="nodeHandle"> This type is used to reference state kept by the NORM implementation with respect to other participants within a NormSession.</param>
+                [DllImport(NORM_LIBRARY)]
         public static extern void NormNodeRelease(long nodeHandle);
     }
 }
