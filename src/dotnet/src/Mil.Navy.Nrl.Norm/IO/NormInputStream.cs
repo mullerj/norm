@@ -1,4 +1,6 @@
 using Mil.Navy.Nrl.Norm;
+using System.Runtime.CompilerServices;
+
 public class NormInputStream : Stream
 {
     private NormInstance _normInstance;
@@ -30,6 +32,7 @@ public class NormInputStream : Stream
         _receivedEof  = false;
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void OpenDebugLog(string fileName)
     {
         if(fileName == null )
@@ -39,21 +42,16 @@ public class NormInputStream : Stream
         _normInstance.OpenDebugLog(fileName);
     }
 
-    public void CloseDebugLog()
-    {
-        _normInstance.CloseDebugLog();
-    }
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
+    public void CloseDebugLog() => _normInstance.CloseDebugLog();
 
-    public void NormSetDebugLevel(int level)
-    {
-        //_normInstance.DebugLevel;
-    }
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
+    public void NormSetDebugLevel(int level) {_normInstance.DebugLevel = level;}
 
-    public void SetMessageTrace(bool messageTrace) 
-    {
-        _normSession.SetMessageTrace(messageTrace);
-    }
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
+    public void SetMessageTrace(bool messageTrace) => _normSession.SetMessageTrace(messageTrace);
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void setMulticastInterface(String multicastInterface)
     {
         if(multicastInterface == null)
@@ -68,6 +66,7 @@ public class NormInputStream : Stream
         _normSession.SetEcnSupport(ecnEnable, ignoreLoss);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetTtl(byte ttl)   
     {
         if(ttl == null)
@@ -106,18 +105,27 @@ public class NormInputStream : Stream
         _normStream.SeekMsgStart();
     }
 
-
+    /// <param name="normEventListener">The INormEventListener to add.</param>
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void AddNormEventListener(INormEventListener normEventListener) 
     {
-        _normEventListeners.Add(normEventListener);
+        lock(normEventListener)
+        {
+            _normEventListeners.Add(normEventListener);
+        }
     }
 
     /// <param name="normEventListener">The INormEventListener to remove.</param>
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void RemoveNormEventListener(INormEventListener normEventListener)
     {
-        _normEventListeners.Remove(normEventListener);
+        lock(normEventListener)
+        {
+            _normEventListeners.Remove(normEventListener);
+        }
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     private void FireNormEventOccured(NormEvent normEvent)
     {
         foreach (var normEventListener in _normEventListeners)
