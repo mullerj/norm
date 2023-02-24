@@ -42,3 +42,4 @@ To test the .NET extension for NORM, execute the .NET CLI command in the src/dot
   ```
 
 The test command results should show that all tests have passed.
+Some tests might be skipped due to an IO exception.
