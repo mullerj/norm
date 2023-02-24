@@ -64,14 +64,22 @@ namespace Mil.Navy.Nrl.Norm
 
         public int Read(byte[] buffer, int offset, int length)
         {
-            GCHandle gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-            IntPtr ptr = gch.AddrOfPinnedObject();
-            ptr = IntPtr.Add(ptr, offset);
+            var bytes = new byte[length];
 
-            if (!NormStreamRead(_handle, ptr, ref length))
+            if (!NormStreamRead(_handle, bytes, ref length))
             {
                 return -1;
             }
+
+            for (var i = 0; i < length; i++)
+            {
+                var bufferPosition = offset + i;
+                if (bufferPosition < buffer.Length)
+                {
+                    buffer[bufferPosition] = bytes[i];
+                } 
+            }
+
             return length;
         }
 
