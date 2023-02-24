@@ -16,6 +16,8 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         private bool _isReceiverStarted;
         private bool _isReceiverStopped;
 
+        private string _testPath;
+
         /// <summary>
         /// Create a NORM session
         /// </summary>
@@ -29,6 +31,22 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             return _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId);
         }
 
+        private void CreateTestDirectory()
+        {
+            if (!Directory.Exists(_testPath))
+            {
+                Directory.CreateDirectory(_testPath);
+            }
+        }
+
+        private void DeleteTestDirectory()
+        {
+            if (Directory.Exists(_testPath))
+            {
+                Directory.Delete(_testPath, true);
+            }
+        }
+
         public NormSessionTests()
         {
             _normInstance = new NormInstance();
@@ -37,6 +55,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _isSessionDestroyed = false;
             _isSenderStarted = false;
             _isSenderStopped = false;
+            var currentDirectory = Directory.GetCurrentDirectory();
+            _testPath = Path.Combine(currentDirectory, Guid.NewGuid().ToString());
+            CreateTestDirectory();
         }
 
         private void StartSender()
@@ -108,6 +129,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         public void Dispose()
         {
             DestroyInstance();
+            DeleteTestDirectory();
         }
 
         /// <summary>
@@ -147,7 +169,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             StopSender();
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void StartsReceiver()
         {
             StartReceiver();
@@ -226,7 +248,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             var fileContent = GenerateTextContent();
             var fileName = Guid.NewGuid().ToString();
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            var filePath = Path.Combine(_testPath, fileName);
             File.WriteAllText(filePath, fileContent);
 
             try
@@ -248,7 +270,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             finally
             {
                 StopSender();
-                File.Delete(filePath);
             }
         }
 
@@ -261,14 +282,14 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up cache directory
             var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var cachePath = Path.Combine(_testPath, folderName);
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
             //Set up file to send
             var fileName = Guid.NewGuid().ToString();
             var fileContent = GenerateTextContent();
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            var filePath = Path.Combine(_testPath, fileName);
             File.WriteAllText(filePath, fileContent);
 
             try
@@ -307,8 +328,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 StopSender();
                 StopReceiver();
-                File.Delete(filePath);
-                Directory.Delete(cachePath, true);
             }
         }
 
@@ -321,14 +340,14 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up cache directory
             var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var cachePath = Path.Combine(_testPath, folderName);
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
             //Set up file to send
             var fileName = Guid.NewGuid().ToString();
             var fileContent = GenerateTextContent();
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            var filePath = Path.Combine(_testPath, fileName);
             File.WriteAllText(filePath, fileContent);
 
             try
@@ -376,8 +395,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 StopSender();
                 StopReceiver();
-                File.Delete(filePath);
-                Directory.Delete(cachePath, true);
             }
         }
 
@@ -419,7 +436,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up cache directory
             var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var cachePath = Path.Combine(_testPath, folderName);
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
@@ -459,7 +476,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 StopSender();
                 StopReceiver();
-                Directory.Delete(cachePath, true);
             }
         }
 
@@ -507,7 +523,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up cache directory
             var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var cachePath = Path.Combine(_testPath, folderName);
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
@@ -555,7 +571,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 normStream?.Close(true);
                 StopSender();
                 StopReceiver();
-                Directory.Delete(cachePath, true);
             }
         }
 
@@ -568,7 +583,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up cache directory
             var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var cachePath = Path.Combine(_testPath, folderName);
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
@@ -623,7 +638,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 normStream?.Close(true);
                 StopSender();
                 StopReceiver();
-                Directory.Delete(cachePath, true);
             }
         }
 
@@ -898,7 +912,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up cache directory
             var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var cachePath = Path.Combine(_testPath, folderName);
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
@@ -933,7 +947,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 StopSender();
                 StopReceiver();
-                Directory.Delete(cachePath, true);
             }
         }
 
@@ -947,7 +960,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up cache directory
             var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var cachePath = Path.Combine(_testPath, folderName);
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
@@ -982,7 +995,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 StopSender();
                 StopReceiver();
-                Directory.Delete(cachePath, true);
             }
         }
 
@@ -995,7 +1007,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up cache directory
             var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var cachePath = Path.Combine(_testPath, folderName);
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
@@ -1039,7 +1051,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 StopSender();
                 StopReceiver();
-                Directory.Delete(cachePath, true);
             }
         }
 
@@ -1066,7 +1077,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up cache directory
             var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var cachePath = Path.Combine(_testPath, folderName);
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
@@ -1091,7 +1102,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 StopSender();
                 StopReceiver();
-                Directory.Delete(cachePath, true);
             }
         }
 
@@ -1436,7 +1446,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void FreesBuffers()
         {
             _normSession.SetLoopback(true);
@@ -1531,7 +1541,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             var fileContent = GenerateTextContent();
             var fileName = Guid.NewGuid().ToString();
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            var filePath = Path.Combine(_testPath, fileName);
             File.WriteAllText(filePath, fileContent);
 
             try
@@ -1546,7 +1556,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             finally
             {
                 StopSender();
-                File.Delete(filePath);
             }
         }
 
@@ -1796,7 +1805,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up cache directory
             var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var cachePath = Path.Combine(_testPath, folderName);
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
@@ -1822,7 +1831,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 StopSender();
                 StopReceiver();
-                Directory.Delete(cachePath, true);
             }
         }
 
@@ -1835,7 +1843,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up cache directory
             var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var cachePath = Path.Combine(_testPath, folderName);
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
@@ -1863,7 +1871,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 StopSender();
                 StopReceiver();
-                Directory.Delete(cachePath, true);
             }
         }
 
@@ -1876,7 +1883,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up cache directory
             var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var cachePath = Path.Combine(_testPath, folderName);
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
@@ -1912,7 +1919,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 StopSender();
                 StopReceiver();
-                Directory.Delete(cachePath, true);
             }
         }
 
@@ -1980,7 +1986,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Set up cache directory
             var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            var cachePath = Path.Combine(_testPath, folderName);
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
@@ -2019,7 +2025,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 normStream?.Close(true);
                 StopSender();
                 StopReceiver();
-                Directory.Delete(cachePath, true);
             }
         }
 

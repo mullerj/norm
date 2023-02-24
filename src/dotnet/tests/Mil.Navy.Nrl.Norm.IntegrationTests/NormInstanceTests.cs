@@ -18,6 +18,24 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         /// </summary>
         private bool _isDestroyed;
 
+        private string _testPath;
+
+        private void CreateTestDirectory()
+        {
+            if (!Directory.Exists(_testPath))
+            {
+                Directory.CreateDirectory(_testPath);
+            }
+        }
+
+        private void DeleteTestDirectory()
+        {
+            if (Directory.Exists(_testPath))
+            {
+                Directory.Delete(_testPath, true);
+            }
+        }
+
         /// <summary>
         /// Default constructor for NORM instance tests
         /// </summary>
@@ -29,6 +47,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         {
             _normInstance = new NormInstance();
             _isDestroyed = false;
+            var currentDirectory = Directory.GetCurrentDirectory();
+            _testPath = Path.Combine(currentDirectory, Guid.NewGuid().ToString());
+            CreateTestDirectory();
         }
 
         /// <summary>
@@ -39,6 +60,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             if (!_isDestroyed) 
             {
                 _normSession?.DestroySession();
+                _normInstance.CloseDebugLog();
                 _normInstance.DestroyInstance();
                 _isDestroyed = true;
             }
@@ -50,6 +72,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         public void Dispose()
         {
             DestroyInstance();
+            DeleteTestDirectory();
         }
 
         /// <summary>
@@ -166,7 +189,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         [Fact]
         public void OpenDebugLog(){
             var fileName = Guid.NewGuid().ToString();
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            var filePath = Path.Combine(_testPath, fileName);
 
             _normInstance.OpenDebugLog(filePath);
         }
