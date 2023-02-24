@@ -8,13 +8,11 @@ public class NormInputStream : Stream
     private NormInputStream _normInputStream;
     private List<INormEventListener> _normEventListeners;
     private bool _closed;
-    private object _closedLock;
+    private object _closeLock;
     private bool _bufferIsEmpty;
     private bool _receivedEof;
 
     private NormStream _normStream;
-    
-    public bool IsClosed => _closed;
 
     public NormInputStream(string address, int port)
     {
@@ -26,7 +24,7 @@ public class NormInputStream : Stream
         _normEventListeners = new List<INormEventListener>();
     
         _closed = true;
-        _closedLock = new Object();
+        _closeLock = new Object();
         
         _bufferIsEmpty = true;
         _receivedEof  = false;
@@ -128,23 +126,65 @@ public class NormInputStream : Stream
     [MethodImplAttribute(MethodImplOptions.Synchronized)]
     private void FireNormEventOccured(NormEvent normEvent)
     {
-        foreach (var normEventListener in _normEventListeners)
+        lock(normEvent)
         {
-            normEventListener.NormEventOccurred(normEvent);
+            foreach (var normEventListener in _normEventListeners)
+            {
+                normEventListener.NormEventOccurred(normEvent);
+            }
+
         }
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void Open(long bufferSpace) 
     {
-        if (!IsClosed) 
+        lock(_closeLock)
         {
-            throw new IOException("Stream is already open");
+            if (!IsClosed) 
+            {
+                throw new IOException("Stream is already open");
+            }
+
+            _normSession.StartReceiver(bufferSpace);
+
+            _closed = false;
         }
-
-        _normSession.StartReceiver(bufferSpace);
-
-        _closed = false;
     }
+
+    public override void Close()
+    {
+        lock(_closeLock)
+        {
+            if (IsClosed)
+            {
+                return;
+            }
+
+            _normStream?.Close(false);
+            _normSession.StopSender();
+            _normInstance.StopInstance();
+
+            _closed = true;
+        }   
+    }
+
+
+    public void Dispose()
+    {
+       
+    }
+    
+    public bool IsClosed
+    {
+        get
+        {
+            lock(_closeLock)
+            {
+                return _closed;
+            }
+        }
+    } 
 
     private void ProcessEvent()
     {
@@ -189,16 +229,6 @@ public class NormInputStream : Stream
         }
     }
 
-    public void Dispose()
-    {
-       
-    }
-
-    public override void Flush()
-    {
-        throw new NotImplementedException();
-    }
-
     public override int Read(byte[] buffer, int offset, int count)
     {
         int n = 0;
@@ -224,6 +254,11 @@ public class NormInputStream : Stream
         } while (_bufferIsEmpty);
         
         return n;
+    }
+
+    public override void Flush()
+    {
+        throw new NotImplementedException();
     }
 
     public override void Write(byte[] buffer, int offset, int count)
