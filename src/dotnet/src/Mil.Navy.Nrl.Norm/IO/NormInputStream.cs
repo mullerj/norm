@@ -207,7 +207,7 @@ public class NormInputStream : Stream
                 ProcessEvent();
                 if (_receivedEof){return -1;}
                 if (_normStream == null){return -1;}
-                if ((n = _normStream.Read(buffer, count)) < 0) 
+                if ((n = _normStream.Read(buffer, offset, count)) < 0) 
                 {
                     throw new IOException("Break in stream integrity");
                 }
