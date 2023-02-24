@@ -211,14 +211,29 @@ namespace Mil.Navy.Nrl.Norm
             NormStopSender(_handle);
         }
 
-        public NormFile FileEnqueue(string filename, byte[] info, int infoLength)
+        public NormFile FileEnqueue(string filename, byte[] info, int infoOffset, int infoLength)
         {
-            var objectHandle = NormFileEnqueue(_handle, filename, info, infoLength);
+            byte[]? infoBytes;
+            if (info != null)
+            {
+                infoBytes = info.Skip(infoOffset).Take(infoLength).ToArray();
+            }
+            else
+            {
+                infoBytes = null;
+                infoLength = 0;
+            }
+            var objectHandle = NormFileEnqueue(_handle, filename, infoBytes, infoLength);
             if (objectHandle == NORM_OBJECT_INVALID)
             {
                 throw new IOException("Failed to enqueue file");
             }
             return new NormFile(objectHandle);
+        }
+
+        public NormFile FileEnqueue(string filename, byte[] info, int infoLength)
+        {
+            return FileEnqueue(filename, info, 0, infoLength);
         }
 
         public NormFile FileEnqueue(string filename)
@@ -258,6 +273,7 @@ namespace Mil.Navy.Nrl.Norm
             return DataEnqueue(dataBuffer, dataLength, null, 0);
         }
 
+        //TODO: Add offsets to StreamOpen
         public NormStream StreamOpen(long bufferSize, byte[]? info, int infoLength)
         {
             var objectHandle = NormStreamOpen(_handle, bufferSize, info, infoLength);
