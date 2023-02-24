@@ -335,7 +335,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 //Enqueue file
                 var fileNameBytes = Encoding.ASCII.GetBytes(fileName);
-                var normFile = _normSession.FileEnqueue(filePath, fileNameBytes, fileNameBytes.Length);
+                var normFile = _normSession.FileEnqueue(filePath, fileNameBytes, 0, fileNameBytes.Length);
                 //Wait for events
                 var normEvents = GetEvents();
                 AssertNormEvents(normEvents);

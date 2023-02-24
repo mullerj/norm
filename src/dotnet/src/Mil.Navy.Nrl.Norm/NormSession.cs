@@ -211,6 +211,14 @@ namespace Mil.Navy.Nrl.Norm
             NormStopSender(_handle);
         }
 
+        /// <exception cref="IOException"></exception>
+        public NormFile FileEnqueue(string filename)
+        {
+            var info = Encoding.ASCII.GetBytes(filename);
+            return FileEnqueue(filename, info, 0, info.Length);
+        }
+
+        /// <exception cref="IOException"></exception>
         public NormFile FileEnqueue(string filename, byte[] info, int infoOffset, int infoLength)
         {
             byte[]? infoBytes;
@@ -229,17 +237,6 @@ namespace Mil.Navy.Nrl.Norm
                 throw new IOException("Failed to enqueue file");
             }
             return new NormFile(objectHandle);
-        }
-
-        public NormFile FileEnqueue(string filename, byte[] info, int infoLength)
-        {
-            return FileEnqueue(filename, info, 0, infoLength);
-        }
-
-        public NormFile FileEnqueue(string filename)
-        {
-            var info = Encoding.ASCII.GetBytes(filename);
-            return FileEnqueue(filename, info, info.Length);
         }
 
         public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength, byte[]? info, int infoOffset, int infoLength)

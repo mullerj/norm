@@ -43,9 +43,8 @@ class NormSession {
     + SetBackoffFactor(backoffFactor:double) : void
     + SetGroupSize(groupSize:long) : void
     + SetTxRobustFactor(robustFactor:int) : void
-    + FileEnqueue(filename:string, info:byte[], infoOffset:int, infoLength:int) : NormFile
-    + FileEnqueue(filename:string, info:byte[], infoLength:int) : NormFile
     + FileEnqueue(filename:string) : NormFile
+    + FileEnqueue(filename:string, info:byte[], infoOffset:int, infoLength:int) : NormFile
     + DataEnqueue(dataBuffer:byte[], dataOffset:int, dataLength:int, info:byte[], infoOffset:int, infoLength:int) : NormData
     + DataEnqueue(dataBuffer:byte[], dataLength:int, info:byte[], infoLength:int) : NormData
     + DataEnqueue(dataBuffer:byte[], dataLength:int) : NormData
