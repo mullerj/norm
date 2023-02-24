@@ -267,6 +267,13 @@ namespace Mil.Navy.Nrl.Norm
             return new NormData(objectHandle);
         }
 
+        /// <exception cref="IOException"></exception>
+        public NormStream StreamOpen(long bufferSize)
+        {
+            return StreamOpen(bufferSize, null, 0, 0);
+        }
+
+        /// <exception cref="IOException"></exception>
         public NormStream StreamOpen(long bufferSize, byte[]? info, int infoOffset, int infoLength)
         {
             byte[]? infoBytes;
@@ -285,16 +292,6 @@ namespace Mil.Navy.Nrl.Norm
                 throw new IOException("Failed to open stream");
             }
             return new NormStream(objectHandle);
-        }
-
-        public NormStream StreamOpen(long bufferSize, byte[]? info, int infoLength)
-        {
-            return StreamOpen(bufferSize, info, 0, infoLength);
-        }
-
-        public NormStream StreamOpen(long bufferSize)
-        {
-            return StreamOpen(bufferSize, null, 0);
         }
 
         public void StartReceiver(long bufferSpace)
