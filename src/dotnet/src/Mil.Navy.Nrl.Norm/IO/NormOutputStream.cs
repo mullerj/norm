@@ -1,4 +1,5 @@
 using Mil.Navy.Nrl.Norm;
+using System.Runtime.CompilerServices;
 
 public class NormOutputStream : Stream
 {
@@ -91,18 +92,40 @@ public class NormOutputStream : Stream
         _normSession.SetTxRateBounds(maxTxRate, minTxRate);
     }
 
-    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public double TxRate
     {
-        get => _normSession.TxRate;
-        set => _normSession.TxRate = value;
+        get
+        {
+            lock(this)
+            {
+                return _normSession.TxRate;
+            }
+        } 
+        set
+        {
+            lock(this)
+            {
+                _normSession.TxRate = value;
+            }
+        } 
     }
 
-    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public double GrttEstimate
     {
-        get => _normSession.GrttEstimate;
-        set => _normSession.GrttEstimate = value;
+        get
+        {
+            lock(this)
+            {
+                return _normSession.GrttEstimate;
+            }
+        } 
+        set
+        {
+            lock(this)
+            {
+                _normSession.GrttEstimate = value;
+            }
+        } 
     }
 
     [MethodImplAttribute(MethodImplOptions.Synchronized)]
@@ -323,7 +346,7 @@ public class NormOutputStream : Stream
 
     public override void Flush()
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public override int Read(byte[] buffer, int offset, int count)
