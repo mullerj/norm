@@ -59,6 +59,7 @@ public class NormInputStream : Stream
         _normSession.SetMulticastInterface(multicastInterface);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void setEcnSupport(bool ecnEnable, bool ignoreLoss)
     {
         _normSession.SetEcnSupport(ecnEnable, ignoreLoss);
@@ -74,6 +75,7 @@ public class NormInputStream : Stream
         _normSession.SetTTL(ttl);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void setTos(byte tos)
     {
         if(tos == null)
@@ -83,16 +85,19 @@ public class NormInputStream : Stream
         _normSession.SetTOS(tos);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void setSilentReceiver(bool silent, int maxDelay) 
     {
         _normSession.SetSilentReceiver(silent, maxDelay);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetDefaultUnicastNack(bool defaultUnicastNack) 
     {
         _normSession.SetDefaultUnicastNack(defaultUnicastNack);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public  void SeekMsgStart() 
     {
         if (_normStream == null) 
