@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using System.Text;
 
 namespace Mil.Navy.Nrl.Norm.IntegrationTests
 {
@@ -177,12 +178,61 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         }
 
         [Fact]
+        public void OpensDebugPipe()
+        {
+            var pipename = "test.pipe";
+            Assert.Throws<IOException>(() => _normInstance.OpenDebugPipe(pipename));
+        }
+
+        [Fact]
         public void SetsDebugLevel()
         {
             var expectedDebugLevel = 12;
             _normInstance.DebugLevel = expectedDebugLevel;
             var actualDebugLevel = _normInstance.DebugLevel;
             Assert.Equal(expectedDebugLevel, actualDebugLevel);
+        }
+
+        [Fact]
+        public void HasEventsFromTimeSpan()
+        {
+            var faker = new Faker();
+            var sessionAddress = "224.1.2.3";
+            var sessionPort = faker.Internet.Port();
+            var localNodeId = NormNode.NORM_NODE_ANY;
+
+            _normSession = _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId);
+
+            _normSession.StartSender(1024 * 1024, 1400, 64, 16);
+
+            var dataContent = faker.Lorem.Paragraph();
+            var data = Encoding.ASCII.GetBytes(dataContent);
+            _normSession.DataEnqueue(data, 0, data.Length);
+
+            Assert.True(_normInstance.HasNextEvent(TimeSpan.FromSeconds(1.5)));
+
+            _normSession.StopSender();
+        }
+
+        [Fact]
+        public void HasEventsFromSecondsAndMicroseconds()
+        {
+            var faker = new Faker();
+            var sessionAddress = "224.1.2.3";
+            var sessionPort = faker.Internet.Port();
+            var localNodeId = NormNode.NORM_NODE_ANY;
+
+            _normSession = _normInstance.CreateSession(sessionAddress, sessionPort, localNodeId);
+
+            _normSession.StartSender(1024 * 1024, 1400, 64, 16);
+
+            var dataContent = faker.Lorem.Paragraph();
+            var data = Encoding.ASCII.GetBytes(dataContent);
+            _normSession.DataEnqueue(data, 0, data.Length);
+
+            Assert.True(_normInstance.HasNextEvent(1, 500000));
+
+            _normSession.StopSender();
         }
     }
 }

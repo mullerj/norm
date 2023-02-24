@@ -211,6 +211,14 @@ namespace Mil.Navy.Nrl.Norm
             NormStopSender(_handle);
         }
 
+        /// <exception cref="IOException"></exception>
+        public NormFile FileEnqueue(string filename)
+        {
+            var info = Encoding.ASCII.GetBytes(filename);
+            return FileEnqueue(filename, info, 0, info.Length);
+        }
+
+        /// <exception cref="IOException"></exception>
         public NormFile FileEnqueue(string filename, byte[] info, int infoOffset, int infoLength)
         {
             byte[]? infoBytes;
@@ -231,17 +239,13 @@ namespace Mil.Navy.Nrl.Norm
             return new NormFile(objectHandle);
         }
 
-        public NormFile FileEnqueue(string filename, byte[] info, int infoLength)
+        /// <exception cref="IOException"></exception>
+        public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength)
         {
-            return FileEnqueue(filename, info, 0, infoLength);
+            return DataEnqueue(dataBuffer, dataOffset, dataLength, null, 0, 0);
         }
 
-        public NormFile FileEnqueue(string filename)
-        {
-            var info = Encoding.ASCII.GetBytes(filename);
-            return FileEnqueue(filename, info, info.Length);
-        }
-
+        /// <exception cref="IOException"></exception>
         public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength, byte[]? info, int infoOffset, int infoLength)
         {
             var dataBytes = dataBuffer.Skip(dataOffset).Take(dataLength).ToArray();
@@ -263,16 +267,13 @@ namespace Mil.Navy.Nrl.Norm
             return new NormData(objectHandle);
         }
 
-        public NormData DataEnqueue(byte[] dataBuffer, int dataLength, byte[]? info, int infoLength)
+        /// <exception cref="IOException"></exception>
+        public NormStream StreamOpen(long bufferSize)
         {
-            return DataEnqueue(dataBuffer, 0, dataLength, info, 0, infoLength);
+            return StreamOpen(bufferSize, null, 0, 0);
         }
 
-        public NormData DataEnqueue(byte[] dataBuffer, int dataLength)
-        {
-            return DataEnqueue(dataBuffer, dataLength, null, 0);
-        }
-
+        /// <exception cref="IOException"></exception>
         public NormStream StreamOpen(long bufferSize, byte[]? info, int infoOffset, int infoLength)
         {
             byte[]? infoBytes;
@@ -291,16 +292,6 @@ namespace Mil.Navy.Nrl.Norm
                 throw new IOException("Failed to open stream");
             }
             return new NormStream(objectHandle);
-        }
-
-        public NormStream StreamOpen(long bufferSize, byte[]? info, int infoLength)
-        {
-            return StreamOpen(bufferSize, info, 0, infoLength);
-        }
-
-        public NormStream StreamOpen(long bufferSize)
-        {
-            return StreamOpen(bufferSize, null, 0);
         }
 
         public void StartReceiver(long bufferSpace)

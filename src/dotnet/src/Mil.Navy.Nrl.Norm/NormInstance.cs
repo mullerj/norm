@@ -54,11 +54,13 @@ namespace Mil.Navy.Nrl.Norm
             return new NormSession(session);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="waitTime"></param>
-        /// <returns></returns>
+        public bool HasNextEvent(int sec, int usec)
+        {
+            var totalMilliseconds = sec * 1000 + usec / 1000;
+            var waitTime = TimeSpan.FromMilliseconds(totalMilliseconds);
+            return HasNextEvent(waitTime);
+        }
+
         public bool HasNextEvent(TimeSpan waitTime)
         {
             var normDescriptor = NormGetDescriptor(_handle);
@@ -83,11 +85,6 @@ namespace Mil.Navy.Nrl.Norm
             return hasNextEvent;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="waitForEvent"></param>
-        /// <returns></returns>
         public NormEvent? GetNextEvent(bool waitForEvent)
         {
             bool success = NormGetNextEvent(_handle, out NormApi.NormEvent normEvent, waitForEvent);
@@ -142,6 +139,14 @@ namespace Mil.Navy.Nrl.Norm
         public void CloseDebugLog()
         {
             NormCloseDebugLog(_handle);
+        }
+
+        public void OpenDebugPipe(string pipename)
+        {
+            if (!NormOpenDebugPipe(_handle, pipename))
+            {
+                throw new IOException("Failed to open debug pipe");
+            }
         }
 
         public int DebugLevel 

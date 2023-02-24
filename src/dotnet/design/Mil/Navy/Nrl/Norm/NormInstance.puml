@@ -14,6 +14,7 @@ class NormInstance {
     + CloseDebugLog() : void
     + OpenDebugPipe(pipename:string) : void
     + DebugLevel: int <<get>> <<set>>
+    + HasNextEvent(sec:int, usec:int) : bool
     + HasNextEvent(waitTime:TimeSpan) : bool
     + GetNextEvent(waitForEvent:bool) : NormEvent
     + GetNextEvent() : NormEvent
