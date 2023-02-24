@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace Mil.Navy.Nrl.Norm
 {
@@ -226,14 +227,35 @@ namespace Mil.Navy.Nrl.Norm
             return FileEnqueue(filename, info, info.Length);
         }
 
-        public NormData DataEnqueue(byte[] dataBuffer, int dataLength, byte[]? info, int infoLength)
+        public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength, byte[]? info, int infoOffset, int infoLength)
         {
-            var objectHadle = NormDataEnqueue(_handle, dataBuffer, dataLength, info, infoLength);
-            if(objectHadle == NORM_OBJECT_INVALID)
+            var dataBytes = dataBuffer.Skip(dataOffset).Take(dataLength).ToArray();
+            byte[]? infoBytes;
+            if (info != null)
+            {
+                infoBytes = info.Skip(infoOffset).Take(infoLength).ToArray();
+            } 
+            else
+            {
+                infoBytes = null;
+                infoLength = 0;
+            }
+            var objectHandle = NormDataEnqueue(_handle, dataBytes, dataLength, infoBytes, infoLength);
+            if (objectHandle == NORM_OBJECT_INVALID)
             {
                 throw new IOException("Failed to enqueue data");
             }
-            return new NormData(objectHadle);
+            return new NormData(objectHandle);
+        }
+
+        public NormData DataEnqueue(byte[] dataBuffer, int dataLength, byte[]? info, int infoLength)
+        {
+            var objectHandle = NormDataEnqueue(_handle, dataBuffer, dataLength, info, infoLength);
+            if(objectHandle == NORM_OBJECT_INVALID)
+            {
+                throw new IOException("Failed to enqueue data");
+            }
+            return new NormData(objectHandle);
         }
 
         public NormData DataEnqueue(byte[] dataBuffer, int dataLength)
