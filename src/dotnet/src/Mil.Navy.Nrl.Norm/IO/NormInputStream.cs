@@ -70,7 +70,7 @@ public class NormInputStream : Stream
     {
         if(ttl == null)
         {
-            throw new IOException("");
+            throw new IOException("Operation not available.");
         }
         _normSession.SetTTL(ttl);
     }
