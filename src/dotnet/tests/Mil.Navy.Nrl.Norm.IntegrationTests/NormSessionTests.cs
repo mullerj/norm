@@ -573,44 +573,40 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normInstance.SetCacheDirectory(cachePath);
 
             var fileContent = GenerateTextContent();
-            var content_1 = fileContent.Remove(0, 5);
-            var content_2 = fileContent.Remove(5, fileContent.Length-5);
-            var data_1 = Encoding.ASCII.GetBytes(content_1);
-            var data_2 = Encoding.ASCII.GetBytes(content_2);
-            var dataOffset = 5;
+            var data = Encoding.ASCII.GetBytes(fileContent);
             NormStream? normStream = null;
 
             try
             {
                 var repairWindowSize = 1024 * 1024;
+
                 normStream = _normSession.StreamOpen(repairWindowSize);
-
-                normStream.Write(data_1, 0, data_1.Length);
-                normStream.Write(data_2, 0, data_2.Length);
-
+                var offset = 0;
+                var length = data.Length;
+                normStream.Write(data, offset, length);
                 normStream.MarkEom();
                 normStream.Flush();
+
                 var normEvents = GetEvents();
                 AssertNormEvents(normEvents);
 
                 var expectedNormEventType = NormEventType.NORM_RX_OBJECT_UPDATED;
-                var normObjectEvents = normEvents.Where(e => e.Type == expectedNormEventType).ToArray();
-                Assert.Equal(2, normObjectEvents.Length);
+                var normObjectEvent = normEvents.First(e => e.Type == expectedNormEventType);
+                var receivedNormStream = Assert.IsType<NormStream>(normObjectEvent.Object);
+
                 var receiveBuffer = new byte[65536];
+                var receiveOffset = 0;
+                var receiveBufferLength = 10;
                 var totalNumRead = 0;
-                foreach(var normObjectEvent in normObjectEvents)
+                var numRead = 0;
+
+                while ((numRead = receivedNormStream.Read(receiveBuffer, receiveOffset, receiveBufferLength)) > 0)
                 {
-                    var receivedNormStream = Assert.IsType<NormStream>(normObjectEvent.Object);
-                    var numRead = 0;
-                    while ((numRead = receivedNormStream.Read(receiveBuffer, 0, receiveBuffer.Length)) > 0)
+                    if (numRead != -1)
                     {
-                        if (numRead != -1)
-                        {
-                            totalNumRead += numRead;
-                         
-                        }
+                        totalNumRead += numRead;
+                        receiveOffset += numRead;
                     }
-                  
                 }
                 var receivedData = receiveBuffer.Take(totalNumRead).ToArray();
                 var receivedContent = Encoding.ASCII.GetString(receivedData);
