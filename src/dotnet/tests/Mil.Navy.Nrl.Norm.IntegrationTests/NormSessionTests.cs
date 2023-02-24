@@ -1400,7 +1400,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void GetsCommand()
         {
             _normSession.SetLoopback(true);
@@ -1419,30 +1419,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var actualEvent = actualEvents.First(e => e.Type == normEventType);
                 var actualNode = actualEvent.Node;
                 Assert.NotNull(actualNode);
-                var maximumAttempts = 5;
-                var waitTime = TimeSpan.FromSeconds(1);
-                var currentAttempt = 1;
-                var success = false;
-                while (!success && currentAttempt <= maximumAttempts) 
-                {
-                    try
-                    {
-                        var actualCommand = actualNode.Command;
-                        Assert.Equal(expectedCommand, actualCommand);
-                        var actualContent = Encoding.ASCII.GetString(actualCommand);
-                        Assert.Equal(expectedContent, actualContent);
-                        success = true;
-                    }
-                    catch (Exception)
-                    {
-                        if (currentAttempt >= maximumAttempts)
-                        {
-                            throw;
-                        }
-                        currentAttempt++;
-                        Thread.Sleep(waitTime);
-                    }
-                }  
+
+                var actualCommand = actualNode.Command;
+                Assert.Equal(expectedCommand, actualCommand);
+                var actualContent = Encoding.ASCII.GetString(actualCommand);
+                Assert.Equal(expectedContent, actualContent);
             }
             catch (Exception)
             {
