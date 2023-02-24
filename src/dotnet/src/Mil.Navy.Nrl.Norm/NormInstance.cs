@@ -141,6 +141,14 @@ namespace Mil.Navy.Nrl.Norm
             NormCloseDebugLog(_handle);
         }
 
+        public void OpenDebugPipe(string pipename)
+        {
+            if (!NormOpenDebugPipe(_handle, pipename))
+            {
+                throw new IOException("Failed to open debug pipe");
+            }
+        }
+
         public int DebugLevel 
         { 
             get => NormGetDebugLevel(); 

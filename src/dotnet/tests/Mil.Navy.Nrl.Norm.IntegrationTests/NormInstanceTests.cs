@@ -178,6 +178,13 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         }
 
         [Fact]
+        public void OpensDebugPipe()
+        {
+            var pipename = "test.pipe";
+            Assert.Throws<IOException>(() => _normInstance.OpenDebugPipe(pipename));
+        }
+
+        [Fact]
         public void SetsDebugLevel()
         {
             var expectedDebugLevel = 12;

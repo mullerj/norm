@@ -97,6 +97,9 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormCloseDebugLog(long instanceHandle);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern bool NormOpenDebugPipe(long instanceHandle, string pipeName);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern void NormSetDebugLevel(int level);
 
         [DllImport(NORM_LIBRARY)]
