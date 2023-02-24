@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Mil.Navy.Nrl.Norm
@@ -32,9 +32,13 @@ namespace Mil.Navy.Nrl.Norm
         internal NormSession(long handle)
         {
             _handle = handle;
-            _normSessions.Add(handle, this);
+            lock (_normSessions)
+            {
+                _normSessions.Add(handle, this);
+            }     
         }
 
+        [MethodImplAttribute(MethodImplOptions.Synchronized)]
         internal static NormSession GetSession(long handle)
         {
             return _normSessions[handle];
@@ -42,7 +46,10 @@ namespace Mil.Navy.Nrl.Norm
 
         public void DestroySession()
         {
-            _normSessions.Remove(_handle);
+            lock (_normSessions)
+            {
+                _normSessions.Remove(_handle);
+            }
             DestroySessionNative();
         }
 
