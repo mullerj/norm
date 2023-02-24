@@ -273,15 +273,29 @@ namespace Mil.Navy.Nrl.Norm
             return DataEnqueue(dataBuffer, dataLength, null, 0);
         }
 
-        //TODO: Add offsets to StreamOpen
-        public NormStream StreamOpen(long bufferSize, byte[]? info, int infoLength)
+        public NormStream StreamOpen(long bufferSize, byte[]? info, int infoOffset, int infoLength)
         {
-            var objectHandle = NormStreamOpen(_handle, bufferSize, info, infoLength);
+            byte[]? infoBytes;
+            if (info != null)
+            {
+                infoBytes = info.Skip(infoOffset).Take(infoLength).ToArray();
+            }
+            else
+            {
+                infoBytes = null;
+                infoLength = 0;
+            }
+            var objectHandle = NormStreamOpen(_handle, bufferSize, infoBytes, infoLength);
             if (objectHandle == NORM_OBJECT_INVALID)
             {
                 throw new IOException("Failed to open stream");
             }
             return new NormStream(objectHandle);
+        }
+
+        public NormStream StreamOpen(long bufferSize, byte[]? info, int infoLength)
+        {
+            return StreamOpen(bufferSize, info, 0, infoLength);
         }
 
         public NormStream StreamOpen(long bufferSize)
