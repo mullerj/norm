@@ -31,83 +31,99 @@ public class NormOutputStream : Stream
         _bufferIsFull = false;
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void OpenDebugLog(string filename)
     {
         _normInstance.OpenDebugLog(filename);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void CloseDebugLog()
     {
         _normInstance.CloseDebugLog();
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetDebugLevel(int level)
     {
         _normInstance.DebugLevel = level;
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetMessageTrace(bool messageTrace)
     {
         _normSession.SetMessageTrace(messageTrace);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetMulticastInterface(string multicastInterface)
     {
         _normSession.SetMulticastInterface(multicastInterface);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetEcnSupport(bool ecnEnable, bool ignoreLoss)
     {
         _normSession.SetEcnSupport(ecnEnable, ignoreLoss);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetTtl(byte ttl)
     {
         _normSession.SetTTL(ttl);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetTos(byte tos)
     {
         _normSession.SetTOS(tos);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetCongestionControl(bool ccEnabled, bool ccAdjustRate)
     {
         _normSession.SetCongestionControl(ccEnabled, ccAdjustRate);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetTxRateBounds(double minTxRate, double maxTxRate)
     {
         _normSession.SetTxRateBounds(maxTxRate, minTxRate);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public double TxRate
     {
         get => _normSession.TxRate;
         set => _normSession.TxRate = value;
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public double GrttEstimate
     {
         get => _normSession.GrttEstimate;
         set => _normSession.GrttEstimate = value;
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetGroupSize(long groupSize)
     {
         _normSession.SetGroupSize(groupSize);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetAutoParity(short autoParity)
     {
         _normSession.SetAutoParity(autoParity);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetBackoffFactor(double backoffFactor)
     {
         _normSession.SetBackoffFactor(backoffFactor);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetAutoFlush(NormFlushMode flushMode)
     {
         if (_normStream == null)
@@ -117,6 +133,7 @@ public class NormOutputStream : Stream
         _normStream.SetAutoFlush(flushMode);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void SetPushEnable(bool pushEnable)
     {
         if (_normStream == null)
@@ -126,6 +143,7 @@ public class NormOutputStream : Stream
         _normStream.SetPushEnable(pushEnable);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void MarkEom()
     {
         if (_normStream == null)
@@ -138,54 +156,79 @@ public class NormOutputStream : Stream
     /// <param name="normEventListener">The INormEventListener to add.</param>
     public void AddNormEventListener(INormEventListener normEventListener)
     {
-        _normEventListeners.Add(normEventListener);
+        lock(_normEventListeners)
+        {
+            _normEventListeners.Add(normEventListener);
+        }  
     }
 
     /// <param name="normEventListener">The INormEventListener to remove.</param>
     public void RemoveNormEventListener(INormEventListener normEventListener)
     {
-        _normEventListeners.Remove(normEventListener);
+        lock(_normEventListeners)
+        {
+            _normEventListeners.Remove(normEventListener);
+        }   
     }
 
     private void FireNormEventOccured(NormEvent normEvent)
     {
-        foreach (var normEventListener in _normEventListeners)
+        lock(_normEventListeners)
         {
-            normEventListener.NormEventOccurred(normEvent);
-        }
+            foreach (var normEventListener in _normEventListeners)
+            {
+                normEventListener.NormEventOccurred(normEvent);
+            }
+        }      
     }
 
     public void Open(int sessionId, long bufferSpace, int segmentSize, short blockSize, short numParity, long repairWindow)
     {
-        if (IsClosed)
+        lock(_closeLock)
         {
-            throw new IOException("Stream is already open");
-        }
+            if (IsClosed)
+            {
+                throw new IOException("Stream is already open");
+            }
 
-        _normSession.StartSender(sessionId, bufferSpace, segmentSize, blockSize, numParity);
+            _normSession.StartSender(sessionId, bufferSpace, segmentSize, blockSize, numParity);
 
-        // Open the stream
-        _normStream = _normSession.StreamOpen(repairWindow);
+            // Open the stream
+            _normStream = _normSession.StreamOpen(repairWindow);
 
-        _closed = false;
+            _closed = false;
+        }    
     }
 
     public override void Close()
     {
-        if (IsClosed)
+        lock(_closeLock)
         {
-            return;
-        }
+            if (IsClosed)
+            {
+                return;
+            }
 
-        _normStream?.Close(false);
-        _normSession.StopSender();
-        _normInstance.StopInstance();
+            _normStream?.Close(false);
+            _normSession.StopSender();
+            _normInstance.StopInstance();
 
-        _closed = true;
+            _closed = true;
+        }   
     }
 
-    public bool IsClosed => _closed;
+    public bool IsClosed
+    {
+        get
+        {
+            lock(_closeLock)
+            {
+                return _closed;
+            }
+        }
+    } 
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public void Write(int b)
     {
         if (IsClosed)
@@ -199,6 +242,7 @@ public class NormOutputStream : Stream
         Write(buffer);
     }
 
+    [MethodImplAttribute(MethodImplOptions.Synchronized)]
     public override void Write(byte[] buffer, int offset, int count)
     {
         int n;
