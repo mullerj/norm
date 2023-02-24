@@ -250,12 +250,7 @@ namespace Mil.Navy.Nrl.Norm
 
         public NormData DataEnqueue(byte[] dataBuffer, int dataLength, byte[]? info, int infoLength)
         {
-            var objectHandle = NormDataEnqueue(_handle, dataBuffer, dataLength, info, infoLength);
-            if(objectHandle == NORM_OBJECT_INVALID)
-            {
-                throw new IOException("Failed to enqueue data");
-            }
-            return new NormData(objectHandle);
+            return DataEnqueue(dataBuffer, 0, dataLength, info, 0, infoLength);
         }
 
         public NormData DataEnqueue(byte[] dataBuffer, int dataLength)
