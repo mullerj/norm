@@ -291,7 +291,7 @@ namespace Mil.Navy.Nrl.Norm.IO
 
             while (count > 0)
             {
-                while (_normInstance.HasNextEvent(TimeSpan.FromTicks(0)))
+                while (_normInstance.HasNextEvent(0, 0))
                 {
                     ProcessEvent();
                 }
