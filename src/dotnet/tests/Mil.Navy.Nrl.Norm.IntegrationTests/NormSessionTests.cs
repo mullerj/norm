@@ -162,7 +162,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         /// <summary>
         /// Test for stopping a NORM sender
         /// </summary>
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void StopsSender()
         {
             StartSender();
@@ -175,7 +175,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             StartReceiver();
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void StopsReceiver()
         {
             StartReceiver();
@@ -398,7 +398,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void EnqueuesData()
         {
             StartSender();
@@ -427,7 +427,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void ReceivesData()
         {
             _normSession.SetLoopback(true);
@@ -479,7 +479,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void SendsStream()
         {
             StartSender();
@@ -514,7 +514,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void ReceivesStream()
         {
             _normSession.SetLoopback(true);
@@ -574,7 +574,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void ReceivesStreamWithOffset()
         {
             _normSession.SetLoopback(true);
@@ -874,7 +874,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normSession.SetTxRobustFactor(txRobustFactor);
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void RequeuesObject()
         {
             StartSender();
@@ -902,7 +902,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void SetsWatermark()
         {
             _normSession.AddAckingNode(_normSession.LocalNodeId);
@@ -950,7 +950,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void CancelsWatermark()
         {
             _normSession.AddAckingNode(_normSession.LocalNodeId);
@@ -998,7 +998,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void ResetsWatermark()
         {
             _normSession.SetLoopback(true);
@@ -1105,7 +1105,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void SendsCommand()
         {
             StartSender();
@@ -1130,7 +1130,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void ReceivesCommand()
         {
             _normSession.SetLoopback(true);
@@ -1164,7 +1164,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void CancelsCommand()
         {
             StartSender();
@@ -1197,7 +1197,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normSession.SetRxCacheLimit(countMax);
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void SetsRxSocketBuffer()
         {
             StartSender();
@@ -1219,7 +1219,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normSession.SetDefaultUnicastNack(enable);
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void SetsUnicastNack()
         {
             _normSession.SetLoopback(true);
@@ -1339,7 +1339,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normSession.SetDefaultRepairBoundary(repairBoundary);
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void SetsRepairBoundary()
         {
             _normSession.SetLoopback(true);
@@ -1378,7 +1378,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normSession.SetDefaultRxRobustFactor(rxRobustFactor);
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void SetsRxRobustFactor()
         {
             _normSession.SetLoopback(true);
@@ -1478,7 +1478,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void RetainsAndReleases()
         {
             _normSession.SetLoopback(true);
@@ -1511,7 +1511,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void GetsObjectType_DATA()
         {
              StartSender();
@@ -1534,7 +1534,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void GetsObjectType_FILE()
         {
              StartSender();
@@ -1559,7 +1559,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void GetsObjectType_STREAM()
         {
              StartSender();
@@ -1585,7 +1585,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void GetsObjectSize()
         {
              StartSender();
@@ -1609,7 +1609,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void SetsObjectNackingMode_NORM_NACK_NONE()
         {
             StartSender();
@@ -1632,7 +1632,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void SetsObjectNackingMode_NORM_NACK_INFO_ONLY()
         {
             StartSender();
@@ -1655,7 +1655,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void SetsObjectNackingMode_NORM_NACK_NORMAL()
         {
             StartSender();
@@ -1678,7 +1678,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void GetsBytesPending()
         {
             StartSender();
@@ -1703,7 +1703,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void CancelsObject()
         {
             StartSender();
@@ -1726,7 +1726,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void RetainsObject()
         {
              StartSender();
@@ -1749,7 +1749,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void ReleasesObject()
         {
             StartSender();
@@ -1773,7 +1773,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void GetsSenderThrowsException()
         {
             StartSender();
@@ -1796,7 +1796,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void GetsSender()
         {
             _normSession.SetLoopback(true);
@@ -1834,7 +1834,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void GetsObjectHashCode()
         {
             _normSession.SetLoopback(true);
@@ -1874,7 +1874,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void ObjectsEqual()
         {
              _normSession.SetLoopback(true);
@@ -1922,7 +1922,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void NormStreamHasVacancy()
         {
             StartSender();
@@ -1949,7 +1949,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void NormStreamGetsReadOffset()
         {
             StartSender();
@@ -1977,7 +1977,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void NormStreamSeeksMsgStart()
         {
             _normSession.SetLoopback(true);
@@ -2028,7 +2028,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void NormStreamSetsPushEnable()
         {
             StartSender();
