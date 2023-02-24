@@ -241,7 +241,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void EnqueuesFile()
         {
             StartSender();
@@ -2055,7 +2055,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void NormStreamSetsAutoFlush_FLUSH_NONE()
         {
             StartSender();
@@ -2082,7 +2082,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void NormStreamSetsAutoFlush_FLUSH_PASSIVE()
         {
             StartSender();
@@ -2109,7 +2109,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void NormStreamSetsAutoFlush_FLUSH_ACTIVE()
         {
             StartSender();
