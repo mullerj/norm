@@ -627,7 +627,7 @@ namespace Mil.Navy.Nrl.Norm
         /// no longer reference the specified NormNodeHandle, unless it is still valid.
         /// </summary>
         /// <param name="nodeHandle"> This type is used to reference state kept by the NORM implementation with respect to other participants within a NormSession.</param>
-                [DllImport(NORM_LIBRARY)]
+        [DllImport(NORM_LIBRARY)]
         public static extern void NormNodeRelease(long nodeHandle);
     }
 }
