@@ -63,6 +63,15 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport (NORM_LIBRARY)]
         public static extern bool NormResumeInstance(long instanceHandle);
 
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetCacheDirectory(long instanceHandle, string cachePath);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormGetNextEvent(long instanceHandle, out NormEvent theEvent, bool waitForEvent);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern int NormGetDescriptor(long instanceHandle);
+
         /// <summary>
         /// This function creates a NORM protocol session (NormSession) using the address (multicast or unicast) and port
         /// parameters provided.While session state is allocated and initialized, active session participation does not begin
@@ -85,120 +94,13 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormDestroySession(long sessionHandle);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormSetLoopback(long sessionHandle, bool loopback);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern int NormGetRandomSessionId();
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormOpenDebugLog(long instanceHandle, string path);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormCloseDebugLog(long instanceHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormOpenDebugPipe(long instanceHandle, string pipeName);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern void NormSetDebugLevel(int level);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern int NormGetDebugLevel();
-
-        /// <summary>
-        /// The application's participation as a sender within a specified NormSession begins when this function is called.
-        /// </summary>
-        /// <param name="instanceHandle"> Valid NormSessionHandle previously obtained with a call to NormCreateSession() </param>
-        /// <param name="instanceId"> Application-defined value used as the instance_id field of NORM sender messages for the application's participation within a session </param>
-        /// <param name="bufferSpace"> This specifies the maximum memory space (in bytes) the NORM protocol engine is allowed to use to buffer any sender calculated FEC segments and repair state for the session. </param>
-        /// <param name="segmentSize"> This parameter sets the maximum payload size (in bytes) of NORM sender messages (not including any NORM message header fields). </param>
-        /// <param name="numData">  </param>
-        /// <param name="numParity"></param>
-        /// <param name="fedId"></param>
-        /// <returns></returns>
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormStartSender(long instanceHandle, int instanceId, long bufferSpace, int segmentSize, short numData, short numParity, NormFecType fedId);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern void NormStopSender(long sessionHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern long NormFileEnqueue(long sessionHandle, string fileName);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern long NormFileEnqueue(long sessionHandle, string fileName, byte[]? infoPtr, int infoLen);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern long NormStreamOpen(long sessionHandle, long bufferSize, byte[]? infoPtr, int infoLen);
-
-        [DllImport(NORM_LIBRARY)]
-        internal static extern int NormStreamWrite(long streamHandle, byte[] buffer, int numBytes);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern void NormStreamMarkEom(long streamHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern void NormStreamFlush(long streamHandle, bool eom, NormFlushMode flushMode);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern void NormStreamClose(long streamHandle, bool graceful);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormStreamRead(long streamHandle, byte[] buffer, ref int numBytes);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern int NormGetDescriptor(long instanceHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormGetNextEvent(long instanceHandle, out NormEvent theEvent);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormGetNextEvent(long instanceHandle, out NormEvent theEvent, bool waitForEvent);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern NormObjectType NormObjectGetType(long objectHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormObjectHasInfo(long objectHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern int NormObjectGetInfoLength(long objectHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern int NormObjectGetInfo(long objectHandle, [Out] byte[] buffer, int bufferLen);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormFileRename(long fileHandle, string fileName);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormFileGetName(long fileHandle, [Out] char[] nameBuffer, int bufferLen);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormStartReceiver(long sessionHandle, long bufferSpace);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern void NormStopReceiver(long sessionHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormSetCacheDirectory(long instanceHandle, string cachePath);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern long NormDataEnqueue(long sessionHandle, byte[] dataPtr, int dataLen);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern long NormDataEnqueue(long sessionHandle, byte[] dataPtr, int dataLen, byte[]? infoPtr, int infoLen);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern nint NormDataAccessData(long objectHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern int NormObjectGetSize(long objectHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern nint NormDataDetachData(long objectHandle);
+        public static extern long NormGetLocalNodeId(long sessionHandle);
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetTxPort(long sessionHandle, int txPortNumber, bool enableReuse, string? txBindAddress);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetTxOnly(long sessionHandle, bool txOnly, bool connectToSessionAddress);
 
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetRxPortReuse(long sessionHandle, bool enableReuse, string? rxBindAddress, string? senderAddress, int senderPort);
@@ -219,6 +121,9 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormSetTOS(long sessionHandle, byte tos);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern bool NormSetLoopback(long sessionHandle, bool loopback);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern void NormSetMessageTrace(long sessionHandle, bool flag);
 
         [DllImport(NORM_LIBRARY)]
@@ -228,19 +133,57 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormSetRxLoss(long sessionHandle, double precent);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern bool NormOpenDebugLog(long instanceHandle, string path);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormCloseDebugLog(long instanceHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormOpenDebugPipe(long instanceHandle, string pipeName);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetDebugLevel(int level);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern int NormGetDebugLevel();
+
+        [DllImport(NORM_LIBRARY)]
         public static extern void NormSetReportInterval(long sessionHandle, double interval);
 
         [DllImport(NORM_LIBRARY)]
         public static extern double NormGetReportInterval(long sessionHandle);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern void NormSetTxOnly(long sessionHandle, bool txOnly, bool connectToSessionAddress);
+        public static extern int NormGetRandomSessionId();
+
+        /// <summary>
+        /// The application's participation as a sender within a specified NormSession begins when this function is called.
+        /// </summary>
+        /// <param name="instanceHandle"> Valid NormSessionHandle previously obtained with a call to NormCreateSession() </param>
+        /// <param name="instanceId"> Application-defined value used as the instance_id field of NORM sender messages for the application's participation within a session </param>
+        /// <param name="bufferSpace"> This specifies the maximum memory space (in bytes) the NORM protocol engine is allowed to use to buffer any sender calculated FEC segments and repair state for the session. </param>
+        /// <param name="segmentSize"> This parameter sets the maximum payload size (in bytes) of NORM sender messages (not including any NORM message header fields). </param>
+        /// <param name="numData">  </param>
+        /// <param name="numParity"></param>
+        /// <param name="fedId"></param>
+        /// <returns></returns>
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormStartSender(long instanceHandle, int instanceId, long bufferSpace, int segmentSize, short numData, short numParity, NormFecType fedId);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern void NormSetFlowControl(long sessionHandle, double flowControlFactor);
+        public static extern void NormStopSender(long sessionHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetTxRate(long sessionHandle, double rate);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern double NormGetTxRate(long sessionHandle);
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetTxSocketBuffer(long sessionHandle, long bufferSize);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormSetFlowControl(long sessionHandle, double flowControlFactor);
 
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetCongestionControl(long sessionHandle, bool enable, bool adjustRate);
@@ -252,19 +195,13 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormSetTxCacheBounds(long sessionHandle, long sizeMax, long countMin, long countMax);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern double NormGetTxRate(long sessionHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern void NormSetTxRate(long sessionHandle, double rate);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern double NormGetGrttEstimate(long sessionHandle);
+        public static extern void NormSetAutoParity(long sesssionHandle, short autoParity);
 
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetGrttEstimate(long sessionHandle, double grtt);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern void NormSetAutoParity(long sesssionHandle, short autoParity);
+        public static extern double NormGetGrttEstimate(long sessionHandle);
 
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetGrttMax(long sessionHandle, double grttMax);
@@ -285,16 +222,46 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormSetTxRobustFactor(long sessionHandle, int txRobustFactor);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern long NormFileEnqueue(long sessionHandle, string fileName, byte[]? infoPtr, int infoLen);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern long NormDataEnqueue(long sessionHandle, byte[] dataPtr, int dataLen, byte[]? infoPtr, int infoLen);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern bool NormRequeueObject(long sessionHandle, long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern long NormStreamOpen(long sessionHandle, long bufferSize, byte[]? infoPtr, int infoLen);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormStreamClose(long streamHandle, bool graceful);
+
+        [DllImport(NORM_LIBRARY)]
+        internal static extern int NormStreamWrite(long streamHandle, byte[] buffer, int numBytes);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormStreamFlush(long streamHandle, bool eom, NormFlushMode flushMode);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormStreamSetAutoFlush(long streamHandle, NormFlushMode flushMode);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormStreamSetPushEnable(long streamHandle, bool pushEnable);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormStreamHasVacancy(long streamHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormStreamMarkEom(long streamHandle);
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetWatermark(long sessionHandle, long objectHandle, bool overrideFlush);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern void NormCancelWatermark(long sessionHandle);
+        public static extern bool NormResetWatermark(long sessionHandle);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormResetWatermark(long sessionHandle);
+        public static extern void NormCancelWatermark(long sessionHandle);
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormAddAckingNode(long sessionHandle, long nodeId);
@@ -312,6 +279,12 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormCancelCommand(long sessionHandle);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern bool NormStartReceiver(long sessionHandle, long bufferSpace);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormStopReceiver(long sessionHandle);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern void NormSetRxCacheLimit(long sessionHandle, int countMax);
 
         [DllImport(NORM_LIBRARY)]
@@ -321,7 +294,7 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormSetSilentReceiver(long sessionHandle, bool silent, int maxDelay);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern void NormSetDefaultUnicastNack(long sessionHandle, bool enable);
+        public static extern void NormSetDefaultUnicastNack(long sessionHandle, bool unicastNacks);
 
         [DllImport(NORM_LIBRARY)]
         public static extern void NormNodeSetUnicastNack(long remoteSender, bool unicastNacks);
@@ -336,6 +309,9 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormNodeSetNackingMode(long remoteSender, NormNackingMode nackingMode);
 
         [DllImport(NORM_LIBRARY)]
+        public static extern void NormObjectSetNackingMode(long objectHandle, NormNackingMode nackingMode);
+
+        [DllImport(NORM_LIBRARY)]
         public static extern void NormSetDefaultRepairBoundary(long sessionHandle, NormRepairBoundary repairBoundary);
 
         [DllImport(NORM_LIBRARY)]
@@ -348,7 +324,55 @@ namespace Mil.Navy.Nrl.Norm
         public static extern void NormNodeSetRxRobustFactor(long remoteSender, int robustFactor);
 
         [DllImport(NORM_LIBRARY)]
-        public static extern long NormGetLocalNodeId(long sessionHandle);
+        public static extern bool NormStreamRead(long streamHandle, byte[] buffer, ref int numBytes);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormStreamSeekMsgStart(long streamHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern long NormStreamGetReadOffset(long streamHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern NormObjectType NormObjectGetType(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormObjectHasInfo(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern int NormObjectGetInfoLength(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern int NormObjectGetInfo(long objectHandle, [Out] byte[] buffer, int bufferLen);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern int NormObjectGetSize(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern long NormObjectGetBytesPending(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormObjectCancel(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormObjectRetain(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern void NormObjectRelease(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormFileGetName(long fileHandle, [Out] char[] nameBuffer, int bufferLen);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern bool NormFileRename(long fileHandle, string fileName);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern nint NormDataAccessData(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern nint NormDataDetachData(long objectHandle);
+
+        [DllImport(NORM_LIBRARY)]
+        public static extern long NormObjectGetSender(long objectHandle);
 
         [DllImport(NORM_LIBRARY)]
         public static extern long NormNodeGetId(long nodeHandle);
@@ -370,38 +394,5 @@ namespace Mil.Navy.Nrl.Norm
 
         [DllImport(NORM_LIBRARY)]
         public static extern void NormNodeRelease(long nodeHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern void NormObjectSetNackingMode(long objectHandle, NormNackingMode nackingMode);
-        
-        [DllImport(NORM_LIBRARY)]
-        public static extern long NormObjectGetBytesPending(long objectHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern void NormObjectCancel(long objectHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern void NormObjectRetain(long objectHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern void NormObjectRelease(long objectHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern long NormObjectGetSender(long objectHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormStreamHasVacancy(long streamHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern long NormStreamGetReadOffset(long streamHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern bool NormStreamSeekMsgStart(long streamHandle);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern void NormStreamSetPushEnable(long streamHandle, bool pushEnable);
-
-        [DllImport(NORM_LIBRARY)]
-        public static extern void NormStreamSetAutoFlush(long streamHandle, NormFlushMode flushMode);
     }
 }
