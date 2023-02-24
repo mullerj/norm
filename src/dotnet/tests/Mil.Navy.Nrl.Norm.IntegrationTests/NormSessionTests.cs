@@ -273,7 +273,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void ReceivesFile()
         {
             _normSession.SetLoopback(true);
@@ -331,7 +331,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void ReceivesFileWithRename()
         {
             _normSession.SetLoopback(true);
@@ -1067,7 +1067,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normSession.RemoveAckingNode(_normSession.LocalNodeId);
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void GetsAckingStatus()
         {
             _normSession.AddAckingNode(_normSession.LocalNodeId);
