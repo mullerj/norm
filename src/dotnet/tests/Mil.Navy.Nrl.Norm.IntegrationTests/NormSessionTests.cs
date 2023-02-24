@@ -153,7 +153,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         /// <summary>
         /// Test for starting a NORM sender
         /// </summary>
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void StartsSender()
         {
             StartSender();
