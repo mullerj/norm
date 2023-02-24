@@ -1,4 +1,4 @@
-namespace Mil.Navy.Nrl.Norm
+namespace Mil.Navy.Nrl.Norm.IO
 {
     public interface INormEventListener
     {
