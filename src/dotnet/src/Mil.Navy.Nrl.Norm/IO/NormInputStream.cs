@@ -80,7 +80,7 @@ public class NormInputStream : Stream
     {
         if(tos == null)
         {
-            throw new IOException("");
+            throw new IOException("TOS was null.");
         }
         _normSession.SetTOS(tos);
     }
@@ -173,7 +173,6 @@ public class NormInputStream : Stream
             _closed = true;
         }   
     }
-
 
     public void Dispose()
     {
