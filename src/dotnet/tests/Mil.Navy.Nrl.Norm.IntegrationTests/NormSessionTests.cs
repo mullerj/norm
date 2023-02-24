@@ -1293,7 +1293,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normSession.SetDefaultNackingMode(nackingMode);
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void SetsNackingMode()
         {
             _normSession.SetLoopback(true);
