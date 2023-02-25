@@ -1,4 +1,19 @@
 ﻿using System.Runtime.InteropServices;
+using static System.Formats.Asn1.AsnWriter;
+using System.Threading;
+using Microsoft.VisualBasic;
+using System.Buffers.Text;
+using System.Runtime.Intrinsics.X86;
+using System;
+using System.Net.Sockets;
+using System.Reflection;
+using static System.Net.Mime.MediaTypeNames;
+using System.Diagnostics.Metrics;
+using System.Reflection.Metadata;
+using static System.Collections.Specialized.BitVector32;
+using System.Diagnostics;
+using System.IO;
+using System.Xml.Linq;
 
 namespace Mil.Navy.Nrl.Norm
 {
@@ -425,39 +440,165 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetGrttMax(long sessionHandle, double grttMax);
 
+        /// <summary>
+        /// This function sets the sender's mode of probing for round trip timing measurement responses from the receiver set for the given NORM sessionHandle.
+        /// </summary>
+        /// <param name="sesssionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="probingMode">Possible values for the probingMode parameter include NORM_PROBE_NONE, NORM_PROBE_PASSIVE, and NORM_PROBE_ACTIVE.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetGrttProbingMode(long sesssionHandle, NormProbingMode probingMode);
 
+        /// <summary>
+        /// This function controls the sender GRTT measurement and estimation process for the given NORM sessionHandle.
+        /// The NORM sender multiplexes periodic transmission of NORM_CMD(CC) messages with its ongoing data transmission
+        /// or when data transmission is idle.When NORM congestion control operation is enabled, these probes are sent
+        /// once per RTT of the current limiting receiver(with respect to congestion control rate). In this case the intervalMin
+        /// and intervalMax parameters (in units of seconds) control the rate at which the sender's estimate of GRTT is updated.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="intervalMin">At session start, the estimate is updated at intervalMin and the update interval time is doubled until intervalMax is reached.</param>
+        /// <param name="intervalMax">At session start, the estimate is updated at intervalMin and the update interval time is doubled until intervalMax is reached.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetGrttProbingInterval(long sessionHandle, double intervalMin, double intervalMax);
 
+        /// <summary>
+        /// This function sets the sender's "backoff factor" for the given sessionHandle.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="backoffFactor">The backoffFactor (in units of seconds) is used to scale various timeouts related to the NACK repair process. </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetBackoffFactor(long sessionHandle, double backoffFactor);
 
+        /// <summary>
+        /// This function sets the sender's estimate of receiver group size for the given sessionHandle.
+        /// </summary>
+        /// <param name="sessiionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="groupSize">The sender advertises
+        /// its groupSize setting to the receiver group in NORM protocol message headers that, in turn, use this information
+        /// to shape the distribution curve of their random timeouts for the timer-based, probabilistic feedback suppression
+        /// technique used in the NORM protocol. </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetGroupSize(long sessiionHandle, long groupSize);
 
+        /// <summary>
+        /// This routine sets the "robustness factor" used for various NORM sender functions. These functions include the
+        /// number of repetitions of "robustly-transmitted" NORM sender commands such as NORM_CMD(FLUSH) or similar
+        /// application-defined commands, and the number of attempts that are made to collect positive acknowledgement
+        /// from receivers.These commands are distinct from the NORM reliable data transmission process, but play a role
+        /// in overall NORM protocol operation.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="txRobustFactor">The default txRobustFactor value is 20. This relatively large value makes
+        /// the NORM  sender end-of-transmission flushing  and positive  acknowledgement collection  functions somewhat
+        /// immune from packet loss.
+        /// Setting txRobustFactor to a value of -1 makes the redundant transmission of these commands continue indefinitely
+        /// until completion.
+        /// </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetTxRobustFactor(long sessionHandle, int txRobustFactor);
 
+        /// <summary>
+        /// This  function  enqueues  a  file  for  transmission  within  the  specified  NORM  sessionHandle.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="fileName">The fileName parameter specifies the path to the file to be transmitted. The NORM protocol engine
+        /// read and writes directly from/to file system storage for file transport, potentially providing for a very large virtual
+        /// "repair window" as needed for some applications. While relative paths with respect to the "current working directory"
+        /// may be used, it is recommended that full paths be used when possible.</param>
+        /// <param name="infoPtr">The optional infoPtr and infoLen parameters 
+        /// are used to associate NORM_INFO content with the sent transport object. The maximum allowed infoLen
+        /// corresponds to the segmentSize used in the prior call to NormStartSender(). The use and interpretation of the
+        /// NORM_INFO content is left to the application's discretion.</param>
+        /// <param name="infoLen">The optional infoPtr and infoLen parameters 
+        /// are used to associate NORM_INFO content with the sent transport object. The maximum allowed infoLen
+        /// corresponds to the segmentSize used in the prior call to NormStartSender(). The use and interpretation of the
+        /// NORM_INFO content is left to the application's discretion</param>
+        /// <returns>A NormObjectHandle is returned which the application may use in other NORM API calls as needed.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern long NormFileEnqueue(long sessionHandle, string fileName, byte[]? infoPtr, int infoLen);
 
+        /// <summary>
+        /// This  function  enqueues  a  segment  of  application  memory  space  for  transmission  within  the  specified  NORM sessionHandle.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="dataPtr">The dataPtr parameter must be a valid pointer to the area of application memory to be transmitted.</param>
+        /// <param name="dataLen">The dataLen parameter indicates the quantity of data to transmit.</param>
+        /// <param name="infoPtr">The optional infoPtr and infoLen parameters 
+        /// are used to associate NORM_INFO content with the sent transport object. The maximum allowed infoLen
+        /// corresponds to the segmentSize used in the prior call to NormStartSender(). The use and interpretation of the
+        /// NORM_INFO content is left to the application's discretion.</param>
+        /// <param name="infoLen">The optional infoPtr and infoLen parameters 
+        /// are used to associate NORM_INFO content with the sent transport object. The maximum allowed infoLen
+        /// corresponds to the segmentSize used in the prior call to NormStartSender(). The use and interpretation of the
+        /// NORM_INFO content is left to the application's discretion</param>
+        /// <returns>A NormObjectHandle is returned which the application may use in other NORM API calls as needed.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern long NormDataEnqueue(long sessionHandle, byte[] dataPtr, int dataLen, byte[]? infoPtr, int infoLen);
 
+        /// <summary>
+        /// This function allows the application to resend (or reset transmission of) a NORM_OBJECT_FILE or NORM_OBJECT_DATA
+        /// transmit object that was previously enqueued for the indicated sessionHandle.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="objectHandle">The objectHandle parameter must be a valid transmit NormObjectHandle that has not yet been "purged" from the sender's transmit queue.</param>
+        /// <returns>A value of true is returned upon success and a value of false is returned upon failure.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormRequeueObject(long sessionHandle, long objectHandle);
 
+        /// <summary>
+        /// This function opens a NORM_OBJECT_STREAM sender object and enqueues it for transmission within the indicated sessionHandle.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="bufferSize">The bufferSize parameter controls the size of the stream's "repair window"
+        /// which limits how far back the sender will "rewind" to satisfy receiver repair requests.</param>
+        /// <param name="infoPtr">Note  that no data is sent until subsequent calls to NormStreamWrite() are made unless
+        /// NORM_INFO content is specified for the stream with the infoPtr and infoLen parameters. Example usage of
+        /// NORM_INFO content for NORM_OBJECT_STREAM might include application-defined data typing or other information
+        /// which will enable NORM receiver applications to properly interpret the received stream as it is being received.</param>
+        /// <param name="infoLen">Note  that no data is sent until subsequent calls to NormStreamWrite() are made unless
+        /// NORM_INFO content is specified for the stream with the infoPtr and infoLen parameters. Example usage of
+        /// NORM_INFO content for NORM_OBJECT_STREAM might include application-defined data typing or other information
+        /// which will enable NORM receiver applications to properly interpret the received stream as it is being received.</param>
+        /// <returns>A NormObjectHandle is returned which the application may use in other NORM API calls as needed.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern long NormStreamOpen(long sessionHandle, long bufferSize, byte[]? infoPtr, int infoLen);
 
+        /// <summary>
+        /// This function halts transfer of the stream specified by the streamHandle parameter and releases any resources
+        /// used unless the associated object has been explicitly retained by a call to NormObjectRetain().
+        /// </summary>
+        /// <param name="streamHandle">The streamHandle parameter must be a valid transmit NormObjectHandle.</param>
+        /// <param name="graceful">The optional graceful parameter, when
+        /// set to a value of true, may be used by NORM senders to initiate "graceful" shutdown of a transmit stream.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormStreamClose(long streamHandle, bool graceful);
 
+        /// <summary>
+        /// This function enqueues data for transmission within the NORM stream specified by the streamHandle parameter.
+        /// </summary>
+        /// <param name="streamHandle">The streamHandle parameter must be a valid transmit NormObjectHandle.</param>
+        /// <param name="buffer">The buffer parameter must be a pointer to the data to be enqueued.</param>
+        /// <param name="numBytes">The numBytes parameter indicates the length of the data content.</param>
+        /// <returns>This function returns the number of bytes of data successfully enqueued for NORM stream transmission.</returns>
         [DllImport(NORM_LIBRARY)]
         internal static extern int NormStreamWrite(long streamHandle, byte[] buffer, int numBytes);
 
+        /// <summary>
+        /// This function causes an immediate "flush" of the transmit stream specified by the streamHandle parameter.
+        /// </summary>
+        /// <param name="streamHandle">The streamHandle parameter must be a valid transmit NormObjectHandle.</param>
+        /// <param name="eom">The optional eom parameter, when set to true, allows the sender application to mark an end-of-message indication
+        /// (see NormStreamMarkEom()) for the stream and initiate flushing in a single function call.</param>
+        /// <param name="flushMode">The default stream "flush" operation invoked via
+        /// NormStreamFlush() for flushMode equal to NORM_FLUSH_PASSIVE causes NORM to immediately transmit all
+        /// enqueued data for the stream(subject to session transmit rate limits), even if this results in NORM_DATA messages
+        /// with  "small"  payloads.If the  optional flushMode  parameter  is  set to  NORM_FLUSH_ACTIVE,  the application  can
+        /// achieve reliable delivery of stream content up to the current write position in an even more proactive fashion.In
+        /// this  case, the sender  additionally, actively transmits  NORM_CMD(FLUSH) messages  after any  enqueued stream
+        /// content has  been sent.  This immediately  prompt receivers  for  repair requests  which reduces  latency of  reliable
+        /// delivery, but at a cost of some additional messaging. Note any such "active" flush activity will be terminated upon
+        /// the next subsequent write to the stream.If flushMode is set to NORM_FLUSH_NONE, this call has no effect other than
+        /// the optional end-of-message marking described here</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormStreamFlush(long streamHandle, bool eom, NormFlushMode flushMode);
 
