@@ -602,42 +602,133 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern void NormStreamFlush(long streamHandle, bool eom, NormFlushMode flushMode);
 
+        /// <summary>
+        /// This function sets "automated flushing" for the NORM transmit stream indicated by the streamHandle parameter.
+        /// </summary>
+        /// <param name="streamHandle">The streamHandle parameter must be a valid transmit NormObjectHandle.</param>
+        /// <param name="flushMode">Possible values for the flushMode parameter include NORM_FLUSH_NONE, NORM_FLUSH_PASSIVE, and NORM_FLUSH_ACTIVE.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormStreamSetAutoFlush(long streamHandle, NormFlushMode flushMode);
 
+        /// <summary>
+        /// This function controls how the NORM API behaves when the application attempts to enqueue new stream data
+        /// for transmission when the associated stream's transmit buffer is fully occupied with data pending original or repair
+        /// transmission.
+        /// </summary>
+        /// <param name="streamHandle">The streamHandle parameter must be a valid transmit NormObjectHandle.</param>
+        /// <param name="pushEnable"> By default (pushEnable = false), a call to NormStreamWrite() will return a zero value under this
+        /// condition, indicating it was unable to enqueue the new data. However, if pushEnable is set to true for a given
+        /// streamHandle, the NORM protocol engine will discard the oldest buffered stream data(even if it is pending repair
+        /// transmission or has never been transmitted) as needed to enqueue the new data.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormStreamSetPushEnable(long streamHandle, bool pushEnable);
 
+        /// <summary>
+        /// This function can be used to query whether the transmit stream, specified by the streamHandle parameter, has
+        /// buffer space available so that the application may successfully make a call to NormStreamWrite().
+        /// </summary>
+        /// <param name="streamHandle">The streamHandle parameter must be a valid transmit NormObjectHandle.</param>
+        /// <returns>This function returns a value of true when there is transmit buffer space to which the application may write and false otherwise.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormStreamHasVacancy(long streamHandle);
 
+        /// <summary>
+        /// This function allows the application to indicate to the NORM protocol engine that the last data successfully written
+        /// to the stream indicated by streamHandle corresponded to the end of an application-defined message boundary.
+        /// </summary>
+        /// <param name="streamHandle">The streamHandle parameter must be a valid transmit NormObjectHandle.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormStreamMarkEom(long streamHandle);
 
+        /// <summary>
+        /// This function specifies a "watermark" transmission point at which NORM sender protocol operation should perform
+        /// a flushing process and/or positive acknowledgment collection for a given sessionHandle.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="objectHandle">The objectHandle parameter must be a valid transmit NormObjectHandle that has not yet been "purged" from the sender's transmit queue.</param>
+        /// <param name="overrideFlush">The optional overrideFlush parameter, when set to true, causes the watermark acknowledgment process that is
+        /// established with this function call to potentially fully supersede the usual NORM end-of-transmission flushing
+        /// process that  occurs.If overrideFlush  is  set and  the  "watermark"  transmission point  corresponds to  the last
+        /// transmission that will result from data enqueued by the sending application, then the watermark flush completion
+        /// will terminate the usual flushing process</param>
+        /// <returns>The function returns true upon successful establishment of the watermark point. The function may return false upon failure.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetWatermark(long sessionHandle, long objectHandle, bool overrideFlush);
 
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormResetWatermark(long sessionHandle);
 
+        /// <summary>
+        /// This function cancels any "watermark" acknowledgement request that was previously set via the NormSetWatermark() function for the given sessionHandle.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormCancelWatermark(long sessionHandle);
 
+        /// <summary>
+        /// When this function is called, the specified nodeId is added to the list of NormNodeId values (i.e., the "acking node"
+        /// list) used when NORM sender operation performs positive acknowledgement (ACK) collection for the specified sessionHandle. 
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="nodeId">Identifies the application's presence in the NormSession.</param>
+        /// <returns>The function returns true upon success and false upon failure.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormAddAckingNode(long sessionHandle, long nodeId);
 
+        /// <summary>
+        /// This function deletes the specified nodeId from the list of NormNodeId values used when NORM sender operation
+        /// performs positive acknowledgement (ACK) collection for the specified sessionHandle.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="nodeId">Identifies the application's presence in the NormSession.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormRemoveAckingNode(long sessionHandle, long nodeId);
 
+        /// <summary>
+        /// This function queries the status of the watermark flushing process and/or positive acknowledgment collection
+        /// initiated by a prior call to NormSetWatermark() for the given sessionHandle.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="nodeId">Identifies the application's presence in the NormSession.</param>
+        /// <returns>
+        /// Possible return values include:
+        /// NORM_ACK_INVALID - The given sessionHandle is invalid or the given nodeId is not in the sender's acking list.
+        /// NORM_ACK_FAILURE - The positive acknowledgement collection process did not receive acknowledgment from every listed receiver NORM_ACK_FAILURE (nodeId = NORM_NODE_ANY) or the identified nodeId did not respond.
+        /// NORM_ACK_PENDING - The flushing process at large has not yet completed (nodeId = NORM_NODE_ANY) or the given individual nodeId is still being queried for response.
+        /// NORM_ACK_SUCCESS - All receivers (nodeId = NORM_NODE_ANY) responded with positive acknowledgement or the given specific nodeId did acknowledge.
+        /// </returns>
         [DllImport(NORM_LIBRARY)]
         public static extern NormAckingStatus NormGetAckingStatus(long sessionHandle, long nodeId);
 
+        /// <summary>
+        /// This function enqueues a NORM application-defined command for transmission.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="cmdBuffer">The cmdBuffer parameter points to a buffer containing the application-defined command content that will be contained in the NORM_CMD(APPLICA-TION) message payload.</param>
+        /// <param name="cmdLength">The cmdLength indicates the length of this content (in bytes) and MUST be less than or equal to the segmentLength value for the given session (see NormStartSender()).</param>
+        /// <param name="robust">The  command  is  NOT  delivered  reliably, 
+        /// but can be optionally transmitted with repetition (once per GRTT) according to the NORM transmit robust factor
+        /// value (see NormSetTxRobustFactor()) for the given session if the robust parameter is set to true. </param>
+        /// <returns>The function returns true upon success. The function may fail, returning false, if the session is not set for sender
+        /// operation (see NormStartSender()), the cmdLength exceeds the configured session segmentLength, or a previously-
+        /// enqueued command has not yet been sent.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSendCommand(long sessionHandle, byte[] cmdBuffer, int cmdLength, bool robust);
 
+        /// <summary>
+        /// This function terminates any pending NORM_CMD(APPLICATION) transmission that was previously initiated with the NormSendCommand() call. 
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormCancelCommand(long sessionHandle);
 
+        /// <summary>
+        /// This function initiates the application's participation as a receiver within the NormSession identified by the sessionHandle  parameter.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="bufferSpace">The bufferSpace parameter is used to set a limit on the amount of bufferSpace allocated
+        /// by the receiver per active NormSender within the session.</param>
+        /// <returns>A value of true is returned upon success and false upon failure.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormStartReceiver(long sessionHandle, long bufferSpace);
 
