@@ -1,19 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using static System.Formats.Asn1.AsnWriter;
-using System.Threading;
-using Microsoft.VisualBasic;
-using System.Buffers.Text;
-using System.Runtime.Intrinsics.X86;
-using System;
-using System.Net.Sockets;
-using System.Reflection;
-using static System.Net.Mime.MediaTypeNames;
-using System.Diagnostics.Metrics;
-using System.Reflection.Metadata;
-using static System.Collections.Specialized.BitVector32;
-using System.Diagnostics;
-using System.IO;
-using System.Xml.Linq;
 
 namespace Mil.Navy.Nrl.Norm
 {
