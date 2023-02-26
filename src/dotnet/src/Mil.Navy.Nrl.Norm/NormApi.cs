@@ -717,12 +717,27 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormStartReceiver(long sessionHandle, long bufferSpace);
 
+        /// <summary>
+        /// This function ends the application's participation as a receiver in the NormSession specified by the session parameter.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormStopReceiver(long sessionHandle);
 
+        /// <summary>
+        /// This function sets a limit on the number of outstanding (pending) NormObjects for which a receiver will keep state on a per-sender basis.
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="countMax"> Note that the value countMax sets a limit on the maximum consecutive range of objects that can be pending</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetRxCacheLimit(long sessionHandle, int countMax);
 
+        /// <summary>
+        /// This function allows the application to set an alternative, non-default buffer size for the UDP socket used by the specified NORM sessionHandle for packet reception. 
+        /// </summary>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="bufferSize">The bufferSize parameter specifies the socket buffer size in bytes.</param>
+        /// <returns>This function returns true upon success and false upon failure.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetRxSocketBuffer(long sessionHandle, long bufferSize);
 
