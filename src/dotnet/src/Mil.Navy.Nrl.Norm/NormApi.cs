@@ -176,7 +176,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This should be called before any call to NormStartSender() or NormStartReceiver() is made so that the IP multicast group is joined on the proper host interface.
         /// </summary>
         /// <param name="sessionHandle">Used to identify application in the NormSession. </param>
-        /// <param name="interfaceName"></param>
+        /// <param name="interfaceName">Name of the interface</param>
         /// <returns>A return value of true indicates success while a return value of false indicates that the specified interface was
         /// invalid. This function will always return true if made before calls to NormStartSender() or NormStartReceiver().
         /// However, those calls may fail if an invalid interface was specified with the call described here. </returns>
@@ -187,7 +187,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function sets the source address for Source-Specific Multicast (SSM) operation.
         /// </summary>
         /// <param name="sessionHandle">Used to identify application in the NormSession. </param>
-        /// <param name="sourceAddress"></param>
+        /// <param name="sourceAddress">Address to be set as source for source-specific multicast operation. </param>
         /// <returns>A return value of true indicates success while a return value of false indicates that the specified source address
         /// was invalid. Note that if a valid IP address is specified but is improper for SSM (e.g., an IP multicast address) the
         /// later calls to NormStartSender() or NormStartReceiver() may fail. </returns>
@@ -224,9 +224,8 @@ namespace Mil.Navy.Nrl.Norm
         /// This function enables or disables loopback operation for the indicated NORM sessionHandle.
         /// </summary>
         /// <param name="sessionHandle">Used to identify application in the NormSession. </param>
-        /// <param name="loopback">If loopbackEnable
-        /// is set to true, loopback operation is enabled which allows the application to receive its own message traffic. Thus,
-        /// an application which is both actively receiving and sending may receive its own transmissions.</param>
+        /// <param name="loopback">If loopback is set to true, loopback operation is enabled which allows the application to receive its own message traffic.
+        /// Thus, an application which is both actively receiving and sending may receive its own transmissions.</param>
         /// <returns>A return value of true indicates success while a return value of false indicates that the loopback operation could not be set. </returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetLoopback(long sessionHandle, bool loopback);
@@ -339,9 +338,9 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="bufferSpace"> This specifies the maximum memory space (in bytes) the NORM protocol engine is allowed to use to buffer any sender calculated FEC segments and repair state for the session. </param>
         /// <param name="segmentSize"> This parameter sets the maximum payload size (in bytes) of NORM sender messages (not including any NORM message header fields). </param>
         /// <param name="numData">  </param>
-        /// <param name="numParity"></param>
+        /// <param name="numParity">This parameter sets the maximum number of parity symbol segments (packets) the sender is willing to calculate per FEC coding block.</param>
         /// <param name="fedId"></param>
-        /// <returns></returns>
+        /// <returns>A value of true is returned upon success and false upon failure.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormStartSender(long instanceHandle, int instanceId, long bufferSpace, int segmentSize, short numData, short numParity, NormFecType fedId);
 
@@ -421,7 +420,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="sessionHandle">Used to identify application in the NormSession.  </param>
         /// <param name="sizeMax">The sizeMax parameter sets the maximum total size, in bytes, of enqueued objects allowed. </param>
         /// <param name="countMin">The countMin parameter sets the minimum number of objects the application may enqueue, regardless of the objects' sizes and the sizeMax value.</param>
-        /// <param name="countMax">countMax parameter sets a ceiling on how many objects may be enqueued, regardless of their total sizes with respect to the sizeMax setting. </param>
+        /// <param name="countMax">The countMax parameter sets a ceiling on how many objects may be enqueued, regardless of their total sizes with respect to the sizeMax setting. </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetTxCacheBounds(long sessionHandle, long sizeMax, long countMin, long countMax);
 
