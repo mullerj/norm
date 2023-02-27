@@ -231,12 +231,27 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetLoopback(long sessionHandle, bool loopback);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sessionHandle"></param>
+        /// <param name="flag"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetMessageTrace(long sessionHandle, bool flag);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sessionHandle"></param>
+        /// <param name="precent"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetTxLoss(long sessionHandle, double precent);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sessionHandle"></param>
+        /// <param name="precent"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetRxLoss(long sessionHandle, double precent);
 
@@ -257,6 +272,12 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormCloseDebugLog(long instanceHandle);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="instanceHandle"></param>
+        /// <param name="pipeName"></param>
+        /// <returns></returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormOpenDebugPipe(long instanceHandle, string pipeName);
 
@@ -287,12 +308,26 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern int NormGetDebugLevel();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sessionHandle"></param>
+        /// <param name="interval"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetReportInterval(long sessionHandle, double interval);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sessionHandle"></param>
+        /// <returns></returns>
         [DllImport(NORM_LIBRARY)]
         public static extern double NormGetReportInterval(long sessionHandle);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [DllImport(NORM_LIBRARY)]
         public static extern int NormGetRandomSessionId();
 
@@ -325,7 +360,6 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="rate">Transmission rate. </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetTxRate(long sessionHandle, double rate);
-
 
         /// <summary>
         /// This function retrieves the current sender transmission rate in units of bits per second (bps) for the given sessionHandle.
@@ -750,181 +784,226 @@ namespace Mil.Navy.Nrl.Norm
         public static extern bool NormSetRxSocketBuffer(long sessionHandle, long bufferSize);
         
         /// <summary>
-        /// 
+        /// This function provides the option to configure a NORM receiver application as a "silent receiver". This mode of
+        /// receiver operation dictates that the host does not generate any protocol messages while operating as a receiver
+        /// within the specified sessionHandle.
         /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="silent"></param>
-        /// <param name="maxDelay"></param>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="silent">SSetting the silent parameter to true enables silent receiver operation while
+        /// setting it to false results in normal protocol operation where feedback is provided as needed for reliability and
+        /// protocol operation.</param>
+        /// <param name="maxDelay">When the maxDelay parameter is set to a non-negative value, the value determines the maximum number
+        /// of FEC coding blocks (according to a NORM sender's current transmit position) the receiver will cache an incompletely-received FEC block before giving the application the (incomplete) set of received source segments.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetSilentReceiver(long sessionHandle, bool silent, int maxDelay);
 
         /// <summary>
-        /// 
+        /// This function controls the default behavior determining the destination of receiver feedback messages generated
+        /// while participating in the session.
         /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="unicastNacks"></param>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="unicastNacks">If the unicastNacks parameter is true, "unicast NACKing" is enabled for new remote
+        /// senders while it is disabled for state equal to false.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetDefaultUnicastNack(long sessionHandle, bool unicastNacks);
 
         /// <summary>
-        /// 
+        /// This function controls the destination address of receiver feedback messages generated in response to a specific
+        /// remote NORM sender corresponding to the remoteSender parameter.
         /// </summary>
-        /// <param name="remoteSender"></param>
-        /// <param name="unicastNacks"></param>
+        /// <param name="remoteSender">Used to specify the remote NORM sender.</param>
+        /// <param name="unicastNacks">If unicastNacks is true, "unicast NACKing" is enabled
+        /// while it is disabled for enable equal to false.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormNodeSetUnicastNack(long remoteSender, bool unicastNacks);
 
         /// <summary>
-        /// 
+        /// This function sets the default "synchronization policy" used when beginning (or restarting) reception of objects
+        /// from a remote sender (i.e., "syncing" to the sender) for the given sessionHandle
         /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="syncPolicy"></param>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="syncPolicy">The "synchronization policy"
+        /// is the behavior observed by the receiver with regards to what objects it attempts to reliably receive (via transmissions
+        /// of Negative Acknowledgements to the sender(s) or group as needed). There are currently two synchronization policy types defined.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetDefaultSyncPolicy(long sessionHandle, NormSyncPolicy syncPolicy);
 
         /// <summary>
-        /// 
+        /// This function sets the default "nacking mode" used when receiving objects for the given sessionHandle.
+        /// This allows the receiver application some control of its degree of participation in the repair process. By limiting receivers
+        /// to only request repair of objects in which they are really interested in receiving, some overall savings in unnecessary
+        /// network loading might be realized for some applications and users.
         /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="nackingMode"></param>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="nackingMode">Specifies the nacking mode. </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetDefaultNackingMode(long sessionHandle, NormNackingMode nackingMode);
 
         /// <summary>
-        /// 
+        /// This function sets the default "nacking mode" used for receiving new objects from a specific sender as identified
+        /// by the remoteSender parameter.
         /// </summary>
-        /// <param name="remoteSender"></param>
-        /// <param name="nackingMode"></param>
+        /// <param name="remoteSender">Used to specify the remote NORM sender. </param>
+        /// <param name="nackingMode">Specifies the nacking mode. </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormNodeSetNackingMode(long remoteSender, NormNackingMode nackingMode);
 
         /// <summary>
-        /// 
+        /// This function sets the "nacking mode" used for receiving a specific transport object as identified by the objectHandle parameter.
         /// </summary>
-        /// <param name="objectHandle"></param>
-        /// <param name="nackingMode"></param>
+        /// <param name="objectHandle">Specifies the transport object. </param>
+        /// <param name="nackingMode">Specifies the nacking mode. </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormObjectSetNackingMode(long objectHandle, NormNackingMode nackingMode);
 
         /// <summary>
-        /// 
+        /// This function allows the receiver application to customize, for a given sessionHandle, at what points the receiver
+        /// initiates the NORM NACK repair process during protocol operation.
         /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="repairBoundary"></param>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="repairBoundary">Specifies the repair boundary. </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetDefaultRepairBoundary(long sessionHandle, NormRepairBoundary repairBoundary);
 
         /// <summary>
-        /// 
+        /// This function allows the receiver application to customize, for the specific remote sender referenced by the remoteSender parameter, at what points the receiver initiates the NORM NACK repair process during protocol operation.
         /// </summary>
-        /// <param name="remoteSender"></param>
-        /// <param name="repairBoundary"></param>
+        /// <param name="remoteSender">Used to specify the remote NORM sender. </param>
+        /// <param name="repairBoundary">Specifies the repair boundary. </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormNodeSetRepairBoundary(long remoteSender, NormRepairBoundary repairBoundary);
 
         /// <summary>
-        /// 
+        /// This routine controls how persistently NORM receivers will maintain state for sender(s) and continue to request
+        /// repairs from the sender(s) even when packet reception has ceased.
         /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="robustFactor"></param>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="robustFactor">The robustFactor value determines how
+        /// many times a NORM receiver will self-initiate NACKing (repair requests) upon cessation of packet reception from
+        /// a sender. The default value is 20. Setting rxRobustFactor to -1 will make the NORM receiver infinitely persistent
+        /// (i.e., it will continue to NACK indefinitely as long as it is missing data content).</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetDefaultRxRobustFactor(long sessionHandle, int robustFactor);
 
         /// <summary>
-        /// 
+        /// This routine sets the robustFactor as described in NormSetDefaultRxRobustFactor() for an individual remote
+        /// sender identified by the remoteSender parameter.
         /// </summary>
-        /// <param name="remoteSender"></param>
-        /// <param name="robustFactor"></param>
+        /// <param name="remoteSender">Used to specify the remote NORM sender. </param>
+        /// <param name="robustFactor">The robustFactor value determines how
+        /// many times a NORM receiver will self-initiate NACKing (repair requests) upon cessation of packet reception from
+        /// a sender. The default value is 20. Setting rxRobustFactor to -1 will make the NORM receiver infinitely persistent
+        /// (i.e., it will continue to NACK indefinitely as long as it is missing data content).</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormNodeSetRxRobustFactor(long remoteSender, int robustFactor);
 
         /// <summary>
-        /// 
+        /// This function can be used by the receiver application to read any available data from an incoming NORM stream.
         /// </summary>
-        /// <param name="streamHandle"></param>
-        /// <param name="buffer"></param>
-        /// <param name="numBytes"></param>
+        /// <param name="streamHandle">The streamHandle parameter here must correspond to a valid NormObjectHandle value provided during such a
+        /// prior NORM_RX_OBJECT_NEW notification.</param>
+        /// <param name="buffer">The buffer parameter must be a pointer to an array where the received
+        /// data can be stored of a length as referenced by the numBytes pointer</param>
+        /// <param name="numBytes">Specifies the length of data. </param>
         /// <returns></returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormStreamRead(long streamHandle, byte[] buffer, ref int numBytes);
 
         /// <summary>
-        /// 
+        /// This function advances the read offset of the receive stream referenced by the streamHandle parameter to align
+        /// with the next available message boundary
         /// </summary>
-        /// <param name="streamHandle"></param>
-        /// <returns></returns>
+        /// <param name="streamHandle">The streamHandle parameter here must correspond to a valid NormObjectHandle value provided during such a
+        /// prior NORM_RX_OBJECT_NEW notification. </param>
+        /// <returns>This function returns a value of true when start-of-message is found. The next call to NormStreamRead() will
+        /// retrieve data aligned with the message start. If no new message boundary is found in the buffered receive data for
+        /// the stream, the function returns a value of false. In this case, the application should defer repeating a call to this
+        /// function until a subsequent NORM_RX_OBJECT_UPDATE notification is posted.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormStreamSeekMsgStart(long streamHandle);
 
         /// <summary>
-        /// 
+        /// This function retrieves the current read offset value for the receive stream indicated by the streamHandle parameter.
         /// </summary>
-        /// <param name="streamHandle"></param>
-        /// <returns></returns>
+        /// <param name="streamHandle">The streamHandle parameter here must correspond to a valid NormObjectHandle value provided during such a
+        /// prior NORM_RX_OBJECT_NEW notification. </param>
+        /// <returns>This function returns the current read offset in bytes. The return value is undefined for sender streams. There is
+        /// no error result.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern long NormStreamGetReadOffset(long streamHandle);
         
         /// <summary>
-        /// 
+        /// This function can be used to determine the object type ((NORM_OBJECT_DAT, NORM_OBJECT_FILE, or NORM_OBJECT_STREAM) for the NORM transport object identified by the objectHandle parameter.
         /// </summary>
-        /// <param name="objectHandle"></param>
-        /// <returns></returns>
+        /// <param name="objectHandle">The objectHandle must refer to a current, valid transport object.</param>
+        /// <returns>This function returns the NORM object type. Valid NORM object types include NORM_OBJECT_DATA, NORM_OBJECT_FILE, or NORM_OBJECT_STREAM. A type value of NORM_OBJECT_NONE will be returned for an objectHandle
+        ///value of NORM_OBJECT_INVALID. </returns>
         [DllImport(NORM_LIBRARY)]
         public static extern NormObjectType NormObjectGetType(long objectHandle);
 
         /// <summary>
-        /// 
+        /// This function can be used to determine if the sender has associated any NORM_INFO content with the transport object
+        /// specified by the objectHandle parameter.
         /// </summary>
-        /// <param name="objectHandle"></param>
-        /// <returns></returns>
+        /// <param name="objectHandle">The objectHandle must refer to a current, valid transport object. </param>
+        /// <returns>A value of true is returned if NORM_INFO is (or will be) available for the specified transport object. A value of
+        /// false is returned otherwise.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormObjectHasInfo(long objectHandle);
 
         /// <summary>
-        /// 
+        /// This function can be used to determine the length of currently available NORM_INFO content (if any) associated
+        /// with the transport object referenced by the objectHandle parameter.
         /// </summary>
-        /// <param name="objectHandle"></param>
-        /// <returns></returns>
+        /// <param name="objectHandle">The objectHandle must refer to a current, valid transport object. </param>
+        /// <returns>The length of the NORM_INFO content, in bytes, of currently available for the specified transport object is returned.
+        /// A value of 0 is returned if no NORM_INFO content is currently available or associated with the object.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern int NormObjectGetInfoLength(long objectHandle);
 
         /// <summary>
-        /// 
+        /// This function copies any NORM_INFO content associated (by the sender application) with the transport object specified
+        /// by objectHandle into the provided memory space referenced by the buffer parameter.
         /// </summary>
-        /// <param name="objectHandle">type is used to reference state kept for data transport objects being actively transmitted or received.</param>
-        /// <param name="buffer"></param>
-        /// <param name="bufferLen"></param>
-        /// <returns></returns>
+        /// <param name="objectHandle">The objectHandle must refer to a current, valid transport object.</param>
+        /// <param name="buffer">Provided memory space for the object info. </param>
+        /// <param name="bufferLen">The bufferLen parameter indicates the length of the buffer space in bytes.</param>
+        /// <returns>The actual length of currently available NORM_INFO content for the specified transport object is returned. This
+        /// function can be used to determine the length of NORM_INFO content for the object even if a NULL buffer value and
+        /// zero bufferLen is provided. A zero value is returned if NORM_INFO content has not yet been received (or is nonexistent) for the specified object.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern int NormObjectGetInfo(long objectHandle, [Out] byte[] buffer, int bufferLen);
 
         /// <summary>
-        /// 
+        /// This function can be used to determine the size (in bytes) of the transport object specified by the objectHandle parameter.
         /// </summary>
-        /// <param name="objectHandle">type is used to reference state kept for data transport objects being actively transmitted or received.</param>
-        /// <returns></returns>
+        /// <param name="objectHandle">The objectHandle must refer to a current, valid transport object.</param>
+        /// <returns>A size of the data content of the specified object, in bytes, is returned. Note that it may be possible that some objects
+        /// have zero data content, but do have NORM_INFO content available.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern int NormObjectGetSize(long objectHandle);
 
         /// <summary>
-        /// 
+        /// This function can be used to determine the progress of reception of the NORM transport object identified by the objectHandle parameter
         /// </summary>
-        /// <param name="objectHandle">type is used to reference state kept for data transport objects being actively transmitted or received.</param>
-        /// <returns></returns>
+        /// <param name="objectHandle">The objectHandle must refer to a current, valid transport object.</param>
+        /// <returns>A number of object source data bytes pending reception (or transmission) is returned.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern long NormObjectGetBytesPending(long objectHandle);
 
         /// <summary>
-        /// 
+        /// This function immediately cancels the transmission of a local sender transport object or the reception of a specified
+        /// object from a remote sender as specified by the objectHandle parameter
         /// </summary>
-        /// <param name="objectHandle">type is used to reference state kept for data transport objects being actively transmitted or received.</param>
+        /// <param name="objectHandle">The objectHandle must refer to a current, valid transport object.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormObjectCancel(long objectHandle);
 
         /// <summary>
-        /// 
+        /// This function "retains" the objectHandle and any state associated with it for further use by the application even
+        /// when the NORM protocol engine may no longer require access to the associated transport object. 
         /// </summary>
-        /// <param name="objectHandle">type is used to reference state kept for data transport objects being actively transmitted or received.</param>
+        /// <param name="objectHandle">The objectHandle must refer to a current, valid transport object.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormObjectRetain(long objectHandle);
 
@@ -935,7 +1014,7 @@ namespace Mil.Navy.Nrl.Norm
         /// needs and thus it is very unsafe for an application to call NormObjectRelease() for an objectHandle for which
         /// it has not previously explicitly retained via NormObjectRetain().
         /// </summary>
-        /// <param name="objectHandle">type is used to reference state kept for data transport objects being actively transmitted or received.</param>
+        /// <param name="objectHandle">The objectHandle must refer to a current, valid transport object.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormObjectRelease(long objectHandle);
 
@@ -1032,8 +1111,7 @@ namespace Mil.Navy.Nrl.Norm
         /// </summary>
         /// <param name="nodeHandle"> This type is used to reference state kept by the NORM implementation with respect to other participants within a NormSession.</param>
         /// <returns>This function returns the remote sender's advertised GRTT estimate in units of seconds. A value of -1.0 is returned upon failure.An invalid nodeHandle parameter value will lead to such failure.</returns>
-
-                [DllImport(NORM_LIBRARY)]
+        [DllImport(NORM_LIBRARY)]
         public static extern double NormNodeGetGrtt(long nodeHandle);
 
         /// <summary>
@@ -1042,7 +1120,8 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="remoteSender"> notification for a given remote sender when multiple senders may be providing content</param>
         /// <param name="buffer">Allocated system resources for each active sender</param>
         /// <param name="buflen">A return value of false indicates that either no command was available or the provided buffer size</param>
-        /// <returns></returns>
+        /// <returns>This function returns true upon successful retrieval of command content. A return value of false indicates that
+        /// either no command was available or the provided buffer size (buflen parameter) was inadequate. The value referenced by the buflen parameter is adjusted to indicate the actual command length (in bytes) upon return.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormNodeGetCommand(long remoteSender, [Out] byte[] buffer, ref int buflen);
 
