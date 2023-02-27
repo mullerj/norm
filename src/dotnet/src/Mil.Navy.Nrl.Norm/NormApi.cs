@@ -494,7 +494,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// This function sets the sender's estimate of receiver group size for the given sessionHandle.
         /// </summary>
-        /// <param name="sessiionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
         /// <param name="groupSize">The sender advertises
         /// its groupSize setting to the receiver group in NORM protocol message headers that, in turn, use this information
         /// to shape the distribution curve of their random timeouts for the timer-based, probabilistic feedback suppression
@@ -793,7 +793,8 @@ namespace Mil.Navy.Nrl.Norm
         /// setting it to false results in normal protocol operation where feedback is provided as needed for reliability and
         /// protocol operation.</param>
         /// <param name="maxDelay">When the maxDelay parameter is set to a non-negative value, the value determines the maximum number
-        /// of FEC coding blocks (according to a NORM sender's current transmit position) the receiver will cache an incompletely-received FEC block before giving the application the (incomplete) set of received source segments.</param>
+        /// of FEC coding blocks (according to a NORM sender's current transmit position) the receiver will cache an incompletely-received 
+        /// FEC block before giving the application the (incomplete) set of received source segments.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetSilentReceiver(long sessionHandle, bool silent, int maxDelay);
 
