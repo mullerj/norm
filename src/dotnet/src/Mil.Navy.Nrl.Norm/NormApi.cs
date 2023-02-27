@@ -540,7 +540,7 @@ namespace Mil.Navy.Nrl.Norm
         public static extern long NormFileEnqueue(long sessionHandle, string fileName, byte[]? infoPtr, int infoLen);
 
         /// <summary>
-        /// This  function  enqueues  a  segment  of  application  memory  space  for  transmission  within  the  specified  NORM sessionHandle.
+        /// This function enqueues a segment of application memory space for transmission  within  the  specified  NORM sessionHandle.
         /// </summary>
         /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
         /// <param name="dataPtr">The dataPtr parameter must be a valid pointer to the area of application memory to be transmitted.</param>
