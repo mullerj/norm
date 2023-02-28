@@ -5,6 +5,9 @@
     /// </summary>
     public class NormObject
     {
+        /// <summary>
+        /// Used to reference state kept for data transport objects being actively transmitted or received.
+        /// </summary>
         protected long _handle;
 
         /// <summary>
@@ -16,6 +19,9 @@
             _handle = handle;
         }
 
+        /// <summary>
+        /// Used to reference state kept for data transport objects being actively transmitted or received.
+        /// </summary>
         public long Handle => _handle;
 
         /// <summary>
@@ -37,7 +43,7 @@
         }
 
         /// <summary>
-        /// Returns what type this object is.
+        /// The type of Norm object.
         /// Valid types include:
         /// NORM_OBJECT_FILE
         /// NORM_OBJECT_DATA
@@ -52,7 +58,7 @@
         }
 
         /// <summary>
-        /// 
+        /// The size (in bytes) of the transport object.
         /// </summary>
         public long Size
         {
@@ -63,7 +69,7 @@
         }
 
         /// <summary>
-        /// retrieves the NormNodeHandle corresponding to the remote sender of the transport object associated with the given objectHandle.
+        /// The NormNodeHandle corresponding to the remote sender of the transport object.
         /// </summary>
         /// <exception cref="IOException">Thrown when NormObjectGetSender() returns NORM_NODE_INVALID, indicating locally originated sender object.</exception>
         public long Sender
@@ -116,11 +122,11 @@
         }
 
         /// <summary>
-        /// This function complements the NormObjectRetain() call by immediately freeing any resources associated with
+        /// This function complements the Retain() call by immediately freeing any resources associated with
         /// the given objectHandle, assuming the underlying NORM protocol engine no longer requires access to the corresponding
         /// transport object. Note the NORM protocol engine retains/releases state for associated objects for its own
-        /// needs and thus it is very unsafe for an application to call NormObjectRelease() for an objectHandle for which
-        /// it has not previously explicitly retained via NormObjectRetain().
+        /// needs and thus it is very unsafe for an application to call Release() for an objectHandle for which
+        /// it has not previously explicitly retained via Retain().
         /// </summary>
         public void Release()
         {
@@ -139,8 +145,8 @@
         /// <summary>
         /// Decides wether specified object is equal another.
         /// </summary>
-        /// <param name="obj">NormObject to compare to. </param>
-        /// <returns>Returns true if two objects equal, false otherwise. </returns>
+        /// <param name="obj">NormObject to compare to.</param>
+        /// <returns>Returns true if two objects equal, false otherwise.</returns>
         public override bool Equals(object? obj)
         {
             if(obj is NormObject)
