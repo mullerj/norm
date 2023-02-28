@@ -48,11 +48,11 @@ namespace Mil.Navy.Nrl.Norm
             get => NormGetGrttEstimate(_handle);
             set => NormSetGrttEstimate(_handle, value);
         }
-        
+
         /// <summary>
         /// Internal constructor of NormSession which adds the handle to the normSessions dictionary.
         /// </summary>
-        /// <param name="handle"></param>
+        /// <param name="handle">Used to identify application in the NormSession.</param>
         internal NormSession(long handle)
         {
             _handle = handle;
@@ -67,7 +67,7 @@ namespace Mil.Navy.Nrl.Norm
         /// </summary>
         /// <param name="handle">Specifies the session to return</param>
         /// <returns>Returns a NormSession</returns>
-        [MethodImplAttribute(MethodImplOptions.Synchronized)]
+        [MethodImpl(MethodImplOptions.Synchronized)]
         internal static NormSession GetSession(long handle)
         {
             return _normSessions[handle];
