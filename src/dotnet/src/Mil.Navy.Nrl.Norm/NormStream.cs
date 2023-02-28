@@ -32,6 +32,7 @@
         /// Internal constructor for NormStream
         /// </summary>
         /// <param name="handle">Used to identify the stream</param>
+        /// <returns>Returns instance of a NormStream</returns>
         internal NormStream(long handle) : base(handle)
         {
         }
@@ -43,7 +44,7 @@
         /// <param name="offset">The offset indicated where in the buffer to start writing the data.
         /// Note: If the data is written in its entirety, offset should be set to 0.</param>
         /// <param name="length">The length parameter indicates the length of the data content.</param>
-        /// <returns></returns>
+        /// <returns>This function returns the number of bytes of data successfully enqueued for NORM stream transmission.</returns>
         public int Write(byte[] buffer, int offset, int length)
         {
             var bytes = buffer.Skip(offset).Take(length).ToArray();
