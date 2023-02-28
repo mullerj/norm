@@ -255,7 +255,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function allows NORM debug output to be directed to a file instead of the default STDERR.
         /// </summary>
         /// <param name="instanceHandle">Used to identify application in the NormSession. </param>
-        /// <param name="path">Full path and name of the debug log. </param>
+        /// <param name="path">Full path and name of the debug log.</param>
         /// <returns>The function returns true on success. If the specified file cannot be opened a value of false is returned. </returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormOpenDebugLog(long instanceHandle, string path);
