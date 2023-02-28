@@ -123,7 +123,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="sessionAddress">Specified address determines the destination of NORM messages sent </param>
         /// <param name="sessionPort">Valid, unused port number corresponding to the desired NORM session address. </param>
         /// <param name="localNodeId">Identifies the application's presence in the NormSession </param>
-        /// <returns></returns>
+        /// <returns>returns a session handle.</returns>
         [DllImport(NORM_LIBRARY)]
         public static extern long NormCreateSession(long instanceHandle, string sessionAddress, int sessionPort, long localNodeId);
 
@@ -408,7 +408,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function sets the sender's estimate of group round-trip time (GRTT) (in units of seconds) for the given NORM sessionHandle.
         /// </summary>
         /// <param name="sessionHandle">Used to identify application in the NormSession.  </param>
-        /// <param name="grtt"></param>
+        /// <param name="grtt">group round-trip time</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetGrttEstimate(long sessionHandle, double grtt);
 
@@ -901,7 +901,7 @@ namespace Mil.Navy.Nrl.Norm
         /// </summary>
         /// <param name="objectHandle">The objectHandle must refer to a current, valid transport object.</param>
         /// <returns>This function returns the NORM object type. Valid NORM object types include NORM_OBJECT_DATA, NORM_OBJECT_FILE, or NORM_OBJECT_STREAM. A type value of NORM_OBJECT_NONE will be returned for an objectHandle
-        ///value of NORM_OBJECT_INVALID. </returns>
+        /// value of NORM_OBJECT_INVALID. </returns>
         [DllImport(NORM_LIBRARY)]
         public static extern NormObjectType NormObjectGetType(long objectHandle);
 
@@ -988,8 +988,8 @@ namespace Mil.Navy.Nrl.Norm
         /// </summary>
         /// <param name="fileHandle"> type is used to reference state kept for data transport objects being actively transmitted or received. The objectHandle parameter 
         /// must refer to a valid NormObjectHandle for an object of type NORM_OBJECT_FILE.</param>
-        /// <param name="nameBuffer"></param>
-        /// <param name="bufferLen"></param>
+        /// <param name="nameBuffer">provided memory space for the name of the file</param>
+        /// <param name="bufferLen">idicates the length of the nameBuffer</param>
         /// <returns>
         /// This function returns true upon success and false upon failure. Possible failure conditions include the objectHandle
         /// does not refer to an object of type NORM_OBJECT_FILE.
