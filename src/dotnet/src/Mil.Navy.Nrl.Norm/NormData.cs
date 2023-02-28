@@ -22,6 +22,12 @@ namespace Mil.Navy.Nrl.Norm
                 return data;
             }
         }
+
+        /// <summary>
+        /// Constructor of NormData
+        /// </summary>
+        /// <param name="handle">Type is used to reference state kept for data transport objects being actively transmitted or received.</param>
+        /// <returns>Return instance of NormData.</returns>
         internal NormData(long handle) : base(handle)
         {
         }
