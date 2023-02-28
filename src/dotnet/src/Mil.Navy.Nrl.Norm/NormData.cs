@@ -2,6 +2,9 @@
 
 namespace Mil.Navy.Nrl.Norm
 {
+    /// <summary>
+    /// The data storage area for the specified transport object.
+    /// </summary>
     public class NormData : NormObject
     {
 
