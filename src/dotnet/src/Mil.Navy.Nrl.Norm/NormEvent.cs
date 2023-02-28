@@ -15,8 +15,14 @@
             _objectHandle = objectHandle;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public NormEventType Type => _type;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public NormSession? Session 
         { 
             get
