@@ -1,7 +1,7 @@
 ﻿namespace Mil.Navy.Nrl.Norm
 {
     /// <summary>
-    /// NormObject functions
+    /// The base Norm Object
     /// </summary>
     public class NormObject
     {
