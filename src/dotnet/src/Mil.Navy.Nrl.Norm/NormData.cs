@@ -7,7 +7,6 @@ namespace Mil.Navy.Nrl.Norm
     /// </summary>
     public class NormData : NormObject
     {
-
         /// <summary>
         /// The data storage area associated with a transport object of type NORM_OBJECT_DATA.
         /// </summary>
