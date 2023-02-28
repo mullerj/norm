@@ -1,5 +1,8 @@
 ﻿namespace Mil.Navy.Nrl.Norm
 {
+    /// <summary>
+    /// The NormEvent type is used to describe significant NORM protocol events.
+    /// </summary>
     public class NormEvent
     {
         private NormEventType _type { get; }
@@ -8,8 +11,12 @@
         private long _objectHandle { get; }
 
         /// <summary>
-        /// The NormEvent type is a structure used to describe significant NORM protocol events.
+        /// The Parameterized constructor of NormEvent
         /// </summary>
+        /// <param name="type">indicates the NormEventType and determines how the other fields should be interpreted.</param>
+        /// <param name="sessionHandle">indicates the applicable NormSessionHandle to which the event applies.</param>
+        /// <param name="nodeHandle">indicates the applicable NormNodeHandle to which the event applies</param>
+        /// <param name="objectHandle">indicates the applicable NormObjectHandle to which the event applies.</param>
         public NormEvent(NormEventType type, long sessionHandle, long nodeHandle, long objectHandle)
         {
             _type = type;
@@ -82,6 +89,10 @@
             } 
         }
 
+        /// <summary>
+        /// Return string of what type the event is currently.
+        /// </summary>
+        /// <returns>String of the event type.</returns>
         public override string ToString()
         {
             return $"NormEvent [type={_type}]";
