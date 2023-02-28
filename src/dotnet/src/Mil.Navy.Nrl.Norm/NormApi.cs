@@ -173,13 +173,6 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetRxPortReuse(long sessionHandle, bool enableReuse, string? rxBindAddress, string? senderAddress, int senderPort);
 
-        /// <summary>
-        /// (TBD - Describe the NormSetEcnSupport() function as this experimental option matures.)
-        /// </summary>
-        /// <param name="sessionHandle">Used to identify application in the NormSession. </param>
-        /// <param name="ecnEnable"></param>
-        /// <param name="ignoreLoss"></param>
-        /// <param name="tolerateLoss"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetEcnSupport(long sessionHandle, bool ecnEnable, bool ignoreLoss, bool tolerateLoss);
 
@@ -310,10 +303,10 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// The application's participation as a sender within a specified NormSession begins when this function is called.
         /// </summary>
-        /// <param name="instanceHandle"> Valid NormSessionHandle previously obtained with a call to NormCreateSession() </param>
-        /// <param name="instanceId"> Application-defined value used as the instance_id field of NORM sender messages for the application's participation within a session </param>
-        /// <param name="bufferSpace"> This specifies the maximum memory space (in bytes) the NORM protocol engine is allowed to use to buffer any sender calculated FEC segments and repair state for the session. </param>
-        /// <param name="segmentSize"> This parameter sets the maximum payload size (in bytes) of NORM sender messages (not including any NORM message header fields). </param>
+        /// <param name="instanceHandle">Valid NormSessionHandle previously obtained with a call to NormCreateSession()</param>
+        /// <param name="instanceId"> Application-defined value used as the instance_id field of NORM sender messages for the application's participation within a session.</param>
+        /// <param name="bufferSpace"> This specifies the maximum memory space (in bytes) the NORM protocol engine is allowed to use to buffer any sender calculated FEC segments and repair state for the session.</param>
+        /// <param name="segmentSize"> This parameter sets the maximum payload size (in bytes) of NORM sender messages (not including any NORM message header fields).</param>
         /// <param name="numData">  </param>
         /// <param name="numParity">This parameter sets the maximum number of parity symbol segments (packets) the sender is willing to calculate per FEC coding block.</param>
         /// <param name="fedId"></param>
@@ -406,7 +399,7 @@ namespace Mil.Navy.Nrl.Norm
         /// block. By default (i.e., autoParity = 0), FEC content is sent only in response to repair requests (NACKs) from receivers.
         /// </summary>
         /// <param name="sesssionHandle">Used to identify application in the NormSession.  </param>
-        /// <param name="autoParity">y setting a non-zero value for autoParity, the sender can automatically accompany each coding
+        /// <param name="autoParity">Setting a non-zero value for autoParity, the sender can automatically accompany each coding
         /// block of transport object source data segments ((NORM_DATA messages) with the set number of FEC segments. </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetAutoParity(long sesssionHandle, short autoParity);
@@ -432,8 +425,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function sets the sender's maximum advertised GRTT value for the given NORM sessionHandle.
         /// </summary>
         /// <param name="sessionHandle">Used to identify application in the NormSession. </param>
-        /// <param name="grttMax">The
-        /// grttMax parameter, in units of seconds, limits the GRTT used by the group for scaling protocol timers, regardless
+        /// <param name="grttMax">The grttMax parameter, in units of seconds, limits the GRTT used by the group for scaling protocol timers, regardless
         /// of larger measured round trip times. The default maximum for the NRL NORM library is 10 seconds.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetGrttMax(long sessionHandle, double grttMax);
