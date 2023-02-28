@@ -9,6 +9,7 @@ namespace Mil.Navy.Nrl.Norm
     public class NormSession
     {
         private static Dictionary<long, NormSession> _normSessions = new Dictionary<long, NormSession>();
+
         /// <summary>
         /// The NormSessionHandle type is used to reference NORM transport sessions which have been created using the NormCreateSession() API call. 
         /// Multiple NormSessionHandle values may be associated with a given NormInstanceHandle. 
@@ -24,9 +25,6 @@ namespace Mil.Navy.Nrl.Norm
             get => NormGetLocalNodeId(_handle);
         }
 
-        /// <summary>
-        /// TBD
-        /// </summary>
         public double ReportInterval 
         {
             get => NormGetReportInterval(_handle); 
@@ -50,11 +48,11 @@ namespace Mil.Navy.Nrl.Norm
             get => NormGetGrttEstimate(_handle);
             set => NormSetGrttEstimate(_handle, value);
         }
-        
+
         /// <summary>
         /// Internal constructor of NormSession which adds the handle to the normSessions dictionary.
         /// </summary>
-        /// <param name="handle"></param>
+        /// <param name="handle">Used to identify application in the NormSession.</param>
         internal NormSession(long handle)
         {
             _handle = handle;
@@ -69,7 +67,7 @@ namespace Mil.Navy.Nrl.Norm
         /// </summary>
         /// <param name="handle">Specifies the session to return</param>
         /// <returns>Returns a NormSession</returns>
-        [MethodImplAttribute(MethodImplOptions.Synchronized)]
+        [MethodImpl(MethodImplOptions.Synchronized)]
         internal static NormSession GetSession(long handle)
         {
             return _normSessions[handle];
@@ -174,26 +172,11 @@ namespace Mil.Navy.Nrl.Norm
             NormSetRxPortReuse(_handle, enable, rxBindAddress, senderAddress, senderPort);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <note>
-        /// This is a default function that calls SetEcnSupport(bool ecnEnable, bool ignoreLoss, bool tolerateLoss) override
-        /// with tolerateLoss set as false.
-        /// </note>
-        /// <param name="ecnEnable"></param>
-        /// <param name="ignoreLoss"></param>
         public void SetEcnSupport(bool ecnEnable, bool ignoreLoss)
         {
             SetEcnSupport(ecnEnable, ignoreLoss, false);
         }
 
-        /// <summary>
-        /// (TBD - Describe the NormSetEcnSupport() function as this experimental option matures.)
-        /// </summary>
-        /// <param name="ecnEnable"></param>
-        /// <param name="ignoreLoss"></param>
-        /// <param name="tolerateLoss"></param>
         public void SetEcnSupport(bool ecnEnable, bool ignoreLoss, bool tolerateLoss)
         {
             NormSetEcnSupport(_handle, ecnEnable, ignoreLoss, tolerateLoss);
@@ -275,28 +258,16 @@ namespace Mil.Navy.Nrl.Norm
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="flag"></param>
         public void SetMessageTrace(bool flag)
         {
             NormSetMessageTrace(_handle, flag);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="precent"></param>
         public void SetTxLoss(double precent)
         {
             NormSetTxLoss(_handle, precent);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="precent"></param>
         public void SetRxLoss(double precent)
         {
             NormSetRxLoss(_handle, precent);
@@ -385,7 +356,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// The application's participation as a sender begins when this function is called.
         /// </summary>
-        /// <param name="sessionId"></param>
+        /// <param name="sessionId">Application-defined value used as the instance_id field of NORM sender messages for the application's participation within a session.</param>
         /// <param name="bufferSpace">This specifies the maximum memory space (in bytes) the NORM protocol engine is allowed to use to buffer any sender calculated FEC segments and repair state for the session.</param>
         /// <param name="segmentSize">This parameter sets the maximum payload size (in bytes) of NORM sender messages (not including any NORM message header fields).</param>
         /// <param name="blockSize">This parameter sets the number of source symbol segments (packets) per coding block, for the systematic Reed-Solomon FEC code used in the current NORM implementation.</param>
@@ -403,7 +374,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// The application's participation as a sender begins when this function is called.
         /// </summary>
-        /// <param name="sessionId"></param>
+        /// <param name="sessionId">Application-defined value used as the instance_id field of NORM sender messages for the application's participation within a session.</param>
         /// <param name="bufferSpace">This specifies the maximum memory space (in bytes) the NORM protocol engine is allowed to use to buffer any sender calculated FEC segments and repair state for the session.</param>
         /// <param name="segmentSize">This parameter sets the maximum payload size (in bytes) of NORM sender messages (not including any NORM message header fields).</param>
         /// <param name="blockSize">This parameter sets the number of source symbol segments (packets) per coding block, for the systematic Reed-Solomon FEC code used in the current NORM implementation.</param>
@@ -452,7 +423,7 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// This function  enqueues  a  file  for  transmission.
+        /// This function enqueues a file for transmission.
         /// </summary>
         /// <note>
         /// This is the default function which will call FileEnqueue(string filename, byte[] info, int infoOffset, int infoLength) override
@@ -471,7 +442,7 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// This function  enqueues  a  file  for  transmission.
+        /// This function enqueues a file for transmission.
         /// </summary>
         /// <param name="filename">The fileName parameter specifies the path to the file to be transmitted. The NORM protocol engine
         /// read and writes directly from/to file system storage for file transport, potentially providing for a very large virtual
@@ -641,7 +612,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function sets the quantity of proactive "auto parity" NORM_DATA messages sent at the end of each FEC coding
         /// block. By default (i.e., autoParity = 0), FEC content is sent only in response to repair requests (NACKs) from receivers.
         /// </summary>
-        /// <param name="autoParity">y setting a non-zero value for autoParity, the sender can automatically accompany each coding
+        /// <param name="autoParity">Setting a non-zero value for autoParity, the sender can automatically accompany each coding
         /// block of transport object source data segments ((NORM_DATA messages) with the set number of FEC segments. </param>
         public void SetAutoParity(short autoParity)
         {
@@ -651,8 +622,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// This function sets the sender's maximum advertised GRTT value.
         /// </summary>
-        /// <param name="grttMax">The
-        /// grttMax parameter, in units of seconds, limits the GRTT used by the group for scaling protocol timers, regardless
+        /// <param name="grttMax">The grttMax parameter, in units of seconds, limits the GRTT used by the group for scaling protocol timers, regardless
         /// of larger measured round trip times. The default maximum for the NRL NORM library is 10 seconds.</param>
         public void SetGrttMax(double grttMax)
         {
@@ -772,9 +742,6 @@ namespace Mil.Navy.Nrl.Norm
             NormCancelWatermark(_handle);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <exception cref="IOException">Thrown when NormResetWatermark() returns false, indicating the failure to reset watermark.</exception>
         public void ResetWatermark()
         {

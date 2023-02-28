@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting;
-using static System.Net.Mime.MediaTypeNames;
+﻿using System.Runtime.InteropServices;
 
 namespace Mil.Navy.Nrl.Norm
 {
@@ -18,12 +15,27 @@ namespace Mil.Navy.Nrl.Norm
         public const int NORM_DESCRIPTOR_INVALID = 0;
         public const int FILENAME_MAX = 260;
 
+        /// <summary>
+        /// The NormEvent type is a structure used to describe significant NORM protocol events.
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct NormEvent
         {
+            /// <summary>
+            /// The Type field indicates the NormEventType and determines how the other fields should be interpreted.
+            /// </summary>
             public NormEventType Type;
+            /// <summary>
+            /// The Session field indicates the applicable NormSessionHandle to which the event applies.
+            /// </summary>
             public long Session;
+            /// <summary>
+            /// The Sender field indicates the applicable NormNodeHandle to which the event applies.
+            /// </summary>
             public long Sender;
+            /// <summary>
+            /// The Object field indicates the applicable NormObjectHandle to which the event applies.
+            /// </summary>
             public long Object;
         }
 
@@ -161,13 +173,6 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetRxPortReuse(long sessionHandle, bool enableReuse, string? rxBindAddress, string? senderAddress, int senderPort);
 
-        /// <summary>
-        /// (TBD - Describe the NormSetEcnSupport() function as this experimental option matures.)
-        /// </summary>
-        /// <param name="sessionHandle">Used to identify application in the NormSession. </param>
-        /// <param name="ecnEnable"></param>
-        /// <param name="ignoreLoss"></param>
-        /// <param name="tolerateLoss"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetEcnSupport(long sessionHandle, bool ecnEnable, bool ignoreLoss, bool tolerateLoss);
 
@@ -230,27 +235,12 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetLoopback(long sessionHandle, bool loopback);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="flag"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetMessageTrace(long sessionHandle, bool flag);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="precent"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetTxLoss(long sessionHandle, double precent);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="precent"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetRxLoss(long sessionHandle, double precent);
 
@@ -258,7 +248,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function allows NORM debug output to be directed to a file instead of the default STDERR.
         /// </summary>
         /// <param name="instanceHandle">Used to identify application in the NormSession. </param>
-        /// <param name="path">Full path and name of the debug log. </param>
+        /// <param name="path">Full path and name of the debug log.</param>
         /// <returns>The function returns true on success. If the specified file cannot be opened a value of false is returned. </returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormOpenDebugLog(long instanceHandle, string path);
@@ -271,12 +261,6 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormCloseDebugLog(long instanceHandle);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="instanceHandle"></param>
-        /// <param name="pipeName"></param>
-        /// <returns></returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormOpenDebugPipe(long instanceHandle, string pipeName);
 
@@ -307,36 +291,22 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern int NormGetDebugLevel();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="interval"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetReportInterval(long sessionHandle, double interval);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <returns></returns>
         [DllImport(NORM_LIBRARY)]
         public static extern double NormGetReportInterval(long sessionHandle);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         [DllImport(NORM_LIBRARY)]
         public static extern int NormGetRandomSessionId();
 
         /// <summary>
         /// The application's participation as a sender within a specified NormSession begins when this function is called.
         /// </summary>
-        /// <param name="instanceHandle"> Valid NormSessionHandle previously obtained with a call to NormCreateSession() </param>
-        /// <param name="instanceId"> Application-defined value used as the instance_id field of NORM sender messages for the application's participation within a session </param>
-        /// <param name="bufferSpace"> This specifies the maximum memory space (in bytes) the NORM protocol engine is allowed to use to buffer any sender calculated FEC segments and repair state for the session. </param>
-        /// <param name="segmentSize"> This parameter sets the maximum payload size (in bytes) of NORM sender messages (not including any NORM message header fields). </param>
+        /// <param name="instanceHandle">Valid NormSessionHandle previously obtained with a call to NormCreateSession()</param>
+        /// <param name="instanceId"> Application-defined value used as the instance_id field of NORM sender messages for the application's participation within a session.</param>
+        /// <param name="bufferSpace"> This specifies the maximum memory space (in bytes) the NORM protocol engine is allowed to use to buffer any sender calculated FEC segments and repair state for the session.</param>
+        /// <param name="segmentSize"> This parameter sets the maximum payload size (in bytes) of NORM sender messages (not including any NORM message header fields).</param>
         /// <param name="numData">  </param>
         /// <param name="numParity">This parameter sets the maximum number of parity symbol segments (packets) the sender is willing to calculate per FEC coding block.</param>
         /// <param name="fedId"></param>
@@ -429,7 +399,7 @@ namespace Mil.Navy.Nrl.Norm
         /// block. By default (i.e., autoParity = 0), FEC content is sent only in response to repair requests (NACKs) from receivers.
         /// </summary>
         /// <param name="sesssionHandle">Used to identify application in the NormSession.  </param>
-        /// <param name="autoParity">y setting a non-zero value for autoParity, the sender can automatically accompany each coding
+        /// <param name="autoParity">Setting a non-zero value for autoParity, the sender can automatically accompany each coding
         /// block of transport object source data segments ((NORM_DATA messages) with the set number of FEC segments. </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetAutoParity(long sesssionHandle, short autoParity);
@@ -455,8 +425,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function sets the sender's maximum advertised GRTT value for the given NORM sessionHandle.
         /// </summary>
         /// <param name="sessionHandle">Used to identify application in the NormSession. </param>
-        /// <param name="grttMax">The
-        /// grttMax parameter, in units of seconds, limits the GRTT used by the group for scaling protocol timers, regardless
+        /// <param name="grttMax">The grttMax parameter, in units of seconds, limits the GRTT used by the group for scaling protocol timers, regardless
         /// of larger measured round trip times. The default maximum for the NRL NORM library is 10 seconds.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetGrttMax(long sessionHandle, double grttMax);
@@ -676,11 +645,6 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetWatermark(long sessionHandle, long objectHandle, bool overrideFlush);
         
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <returns></returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormResetWatermark(long sessionHandle);
 

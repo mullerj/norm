@@ -1,7 +1,7 @@
 ﻿namespace Mil.Navy.Nrl.Norm
 {
     /// <summary>
-    /// NormStream
+    /// A Norm Object of type Stream
     /// </summary>
     public class NormStream : NormObject
     {
@@ -18,7 +18,7 @@
         }
 
         /// <summary>
-        /// 
+        /// The current read offset value for the receive stream.
         /// </summary>
         public long ReadOffset
         {
@@ -32,7 +32,6 @@
         /// Internal constructor for NormStream
         /// </summary>
         /// <param name="handle">Used to identify the stream</param>
-        /// <returns>Instance of a NormStream. </returns>
         internal NormStream(long handle) : base(handle)
         {
         }
@@ -124,7 +123,7 @@
         /// <param name="offset">Indicates where in the buffer to start reading the data. 
         /// Note: To read the data in its entirety, begin at offset 0.</param>
         /// <param name="length">Expected length of data received</param>
-        /// <returns></returns>
+        /// <returns>The length of data received</returns>
         public int Read(byte[] buffer, int offset, int length)
         {
             var bytes = new byte[length];
