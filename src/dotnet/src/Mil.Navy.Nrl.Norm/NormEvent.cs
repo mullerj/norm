@@ -7,6 +7,9 @@
         private long _nodeHandle { get; }
         private long _objectHandle { get; }
 
+        /// <summary>
+        /// The NormEvent type is a structure used to describe significant NORM protocol events.
+        /// </summary>
         public NormEvent(NormEventType type, long sessionHandle, long nodeHandle, long objectHandle)
         {
             _type = type;
@@ -15,13 +18,14 @@
             _objectHandle = objectHandle;
         }
 
+
         /// <summary>
-        /// 
+        /// The NormEvent type is a structure used to describe significant NORM protocol events.
         /// </summary>
         public NormEventType Type => _type;
 
         /// <summary>
-        /// 
+        /// Type is used to reference NORM transport sessions which have been created using the NormCreateSession() API call.
         /// </summary>
         public NormSession? Session 
         { 
@@ -35,6 +39,9 @@
             } 
         }
 
+        /// <summary>
+        /// type is used to reference state kept by the NORM implementation with respect to other participants within a NormSession.
+        /// </summary>
         public NormNode? Node 
         { 
             get
@@ -47,6 +54,9 @@
             } 
         }
 
+        /// <summary>
+        /// This function can be used to determine the object type ((NORM_OBJECT_DAT, NORM_OBJECT_FILE, or NORM_OBJECT_STREAM) for the NORM transport object identified by the objectHandle parameter.
+        /// </summary>
         public NormObject? Object 
         { 
             get

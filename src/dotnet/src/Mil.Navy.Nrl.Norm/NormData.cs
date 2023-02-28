@@ -7,8 +7,7 @@ namespace Mil.Navy.Nrl.Norm
 
         /// <summary>
         /// This function allows the application to access the data storage area associated with a transport object of type
-        /// NORM_OBJECT_DATA.For example, the application may use this function to copy the received data content for its 
-        /// own use.
+        /// NORM_OBJECT_DATA.
         /// </summary>
         public byte[] Data
         {
