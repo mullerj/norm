@@ -1,7 +1,4 @@
 ﻿using System.Net;
-using System.Reflection.Metadata;
-using System.Reflection;
-using System.Runtime.Intrinsics.X86;
 
 namespace Mil.Navy.Nrl.Norm
 {
@@ -16,14 +13,12 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// This function retrieves the NormNodeId identifier for the remote participant referenced by the given nodeHandle value. 
-        /// The NormNodeId is a 32-bit value used within the NORM protocol to uniquely identify participants within a NORM session.
+        /// The NormNodeId identifier for the remote participant.
         /// </summary>
-        /// 
         public long Id => NormNodeGetId(_handle);
 
         /// <summary>
-        /// Return the current Endpoint from the current Address
+        /// The current network source address detected for packets received from remote NORM sender
         /// </summary>
         public IPEndPoint Address
         {
@@ -44,12 +39,8 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// This function retrieves the advertised estimate of group round-trip timing (GRTT) for the remote sender referenced by the given nodeHandle value.
-        /// Newly-starting senders that have been participating as a receiver within a group 
-        /// may wish to use this function to provide a more accurate startup estimate of GRTT prior to a call to NormStartSender()
+        /// The advertised estimate of group round-trip timing (GRTT) for the remote sender.
         /// </summary>
-        /// <param name="nodeHandle"> This type is used to reference state kept by the NORM implementation with respect to other participants within a NormSession.</param>
-        /// <returns>This function returns the remote sender's advertised GRTT estimate in units of seconds. A value of -1.0 is returned upon failure.An invalid nodeHandle parameter value will lead to such failure.</returns>
         public double Grtt => NormNodeGetGrtt(_handle);
 
         public byte[] Command
@@ -67,22 +58,17 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// This function controls the destination address of receiver feedback messages generated in response to a specific
-        /// remote NORM sender corresponding to the senderNode parameter.If enable is true, "unicast NACKing" is enabled
-        /// while it is disabled for enable equal to false. See the description of NormSetDefaultUnicastNack() for details
-        /// on "unicast NACKing" behavior.
+        /// This function controls the destination address of receiver feedback messages generated in response to a specific remote NORM sender.
         /// </summary>
-        /// <param name="state"></param>
+        /// <param name="state">If state is true, "unicast NACKing" is enabled</param>
         public void SetUnicastNack(bool state)
         {
             NormNodeSetUnicastNack(_handle, state);
         }
 
         /// <summary>
-        /// This function sets the default "nacking mode" used for receiving new objects from a specific sender as identified
-        /// by the remoteSender parameter.
+        /// This function sets the default "nacking mode" used for receiving new objects from a specific sender.
         /// </summary>
-        /// <param name="remoteSender">Used to specify the remote NORM sender. </param>
         /// <param name="nackingMode">Specifies the nacking mode. </param>
         public void SetNackingMode(NormNackingMode nackingMode)
         {
@@ -90,9 +76,8 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// This function allows the receiver application to customize, for the specific remote sender referenced by the remoteSender parameter, at what points the receiver initiates the NORM NACK repair process during protocol operation.
+        /// This function allows the receiver application to customize at what points the receiver initiates the NORM NACK repair process during protocol operation.
         /// </summary>
-        /// <param name="remoteSender">Used to specify the remote NORM sender. </param>
         /// <param name="repairBoundary">Specifies the repair boundary. </param>
         public void SetRepairBoundary(NormRepairBoundary repairBoundary)
         {
@@ -100,10 +85,8 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// This routine sets the robustFactor as described in NormSetDefaultRxRobustFactor() for an individual remote
-        /// sender identified by the remoteSender parameter.
+        /// This routine sets the robustFactor as described in NormSetDefaultRxRobustFactor() for an individual remote sender.
         /// </summary>
-        /// <param name="remoteSender">Used to specify the remote NORM sender. </param>
         /// <param name="robustFactor">The robustFactor value determines how
         /// many times a NORM receiver will self-initiate NACKing (repair requests) upon cessation of packet reception from
         /// a sender. The default value is 20. Setting rxRobustFactor to -1 will make the NORM receiver infinitely persistent
@@ -123,22 +106,16 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// this function allows the application to retain state associated with a given nodeHandle 
-        /// value even when the underlying NORM protocol engine might normally 
-        /// free the associated state and thus invalidate the NormNodeHandle.
+        /// This function allows the application to retain state associated even when the underlying NORM protocol engine might normally free the associated state.
         /// </summary>
-        /// <param name="nodeHandle"> This type is used to reference state kept by the NORM implementation with respect to other participants within a NormSession.</param>
         public void Retain()
         {
             NormNodeRetain(_handle);
         }
 
         /// <summary>
-        /// In complement to the NormNodeRetain() function, this API call releases the specified nodeHandle so that the
-        /// NORM protocol engine may free associated resources as needed.Once this call is made, the application should
-        /// no longer reference the specified NormNodeHandle, unless it is still valid.
+        /// This API call releases the Node so that the NORM protocol engine may free associated resources as needed.
         /// </summary>
-        /// <param name="nodeHandle"> This type is used to reference state kept by the NORM implementation with respect to other participants within a NormSession.</param>
         public void Release()
         {
             NormNodeRelease(_handle);
