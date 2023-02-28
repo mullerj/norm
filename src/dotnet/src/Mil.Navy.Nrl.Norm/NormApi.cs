@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting;
-using static System.Net.Mime.MediaTypeNames;
+﻿using System.Runtime.InteropServices;
 
 namespace Mil.Navy.Nrl.Norm
 {
@@ -18,12 +15,27 @@ namespace Mil.Navy.Nrl.Norm
         public const int NORM_DESCRIPTOR_INVALID = 0;
         public const int FILENAME_MAX = 260;
 
+        /// <summary>
+        /// The NormEvent type is a structure used to describe significant NORM protocol events.
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct NormEvent
         {
+            /// <summary>
+            /// The Type field indicates the NormEventType and determines how the other fields should be interpreted.
+            /// </summary>
             public NormEventType Type;
+            /// <summary>
+            /// The Session field indicates the applicable NormSessionHandle to which the event applies.
+            /// </summary>
             public long Session;
+            /// <summary>
+            /// The Sender field indicates the applicable NormNodeHandle to which the event applies.
+            /// </summary>
             public long Sender;
+            /// <summary>
+            /// The Object field indicates the applicable NormObjectHandle to which the event applies.
+            /// </summary>
             public long Object;
         }
 
@@ -230,27 +242,12 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetLoopback(long sessionHandle, bool loopback);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="flag"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetMessageTrace(long sessionHandle, bool flag);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="precent"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetTxLoss(long sessionHandle, double precent);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="precent"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetRxLoss(long sessionHandle, double precent);
 
@@ -271,12 +268,6 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormCloseDebugLog(long instanceHandle);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="instanceHandle"></param>
-        /// <param name="pipeName"></param>
-        /// <returns></returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormOpenDebugPipe(long instanceHandle, string pipeName);
 
@@ -307,26 +298,12 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern int NormGetDebugLevel();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <param name="interval"></param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetReportInterval(long sessionHandle, double interval);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <returns></returns>
         [DllImport(NORM_LIBRARY)]
         public static extern double NormGetReportInterval(long sessionHandle);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         [DllImport(NORM_LIBRARY)]
         public static extern int NormGetRandomSessionId();
 
@@ -676,11 +653,6 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormSetWatermark(long sessionHandle, long objectHandle, bool overrideFlush);
         
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sessionHandle"></param>
-        /// <returns></returns>
         [DllImport(NORM_LIBRARY)]
         public static extern bool NormResetWatermark(long sessionHandle);
 
