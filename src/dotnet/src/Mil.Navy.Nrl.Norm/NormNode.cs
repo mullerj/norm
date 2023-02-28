@@ -2,11 +2,18 @@
 
 namespace Mil.Navy.Nrl.Norm
 {
+    /// <summary>
+    /// A participant in a NormSession
+    /// </summary>
     public class NormNode
     {
         public const long NORM_NODE_ANY = 0xffffffff;
         private long _handle;
 
+        /// <summary>
+        /// Parameterized contructor.
+        /// </summary>
+        /// <param name="handle">The handle is associated to the NORM protocol engine instance</param>
         internal NormNode(long handle)
         {
             _handle = handle;
@@ -43,6 +50,9 @@ namespace Mil.Navy.Nrl.Norm
         /// </summary>
         public double Grtt => NormNodeGetGrtt(_handle);
 
+        /// <summary>
+        /// NORM application-defined command for transmission
+        /// </summary>
         public byte[] Command
         {
             get
@@ -114,7 +124,7 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// This API call releases the Node so that the NORM protocol engine may free associated resources as needed.
+        /// This function releases the Node so that the NORM protocol engine may free associated resources as needed.
         /// </summary>
         public void Release()
         {

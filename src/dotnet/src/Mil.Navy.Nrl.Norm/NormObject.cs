@@ -105,7 +105,7 @@
 
         /// <summary>
         /// This function immediately cancels the transmission of a local sender transport object or the reception of a specified
-        /// object from a remote sender as specified by the objectHandle parameter
+        /// object from a remote sender
         /// </summary>
         public void Cancel()
         {

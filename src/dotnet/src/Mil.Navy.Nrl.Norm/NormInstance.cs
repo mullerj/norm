@@ -115,7 +115,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function retrieves the next available NORM protocol event from the protocol engine.
         /// </summary>
         /// <param name="waitForEvent">waitForEvent specifies whether the call to this function is blocking or not, if "waitForEvent" is false, this is a non-blocking call. </param>
-        /// <returns>The function returns true when a NormEvent is successfully retrieved, and false otherwise. Note that a return value of false does not indicate an error or signify end of NORM operation.</returns>
+        /// <returns>Returns an instance of NormEvent if NormGetNextEvent() returns true, returns null otherwise. </returns>
         public NormEvent? GetNextEvent(bool waitForEvent)
         {
             bool success = NormGetNextEvent(_handle, out NormApi.NormEvent normEvent, waitForEvent);
@@ -129,7 +129,11 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// This function retrieves the next available NORM protocol event from the protocol engine.
         /// </summary>
-        /// <returns>The function returns true when a NormEvent is successfully retrieved, and false otherwise. Note that a return value of false does not indicate an error or signify end of NORM operation.</returns>
+        /// <note>
+        /// This is a default function which calls GetNextEvent(bool waitForEvent) override
+        /// with waitForEvent set as true.
+        /// </note>
+        /// <returns>Returns an instance of NormEvent if NormGetNextEvent() returns true, returns null otherwise.</returns>
         public NormEvent? GetNextEvent()
         {
             return GetNextEvent(true);
@@ -198,7 +202,6 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// This function disables NORM debug output to be directed to a file instead of the default STDERR.
         /// </summary>
-        /// <returns>The function returns true on success. </return>
         public void CloseDebugLog()
         {
             NormCloseDebugLog(_handle);

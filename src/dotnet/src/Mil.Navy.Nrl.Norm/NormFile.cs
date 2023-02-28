@@ -6,15 +6,13 @@
         /// Constructor of NormFile
         /// </summary>
         /// <param name="handle">type is used to reference state kept for data transport objects being actively transmitted or received.</param>
-        /// <returns>Returns instances of NormFile.</returns>
         internal NormFile(long handle) : base(handle)
         {
 
         }
 
         /// <summary>
-        /// This function copies the name, as a NULL-terminated string, of the file object specified by the objectHandle
-        /// parameter into the nameBuffer of length bufferLen bytes provided by the application.
+        /// The name of the received file.
         /// </summary>
         /// <exception cref="IOException">Thrown when failed to get file name.</exception>
         public string Name
@@ -35,6 +33,7 @@
         /// This function renames the file used to store content for the NORM_OBJECT_FILE transport object specified by the objectHandle parameter.This allows receiver applications to rename (or move) received files as needed.NORM
         /// uses temporary file names for received files until the application explicitly renames the file.
         /// </summary>
+        /// <param name="filePath">The full path of received file.</param>
         /// <exception cref="IOException">Thrown when failed to rename file.</exception>
         public void Rename(string filePath)
         {

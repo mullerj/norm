@@ -8,6 +8,9 @@ namespace Mil.Navy.Nrl.Norm
     /// </summary>
     public class NormSession
     {
+        /// <summary>
+        /// _normSessions is a collection of normSession with their respective handles.
+        /// </summary>
         private static Dictionary<long, NormSession> _normSessions = new Dictionary<long, NormSession>();
 
         /// <summary>
@@ -25,6 +28,9 @@ namespace Mil.Navy.Nrl.Norm
             get => NormGetLocalNodeId(_handle);
         }
 
+        /// <summary>
+        /// TBD
+        /// </summary>
         public double ReportInterval 
         {
             get => NormGetReportInterval(_handle); 
@@ -50,7 +56,7 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// Internal constructor of NormSession which adds the handle to the normSessions dictionary.
+        /// Internal constructor of NormSession which adds the handle to the collection of norm sessions.
         /// </summary>
         /// <param name="handle">Used to identify application in the NormSession.</param>
         internal NormSession(long handle)
@@ -63,7 +69,7 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// Get a specified session.
+        /// Get a specified NormSession from the collection of norm sessions.
         /// </summary>
         /// <param name="handle">Specifies the session to return</param>
         /// <returns>Returns a NormSession</returns>
@@ -172,11 +178,26 @@ namespace Mil.Navy.Nrl.Norm
             NormSetRxPortReuse(_handle, enable, rxBindAddress, senderAddress, senderPort);
         }
 
+        /// <summary>
+        /// TBD
+        /// </summary>
+        /// <note>
+        /// This is a default function which calls SetEcnSupport(bool ecnEnable, bool ignoreLoss, bool tolerateLoss) override
+        /// with tolerateLoss set as false.
+        /// </note>
+        /// <param name="ecnEnable"></param>
+        /// <param name="ignoreLoss"></param>
         public void SetEcnSupport(bool ecnEnable, bool ignoreLoss)
         {
             SetEcnSupport(ecnEnable, ignoreLoss, false);
         }
 
+        /// <summary>
+        /// TBD
+        /// </summary>
+        /// <param name="ecnEnable"></param>
+        /// <param name="ignoreLoss"></param>
+        /// <param name="tolerateLoss"></param>
         public void SetEcnSupport(bool ecnEnable, bool ignoreLoss, bool tolerateLoss)
         {
             NormSetEcnSupport(_handle, ecnEnable, ignoreLoss, tolerateLoss);
@@ -258,16 +279,28 @@ namespace Mil.Navy.Nrl.Norm
             }
         }
 
+        /// <summary>
+        /// TBD
+        /// </summary>
+        /// <param name="flag"></param>
         public void SetMessageTrace(bool flag)
         {
             NormSetMessageTrace(_handle, flag);
         }
 
+        /// <summary>
+        /// TBD
+        /// </summary>
+        /// <param name="precent"></param>
         public void SetTxLoss(double precent)
         {
             NormSetTxLoss(_handle, precent);
         }
 
+        /// <summary>
+        /// TBD
+        /// </summary>
+        /// <param name="precent"></param>
         public void SetRxLoss(double precent)
         {
             NormSetRxLoss(_handle, precent);

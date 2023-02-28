@@ -31,8 +31,7 @@
         /// <summary>
         /// Internal constructor for NormStream
         /// </summary>
-        /// <param name="handle">Used to identify the stream</param>
-        /// <returns>Returns instance of a NormStream</returns>
+        /// <param name="handle">The handle is associated to the NORM protocol engine instance</param>
         internal NormStream(long handle) : base(handle)
         {
         }
