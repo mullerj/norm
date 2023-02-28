@@ -43,3 +43,12 @@ To test the .NET extension for NORM, execute the .NET CLI command in the src/dot
 
 The test command results should show that all tests have passed.
 Some tests might be skipped due to an IO exception.
+
+------------
+Packaging Norm .NET Extension
+------------
+To create nuget package of the the .NET project, execute the .NET CLI command in the src/dotnet/src/Mil.Navy.Nrl.Norm directory:
+
+```
+dotnet pack Mil.Navy.Nrl.Norm.csproj
+```
