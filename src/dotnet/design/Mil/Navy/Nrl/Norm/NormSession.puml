@@ -1,5 +1,6 @@
 @startuml
 class NormSession {
+    + <<const>> NORM_SESSION_INVALID : int = 0
     {static} -_normSessions : Dictionary<long, NormSession>
     - _handle : long
     ~ NormSession(handle:long)

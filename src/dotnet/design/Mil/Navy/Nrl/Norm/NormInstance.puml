@@ -1,5 +1,6 @@
 @startuml
 class NormInstance {
+    + <<const>> NORM_DESCRIPTOR_INVALID : int = 0
     - _handle: long
     + NormInstance()
     + NormInstance(priorityBoost:bool)
