@@ -3,17 +3,23 @@
 namespace Mil.Navy.Nrl.Norm
 {
     /// <summary>
-    /// A participant in a NormSession
+    /// A participant in a NORM protocol session
     /// </summary>
     public class NormNode
     {
+        /// <summary>
+        /// When creating a session, allows the NORM implementation to attempt to pick an identifier based on the host computer's "default" IP address.
+        /// </summary>
         public const long NORM_NODE_ANY = 0xffffffff;
+        /// <summary>
+        /// The handle is associated to the NORM protocol engine instance.
+        /// </summary>
         private long _handle;
 
         /// <summary>
         /// Parameterized contructor.
         /// </summary>
-        /// <param name="handle">The handle is associated to the NORM protocol engine instance</param>
+        /// <param name="handle">The handle is associated to the NORM protocol engine instance.</param>
         internal NormNode(long handle)
         {
             _handle = handle;
@@ -25,7 +31,7 @@ namespace Mil.Navy.Nrl.Norm
         public long Id => NormNodeGetId(_handle);
 
         /// <summary>
-        /// The current network source address detected for packets received from remote NORM sender
+        /// The current network source address detected for packets received from remote NORM sender.
         /// </summary>
         public IPEndPoint Address
         {
@@ -51,7 +57,7 @@ namespace Mil.Navy.Nrl.Norm
         public double Grtt => NormNodeGetGrtt(_handle);
 
         /// <summary>
-        /// NORM application-defined command for transmission
+        /// NORM application-defined command for transmission.
         /// </summary>
         public byte[] Command
         {
@@ -70,7 +76,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// This function controls the destination address of receiver feedback messages generated in response to a specific remote NORM sender.
         /// </summary>
-        /// <param name="state">If state is true, "unicast NACKing" is enabled</param>
+        /// <param name="state">If state is true, "unicast NACKing" is enabled.</param>
         public void SetUnicastNack(bool state)
         {
             NormNodeSetUnicastNack(_handle, state);
@@ -79,7 +85,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// This function sets the default "nacking mode" used for receiving new objects from a specific sender.
         /// </summary>
-        /// <param name="nackingMode">Specifies the nacking mode. </param>
+        /// <param name="nackingMode">Specifies the nacking mode.</param>
         public void SetNackingMode(NormNackingMode nackingMode)
         {
             NormNodeSetNackingMode(_handle, nackingMode);
@@ -88,7 +94,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// This function allows the receiver application to customize at what points the receiver initiates the NORM NACK repair process during protocol operation.
         /// </summary>
-        /// <param name="repairBoundary">Specifies the repair boundary. </param>
+        /// <param name="repairBoundary">Specifies the repair boundary.</param>
         public void SetRepairBoundary(NormRepairBoundary repairBoundary)
         {
             NormNodeSetRepairBoundary(_handle, repairBoundary);
@@ -109,7 +115,6 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// This function releases memory resources that were allocated for a remote sender. 
         /// </summary>
-        /// <param name="remoteSender">notification for a given remote sender when multiple senders may be providing content</param>
         public void FreeBuffers()
         {
             NormNodeFreeBuffers(_handle);

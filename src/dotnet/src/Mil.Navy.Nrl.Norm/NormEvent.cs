@@ -5,9 +5,21 @@
     /// </summary>
     public class NormEvent
     {
+        /// <summary>
+        /// The type identifies the event with one of NORM protocol events.
+        /// </summary>
         private NormEventType _type { get; }
+        /// <summary>
+        /// Used to identify application in the NormSession.
+        /// </summary>
         private long _sessionHandle { get; }
+        /// <summary>
+        /// This type is used to reference state kept by the NORM implementation with respect to other participants within a NormSession.
+        /// </summary>
         private long _nodeHandle { get; }
+        /// <summary>
+        /// This type is used to reference state kept for data transport objects being actively transmitted or received.
+        /// </summary>
         private long _objectHandle { get; }
 
         /// <summary>
@@ -61,7 +73,7 @@
         }
 
         /// <summary>
-        /// NORM transport object identified by the objectHandle parameter.
+        /// NORM transport object.
         /// </summary>
         public NormObject? Object 
         { 
@@ -89,9 +101,9 @@
         }
 
         /// <summary>
-        /// Return string of what type the event is currently.
+        /// This function returns a description of the NORM protocol event
         /// </summary>
-        /// <returns>String of the event type.</returns>
+        /// <returns>A string that includes the event type.</returns>
         public override string ToString()
         {
             return $"NormEvent [type={_type}]";

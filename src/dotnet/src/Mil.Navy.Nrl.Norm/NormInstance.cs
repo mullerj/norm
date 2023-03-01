@@ -50,8 +50,8 @@ namespace Mil.Navy.Nrl.Norm
 
         /// <summary>
         /// This function creates a NORM protocol session (NormSession) using the address (multicast or unicast) and port
-        /// parameters provided.While session state is allocated and initialized, active session participation does not begin
-        /// until a call is made to NormStartSender() and/or NormStartReceiver() to join the specified multicast group
+        /// parameters provided. While session state is allocated and initialized, active session participation does not begin
+        /// until the session starts the sender and/or receiver to join the specified multicast group
         /// (if applicable) and start protocol operation.
         /// </summary>
         /// <param name="address">Specified address determines the destination of NORM messages sent </param>
@@ -129,10 +129,10 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// This function retrieves the next available NORM protocol event from the protocol engine.
         /// </summary>
-        /// <note>
+        /// <remarks>
         /// This is a default function which calls GetNextEvent(bool waitForEvent) override
         /// with waitForEvent set as true.
-        /// </note>
+        /// </remarks>
         /// <returns>Returns an instance of NormEvent if NormGetNextEvent() returns true, returns null otherwise.</returns>
         public NormEvent? GetNextEvent()
         {
@@ -153,7 +153,7 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// This function immediately stops the NORM protocol engine thread corresponding to the given instanceHandle parameter.
+        /// This function immediately stops the NORM protocol engine thread.
         /// </summary>
         public void StopInstance()
         {
@@ -161,7 +161,7 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// This function creates and starts an operating system thread to resume NORM protocol engine operation for the given instanceHandle that was previously stopped by a call to NormStopInstance().
+        /// This function creates and starts an operating system thread to resume NORM protocol engine operation that was previously stopped by a call to StopInstance().
         /// </summary>
         /// <returns>Boolean as to the success of the instance restart. </return>
         public bool RestartInstance()
@@ -170,7 +170,7 @@ namespace Mil.Navy.Nrl.Norm
         }
         
         /// <summary>
-        /// Immediately suspends the NORM protocol engine thread corresponding to the given instanceHandle parameter
+        /// Immediately suspends the NORM protocol engine thread.
         /// </summary>
         /// <returns>Boolean as to the success of the instance suspension. </returns>
         public bool SuspendInstance()

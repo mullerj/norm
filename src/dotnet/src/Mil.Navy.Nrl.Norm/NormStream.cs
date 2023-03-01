@@ -1,7 +1,7 @@
 ﻿namespace Mil.Navy.Nrl.Norm
 {
     /// <summary>
-    /// A Norm Object of type Stream
+    /// A NORM Object of type Stream
     /// </summary>
     public class NormStream : NormObject
     {
@@ -82,10 +82,10 @@
         /// <summary>
         /// This function causes an immediate "flush" of the transmit stream.
         /// </summary>
-        /// <note>
+        /// <remarks>
         /// This is a default function which calls Flush(bool eom, NormFlushMode flushMode) override
         /// with eom set as false and flushMode set to NORM_FLUSH_PASSIVE
-        /// </note>
+        /// </remarks>
         public void Flush()
         {
             Flush(false, NormFlushMode.NORM_FLUSH_PASSIVE);
@@ -106,10 +106,10 @@
         /// This function halts transfer of the stream and releases any resources used unless the associated object
         /// has been explicitly retained by a call to NormObjectRetain().
         /// </summary>
-        /// <note>
+        /// <remarks>
         /// This is a default function which calls Close(bool graceful) override
         /// with graceful set as false.
-        /// </note>
+        /// </remarks>
         public void Close()
         {
             Close(false);

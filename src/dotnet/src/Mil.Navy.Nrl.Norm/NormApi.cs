@@ -165,7 +165,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// This function allows the user to control the port reuse and binding behavior for the receive socket used for the given NORM sessionHandle.
         /// </summary>
-        /// <param name="sessionHandle">Used to identify application in the NormSession. </param>
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
         /// <param name="enableReuse">When the enablReuse parameter is set to true, reuse of the NormSession port number by multiple NORM instances or sessions is enabled. </param>
         /// <param name="rxBindAddress">If the optional rxBindAddress is supplied (an IP address or host name in string form), the socket will bind() to the given address when it is opened in a call to NormStartReceiver() or NormStartSender(). </param>
         /// <param name="senderAddress">The optional senderAddress parameter can be used to connect() the underlying NORM receive socket to specific address. </param>
@@ -173,6 +173,10 @@ namespace Mil.Navy.Nrl.Norm
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetRxPortReuse(long sessionHandle, bool enableReuse, string? rxBindAddress, string? senderAddress, int senderPort);
 
+        /// <param name="sessionHandle">Used to identify application in the NormSession.</param>
+        /// <param name="ecnEnable">Enables NORM ECN (congestion control) support.</param>
+        /// <param name="ignoreLoss">With "ecnEnable", use ECN-only, ignoring packet loss.</param>
+        /// <param name="tolerateLoss">Loss-tolerant congestion control, ecnEnable or not.</param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetEcnSupport(long sessionHandle, bool ecnEnable, bool ignoreLoss, bool tolerateLoss);
 
@@ -342,7 +346,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function can be used to set a non-default socket buffer size for the UDP socket used by the specified NORM sessionHandle for data transmission.
         /// </summary>
         /// <param name="sessionHandle">Used to identify application in the NormSession.  </param>
-        /// <param name="bufferSize">The bufferSize parameter specifies the desired socket buffer size in bytes. </param>
+        /// <param name="bufferSize">The bufferSize parameter specifies the desired socket buffer size in bytes.</param>
         /// <returns>This function returns true upon success and false upon failure. Possible failure modes include an invalid sessionHandle parameter, a call to NormStartReceiver() or NormStartSender() has not yet been made for the
         ///session, or an invalid bufferSize was given. Note some operating systems may require additional system configuration to use non-standard socket buffer sizes. </returns>
         [DllImport(NORM_LIBRARY)]
@@ -815,7 +819,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// This function sets the "nacking mode" used for receiving a specific transport object as identified by the objectHandle parameter.
         /// </summary>
-        /// <param name="objectHandle">Specifies the transport object. </param>
+        /// <param name="objectHandle">Specifies the transport object.</param>
         /// <param name="nackingMode">Specifies the nacking mode. </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormObjectSetNackingMode(long objectHandle, NormNackingMode nackingMode);
@@ -986,7 +990,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function copies the name, as a NULL-terminated string, of the file object specified by the objectHandle
         /// parameter into the nameBuffer of length bufferLen bytes provided by the application.
         /// </summary>
-        /// <param name="fileHandle"> type is used to reference state kept for data transport objects being actively transmitted or received. The objectHandle parameter 
+        /// <param name="fileHandle">This type is used to reference state kept for data transport objects being actively transmitted or received. The objectHandle parameter 
         /// must refer to a valid NormObjectHandle for an object of type NORM_OBJECT_FILE.</param>
         /// <param name="nameBuffer">provided memory space for the name of the file</param>
         /// <param name="bufferLen">idicates the length of the nameBuffer</param>
@@ -1003,7 +1007,7 @@ namespace Mil.Navy.Nrl.Norm
         /// applications may choose to use the NORM_INFO content associated with a file object to provide name and/or typing
         /// information to receivers.
         /// </summary>
-        /// <param name="fileHandle"> type is used to reference state kept for data transport objects being actively transmitted or received.</param>
+        /// <param name="fileHandle">This type is used to reference state kept for data transport objects being actively transmitted or received.</param>
         /// <param name="fileName">parameter must be a NULL-terminated string which should specify the full desired path name to be used</param>
         /// <returns>
         /// This function returns true upon success and false upon failure. Possible failure conditions include the case where
@@ -1019,7 +1023,7 @@ namespace Mil.Navy.Nrl.Norm
         /// own use.Alternatively, the application may establish "ownership" for the allocated memory space using the
         /// NormDataDetachData() function if it is desired to avoid the copy.
         /// </summary>
-        /// <param name="objectHandle">type is used to reference state kept for data transport objects being actively transmitted or received.</param>
+        /// <param name="objectHandle">This type is used to reference state kept for data transport objects being actively transmitted or received.</param>
         /// <returns>
         /// This function returns a pointer to the data storage area for the specified transport object. A NULL value may be
         /// returned if the object has no associated data content or is not of type NORM_OBJECT_DATA.
@@ -1031,7 +1035,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function allows the application to disassociate data storage allocated by the NORM protocol engine for a receive 
         /// object from the NORM_OBJECT_DATA transport object specified by the objectHandle parameter.
         /// </summary>
-        /// <param name="objectHandle">type is used to reference state kept for data transport objects being actively transmitted or received.</param>
+        /// <param name="objectHandle">This type is used to reference state kept for data transport objects being actively transmitted or received.</param>
         /// <returns>
         /// This function returns a pointer to the data storage area for the specified transport object. A NULL value may be returned
         /// if the object has no associated data content or is not of type NORM_OBJECT_DATA.
@@ -1042,7 +1046,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// This function retrieves the NormNodeHandle corresponding to the remote sender of the transport object associated with the given objectHandle parameter.
         /// </summary>
-        /// <param name="objectHandle">type is used to reference state kept for data transport objects being actively transmitted or received.</param>
+        /// <param name="objectHandle">This type is used to reference state kept for data transport objects being actively transmitted or received.</param>
         /// <returns>This function returns the NormNodeHandle corresponding to the remote sender of the transport object associated with the given objectHandle parameter.
         /// A value of NORM_NODE_INVALID is returned if the specified objectHandle 
         /// references a locally originated, sender object.</returns>

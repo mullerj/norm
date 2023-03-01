@@ -1,18 +1,21 @@
 ﻿namespace Mil.Navy.Nrl.Norm
 {
+    /// <summary>
+    ///  A NORM Object of type File
+    /// </summary>
     public class NormFile : NormObject
     {
         /// <summary>
         /// Constructor of NormFile
         /// </summary>
-        /// <param name="handle">type is used to reference state kept for data transport objects being actively transmitted or received.</param>
+        /// <param name="handle">This type is used to reference state kept for data transport objects being actively transmitted or received.</param>
         internal NormFile(long handle) : base(handle)
         {
 
         }
 
         /// <summary>
-        /// The name of the received file.
+        /// The name of the file.
         /// </summary>
         /// <exception cref="IOException">Thrown when failed to get file name.</exception>
         public string Name
@@ -30,8 +33,9 @@
         }
 
         /// <summary>
-        /// This function renames the file used to store content for the NORM_OBJECT_FILE transport object specified by the objectHandle parameter.This allows receiver applications to rename (or move) received files as needed.NORM
-        /// uses temporary file names for received files until the application explicitly renames the file.
+        /// This function renames the file used to store content for the NORM_OBJECT_FILE transport object.
+        /// This allows receiver applications to rename (or move) received files as needed.
+        /// NORM uses temporary file names for received files until the application explicitly renames the file.
         /// </summary>
         /// <param name="filePath">The full path of received file.</param>
         /// <exception cref="IOException">Thrown when failed to rename file.</exception>

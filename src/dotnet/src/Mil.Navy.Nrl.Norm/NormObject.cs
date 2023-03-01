@@ -1,7 +1,7 @@
 ﻿namespace Mil.Navy.Nrl.Norm
 {
     /// <summary>
-    /// The base Norm Object
+    /// The base NORM Object
     /// </summary>
     public class NormObject
     {
@@ -105,7 +105,7 @@
 
         /// <summary>
         /// This function immediately cancels the transmission of a local sender transport object or the reception of a specified
-        /// object from a remote sender
+        /// object from a remote sender.
         /// </summary>
         public void Cancel()
         {
@@ -134,9 +134,9 @@
         }
 
         /// <summary>
-        /// Gets the hash code of the object
+        /// Gets the hash code of the object.
         /// </summary>
-        /// <returns>Returns the handle of the object</returns>
+        /// <returns>Returns the handle of the object.</returns>
         public override int GetHashCode()
         {
             return (int)_handle;
