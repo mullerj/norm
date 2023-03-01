@@ -275,15 +275,15 @@ namespace Mil.Navy.Nrl.Norm
         /// </summary>
         /// <param name="level">
         /// PROTOLIB DEBUG LEVELS:
-        /// PL_FATAL=0 The FATAL level designates very severe error events that will presumably lead the application to abort.
-        /// PL_ERROR=1 The ERROR level designates error events that might still allow the application to continue running.
-        /// PL_WARN=2 The WARN level designates potentially harmful situations.
-        /// PL_INFO=3 The INFO level designates informational messages that highlight the progress of the application at coarse-grained level.
-        /// PL_DEBUG=4 The DEBUG level designates fine-grained informational events that are most useful to debug an application.
-        /// PL_TRACE=5 The TRACE level designates finer-grained informational events than the DEBUG
-        /// PL_DETAIL=6 The TRACE level designates even finer-grained informational events than the DEBUG
-        /// PL_MAX=7 Turn all comments on
-        /// PL_ALWAYS Messages at this level are always printed regardless of debug level
+        /// PL_FATAL=0 - The FATAL level designates very severe error events that will presumably lead the application to abort.
+        /// PL_ERROR=1 - The ERROR level designates error events that might still allow the application to continue running.
+        /// PL_WARN=2 - The WARN level designates potentially harmful situations.
+        /// PL_INFO=3 - The INFO level designates informational messages that highlight the progress of the application at coarse-grained level.
+        /// PL_DEBUG=4 - The DEBUG level designates fine-grained informational events that are most useful to debug an application.
+        /// PL_TRACE=5 - The TRACE level designates finer-grained informational events than the DEBUG.
+        /// PL_DETAIL=6 - The TRACE level designates even finer-grained informational events than the DEBUG.
+        /// PL_MAX=7 - Turn all comments on.
+        /// PL_ALWAYS - Messages at this level are always printed regardless of debug level.
         /// </param>
         [DllImport(NORM_LIBRARY)]
         public static extern void NormSetDebugLevel(int level);
@@ -687,7 +687,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <returns>
         /// Possible return values include:
         /// NORM_ACK_INVALID - The given sessionHandle is invalid or the given nodeId is not in the sender's acking list.
-        /// NORM_ACK_FAILURE - The positive acknowledgement collection process did not receive acknowledgment from every listed receiver NORM_ACK_FAILURE (nodeId = NORM_NODE_ANY) or the identified nodeId did not respond.
+        /// NORM_ACK_FAILURE - The positive acknowledgement collection process did not receive acknowledgment from every listed receiver (nodeId = NORM_NODE_ANY) or the identified nodeId did not respond.
         /// NORM_ACK_PENDING - The flushing process at large has not yet completed (nodeId = NORM_NODE_ANY) or the given individual nodeId is still being queried for response.
         /// NORM_ACK_SUCCESS - All receivers (nodeId = NORM_NODE_ANY) responded with positive acknowledgement or the given specific nodeId did acknowledge.
         /// </returns>

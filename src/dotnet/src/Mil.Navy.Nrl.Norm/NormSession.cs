@@ -789,7 +789,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <returns>
         /// Possible return values include:
         /// NORM_ACK_INVALID - The given sessionHandle is invalid or the given nodeId is not in the sender's acking list.
-        /// NORM_ACK_FAILURE - The positive acknowledgement collection process did not receive acknowledgment from every listed receiver NORM_ACK_FAILURE (nodeId = NORM_NODE_ANY) or the identified nodeId did not respond.
+        /// NORM_ACK_FAILURE - The positive acknowledgement collection process did not receive acknowledgment from every listed receiver (nodeId = NORM_NODE_ANY) or the identified nodeId did not respond.
         /// NORM_ACK_PENDING - The flushing process at large has not yet completed (nodeId = NORM_NODE_ANY) or the given individual nodeId is still being queried for response.
         /// NORM_ACK_SUCCESS - All receivers (nodeId = NORM_NODE_ANY) responded with positive acknowledgement or the given specific nodeId did acknowledge.
         /// </returns>
