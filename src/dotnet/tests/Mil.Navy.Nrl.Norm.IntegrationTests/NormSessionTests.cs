@@ -229,7 +229,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 if (normNode != null)
                 {
                     var actualId = normNode.Id;
-                    Assert.NotEqual(NormApi.NORM_NODE_NONE, actualId);
+                    Assert.NotEqual(NormNode.NORM_NODE_NONE, actualId);
                     var actualAddress = normNode.Address;
                     Assert.NotNull(actualAddress);
                     var actualGrtt = normNode.Grtt;
@@ -1821,7 +1821,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 Assert.Contains(normEventType, actualEvents.Select(e => e.Type));
                 var actualEvent = actualEvents.First(e => e.Type == normEventType);
                 var actualObject = actualEvent.Object;
-                Assert.NotEqual(NormApi.NORM_NODE_INVALID, actualObject!.Sender);
+                Assert.NotEqual(NormNode.NORM_NODE_INVALID, actualObject!.Sender);
             }
             catch (Exception)
             {

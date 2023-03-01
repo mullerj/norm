@@ -12,6 +12,14 @@ namespace Mil.Navy.Nrl.Norm
         /// </summary>
         public const long NORM_NODE_ANY = 0xffffffff;
         /// <summary>
+        /// The special value NORM_NODE_NONE corresponds to an invalid (or null) node.
+        /// </summary>
+        public const int NORM_NODE_NONE = 0;
+        /// <summary>
+        /// The special value NORM_NODE_INVALID corresponds to an invalid reference.
+        /// </summary>
+        public const int NORM_NODE_INVALID = 0;
+        /// <summary>
         /// The handle is associated to the NORM protocol engine instance.
         /// </summary>
         private long _handle;

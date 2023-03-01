@@ -6,6 +6,10 @@
     public class NormObject
     {
         /// <summary>
+        /// The special value NORM_OBJECT_INVALID corresponds to an invalid reference.
+        /// </summary>
+        public const int NORM_OBJECT_INVALID = 0;
+        /// <summary>
         /// Used to reference state kept for data transport objects being actively transmitted or received.
         /// </summary>
         protected long _handle;
@@ -77,7 +81,7 @@
             get
             {
                 var sender = NormObjectGetSender(_handle);
-                if(sender == NORM_NODE_INVALID)
+                if(sender == NormNode.NORM_NODE_INVALID)
                 {
                     throw new IOException("Locally originated sender object");
                 }

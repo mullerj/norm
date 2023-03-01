@@ -11,31 +11,7 @@ namespace Mil.Navy.Nrl.Norm
         /// The name of the NORM library used when calling native NORM API functions
         /// </summary>
         public const string NORM_LIBRARY = "norm";
-        /// <summary>
-        /// The special value NORM_SESSION_INVALID is used to refer to invalid session references.
-        /// </summary>
-        public const int NORM_SESSION_INVALID = 0;
-        /// <summary>
-        /// The special value NORM_OBJECT_INVALID corresponds to an invalid reference.
-        /// </summary>
-        public const int NORM_OBJECT_INVALID = 0;
-        /// <summary>
-        /// The special value NORM_NODE_INVALID corresponds to an invalid reference.
-        /// </summary>
-        public const int NORM_NODE_INVALID = 0;
-        /// <summary>
-        /// The special value NORM_NODE_NONE corresponds to an invalid (or null) node.
-        /// </summary>
-        public const int NORM_NODE_NONE = 0;
-        /// <summary>
-        /// Returned on error when calling NormGetDescriptor().
-        /// </summary>
-        public const int NORM_DESCRIPTOR_INVALID = 0;
-        /// <summary>
-        /// Maximum length of file names.
-        /// </summary>
-        public const int FILENAME_MAX = 260;
-
+        
         /// <summary>
         /// The NormEvent type is a structure used to describe significant NORM protocol events.
         /// </summary>

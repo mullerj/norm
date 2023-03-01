@@ -49,7 +49,7 @@
         { 
             get
             {
-                if (_sessionHandle == NORM_SESSION_INVALID)
+                if (_sessionHandle == NormSession.NORM_SESSION_INVALID)
                 {
                     return null;
                 }

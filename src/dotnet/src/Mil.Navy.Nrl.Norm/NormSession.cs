@@ -9,10 +9,13 @@ namespace Mil.Navy.Nrl.Norm
     public class NormSession
     {
         /// <summary>
+        /// The special value NORM_SESSION_INVALID is used to refer to invalid session references.
+        /// </summary>
+        public const int NORM_SESSION_INVALID = 0;
+        /// <summary>
         /// A dictionary of NORM sessions with their respective handles.
         /// </summary>
         private static Dictionary<long, NormSession> _normSessions = new Dictionary<long, NormSession>();
-
         /// <summary>
         /// The NormSessionHandle type is used to reference the NORM transport session.
         /// </summary>
@@ -479,7 +482,7 @@ namespace Mil.Navy.Nrl.Norm
                 infoLength = 0;
             }
             var objectHandle = NormFileEnqueue(_handle, filename, infoBytes, infoLength);
-            if (objectHandle == NORM_OBJECT_INVALID)
+            if (objectHandle == NormObject.NORM_OBJECT_INVALID)
             {
                 throw new IOException("Failed to enqueue file");
             }
@@ -529,7 +532,7 @@ namespace Mil.Navy.Nrl.Norm
                 infoLength = 0;
             }
             var objectHandle = NormDataEnqueue(_handle, dataBytes, dataLength, infoBytes, infoLength);
-            if (objectHandle == NORM_OBJECT_INVALID)
+            if (objectHandle == NormObject.NORM_OBJECT_INVALID)
             {
                 throw new IOException("Failed to enqueue data");
             }
@@ -587,7 +590,7 @@ namespace Mil.Navy.Nrl.Norm
                 infoLength = 0;
             }
             var objectHandle = NormStreamOpen(_handle, bufferSize, infoBytes, infoLength);
-            if (objectHandle == NORM_OBJECT_INVALID)
+            if (objectHandle == NormObject.NORM_OBJECT_INVALID)
             {
                 throw new IOException("Failed to open stream");
             }

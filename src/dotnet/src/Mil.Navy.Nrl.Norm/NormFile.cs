@@ -6,12 +6,16 @@
     public class NormFile : NormObject
     {
         /// <summary>
+        /// Maximum length of file names.
+        /// </summary>
+        public const int FILENAME_MAX = 260;
+
+        /// <summary>
         /// Constructor of NormFile
         /// </summary>
         /// <param name="handle">This type is used to reference state kept for data transport objects being actively transmitted or received.</param>
         internal NormFile(long handle) : base(handle)
         {
-
         }
 
         /// <summary>

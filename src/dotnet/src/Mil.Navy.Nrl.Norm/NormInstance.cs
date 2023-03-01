@@ -10,6 +10,10 @@ namespace Mil.Navy.Nrl.Norm
     public class NormInstance
     {
         /// <summary>
+        /// Returned on error when getting the file descriptor for a NormInstance.
+        /// </summary>
+        public const int NORM_DESCRIPTOR_INVALID = 0;
+        /// <summary>
         /// The _handle refers to the NORM protocol engine instance
         /// </summary>
         private long _handle;
@@ -62,7 +66,7 @@ namespace Mil.Navy.Nrl.Norm
         public NormSession CreateSession(string address, int port, long localNodeId)
         {
             var session = NormCreateSession(_handle, address, port, localNodeId);
-            if (session == NORM_SESSION_INVALID)
+            if (session == NormSession.NORM_SESSION_INVALID)
             {
                 throw new IOException("Failed to create session");
             }
