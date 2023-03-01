@@ -389,11 +389,11 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="segmentSize">This parameter sets the maximum payload size (in bytes) of NORM sender messages (not including any NORM message header fields).</param>
         /// <param name="blockSize">This parameter sets the number of source symbol segments (packets) per coding block, for the systematic Reed-Solomon FEC code used in the current NORM implementation.</param>
         /// <param name="numParity">This parameter sets the maximum number of parity symbol segments (packets) the sender is willing to calculate per FEC coding block.</param>
-        /// <remarks>Uses NormFecType.SB for fecId.</remarks>
+        /// <remarks>Uses NormFecType.RS for fecId.</remarks>
         /// <exception cref="IOException">Thrown when NormStartSender() returns false, indicating the failure to start sender.</exception>
         public void StartSender(int sessionId, long bufferSpace, int segmentSize, short blockSize, short numParity)
         {
-            StartSender(sessionId, bufferSpace, segmentSize, blockSize, numParity, NormFecType.SB);
+            StartSender(sessionId, bufferSpace, segmentSize, blockSize, numParity, NormFecType.RS);
         }
 
         /// <summary>
@@ -419,11 +419,11 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="segmentSize">This parameter sets the maximum payload size (in bytes) of NORM sender messages (not including any NORM message header fields).</param>
         /// <param name="blockSize">This parameter sets the number of source symbol segments (packets) per coding block, for the systematic Reed-Solomon FEC code used in the current NORM implementation.</param>
         /// <param name="numParity">This parameter sets the maximum number of parity symbol segments (packets) the sender is willing to calculate per FEC coding block.</param>
-        /// <remarks>Generates a random sessionId and uses NormFecType.SB for fecId.</remarks>
+        /// <remarks>Generates a random sessionId and uses NormFecType.RS for fecId.</remarks>
         /// <exception cref="IOException">Thrown when NormStartSender() returns false, indicating the failure to start sender.</exception>
         public void StartSender(long bufferSpace, int segmentSize, short blockSize, short numParity)
         {
-            StartSender(bufferSpace, segmentSize, blockSize, numParity, NormFecType.SB);
+            StartSender(bufferSpace, segmentSize, blockSize, numParity, NormFecType.RS);
         }
 
         /// <summary>

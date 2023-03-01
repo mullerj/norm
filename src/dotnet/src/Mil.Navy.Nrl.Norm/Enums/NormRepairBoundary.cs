@@ -4,7 +4,7 @@
     /// The possible for values for NORM repair boundary.
     /// </summary>
     /// <remarks>
-    ///  Customizes at what points the receiver initiates the NORM NACK repair process during protocol operation.
+    /// Customizes at what points the receiver initiates the NORM NACK repair process during protocol operation.
     /// </remarks>
     public enum NormRepairBoundary
     {

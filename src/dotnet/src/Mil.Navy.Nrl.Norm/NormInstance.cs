@@ -208,10 +208,10 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <summary>
-        /// This function allows NORM debug output to be directed to a named pipe
+        /// This function allows NORM debug output to be directed to a named pipe.
         /// </summary>
-        /// <param name="pipename">The debug pipe name</param>
-        /// <exception cref="IOException">Throws when fails to open debug pipe</exception>
+        /// <param name="pipename">The debug pipe name.</param>
+        /// <exception cref="IOException">Throws when fails to open debug pipe.</exception>
         public void OpenDebugPipe(string pipename)
         {
             if (!NormOpenDebugPipe(_handle, pipename))
