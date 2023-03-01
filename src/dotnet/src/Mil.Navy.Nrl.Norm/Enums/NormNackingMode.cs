@@ -1,7 +1,7 @@
 ﻿namespace Mil.Navy.Nrl.Norm.Enums
 {
     /// <summary>
-    /// The available nacking modes
+    /// The available nacking modes.
     /// </summary>
     public enum NormNackingMode
     {

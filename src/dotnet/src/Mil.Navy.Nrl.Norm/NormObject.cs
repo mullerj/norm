@@ -1,7 +1,7 @@
 ﻿namespace Mil.Navy.Nrl.Norm
 {
     /// <summary>
-    /// The base NORM Object
+    /// The base transport object.
     /// </summary>
     public class NormObject
     {

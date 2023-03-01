@@ -1,7 +1,7 @@
 ﻿namespace Mil.Navy.Nrl.Norm
 {
     /// <summary>
-    ///  A NORM Object of type File
+    /// A transport object of type NORM_OBJECT_FILE.
     /// </summary>
     public class NormFile : NormObject
     {

@@ -1,7 +1,7 @@
 ﻿namespace Mil.Navy.Nrl.Norm
 {
     /// <summary>
-    /// A NORM Object of type Stream
+    /// A transport object of type NORM_OBJECT_STREAM.
     /// </summary>
     public class NormStream : NormObject
     {
