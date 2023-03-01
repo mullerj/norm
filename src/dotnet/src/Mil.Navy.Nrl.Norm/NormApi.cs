@@ -1053,18 +1053,6 @@ namespace Mil.Navy.Nrl.Norm
         public static extern nint NormDataAccessData(long objectHandle);
 
         /// <summary>
-        /// This function allows the application to disassociate data storage allocated by the NORM protocol engine for a receive 
-        /// object from the NORM_OBJECT_DATA transport object specified by the objectHandle parameter.
-        /// </summary>
-        /// <param name="objectHandle">This type is used to reference state kept for data transport objects being actively transmitted or received.</param>
-        /// <returns>
-        /// This function returns a pointer to the data storage area for the specified transport object. A NULL value may be returned
-        /// if the object has no associated data content or is not of type NORM_OBJECT_DATA.
-        /// </returns>
-        [DllImport(NORM_LIBRARY)]
-        public static extern nint NormDataDetachData(long objectHandle);
-
-        /// <summary>
         /// This function retrieves the NormNodeHandle corresponding to the remote sender of the transport object associated with the given objectHandle parameter.
         /// </summary>
         /// <param name="objectHandle">This type is used to reference state kept for data transport objects being actively transmitted or received.</param>
