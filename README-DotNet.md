@@ -47,7 +47,7 @@ Some tests might be skipped due to IO exception.
 ------------
 Packaging
 ------------
-To package the .NET extension for NORM, execute the .NET CLI command in the src/dotnet/src/Mil.Navy.Nrl.Norm directory:
+To package the .NET extension for NORM, execute the .NET CLI command in the src/dotnet directory:
 
 ```
 dotnet pack . -c Release
