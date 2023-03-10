@@ -459,7 +459,7 @@ namespace Mil.Navy.Nrl.Norm
         /// "repair window" as needed for some applications. While relative paths with respect to the "current working directory"
         /// may be used, it is recommended that full paths be used when possible.</param>
         /// <param name="info">The optional info and infoLength parameters are used to associate NORM_INFO content with the sent transport object.</param>
-        /// <param name="infoOffset">Indicates the strart of the message. Anything before it will not be sent. 
+        /// <param name="infoOffset">Indicates the start of the message. Anything before it will not be sent. 
         /// Note: to send full message infoOffset should be set to 0.</param>
         /// <param name="infoLength">The optional info and infoLength parameters are used to associate NORM_INFO content with the sent transport object.</param>
         /// <returns>A NormFile is returned which the application may use in other NORM API calls as needed.</returns>
@@ -491,7 +491,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This is an overload which will call DataEnqueue() with info set to null, infoOffset set to 0, and infoLength set to 0.
         /// </remarks>
         /// <param name="dataBuffer">The dataBuffer is a byte array containing the message to be transmitted.</param>
-        /// <param name="dataOffset">Indicates the strart of the message. Anything before it will not be sent. 
+        /// <param name="dataOffset">Indicates the start of the message. Anything before it will not be sent. 
         /// Note: to send full message dataOffset should be set to 0.</param>
         /// <param name="dataLength">Size of the message.</param>
         /// <returns>A NormData is returned which the application may use in other NORM API calls as needed.</returns>
@@ -505,11 +505,11 @@ namespace Mil.Navy.Nrl.Norm
         /// This function enqueues a segment of application memory space for transmission.
         /// </summary>
         /// <param name="dataBuffer">The dataBuffer is a byte array containing the message to be transmitted.</param>
-        /// <param name="dataOffset">Indicates the strart of the message. Anything before it will not be sent. 
+        /// <param name="dataOffset">Indicates the start of the message. Anything before it will not be sent. 
         /// Note: to send full message dataOffset should be set to 0.</param>
         /// <param name="dataLength">Size of the message.</param>
         /// <param name="info">The optional info and infoLength parameters are used to associate NORM_INFO content with the sent transport object.</param>
-        /// <param name="infoOffset">Indicates the strart of the message.</param>
+        /// <param name="infoOffset">Indicates the start of the message.</param>
         /// <param name="infoLength">The optional info and infoLength parameters are used to associate NORM_INFO content with the sent transport object.</param>
         /// <returns>A NormData is returned which the application may use in other NORM API calls as needed.</returns>
         /// <exception cref="IOException">Thrown when NormDataEnqueue() returns NORM_OBJECT_INVALID, indicating the failure to enqueue data.</exception>
@@ -567,7 +567,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="bufferSize"> The bufferSize parameter controls the size of the stream's "repair window"
         /// which limits how far back the sender will "rewind" to satisfy receiver repair requests.</param>
         /// <param name="info">Alloted memory space for transmitted information.</param>
-        /// <param name="infoOffset">Indicates the strart of the message. Anything before it will not be sent. 
+        /// <param name="infoOffset">Indicates the start of the message. Anything before it will not be sent. 
         /// Note: to send full message infoOffset should be set to 0.</param>
         /// <param name="infoLength">Size of the message.</param>
         /// <returns>A NormStream is returned which the application may use in other NORM API calls as needed.</returns>
