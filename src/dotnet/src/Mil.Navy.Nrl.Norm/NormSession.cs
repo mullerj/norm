@@ -105,8 +105,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function is used to force NORM to use a specific port number for UDP packets sent.
         /// </summary>
         /// <remarks>
-        /// This is a default function which calls SetTxPort(int port, bool enableReuse, string? txBindAddress) override
-        /// with enableReuse set as false and txBindAddress set to null.
+        /// This is an overload which calls SetTxPort() with enableReuse set as false and txBindAddress set to null.
         /// </remarks>
         /// <param name="port">The port parameter, specifies which port number to use.</param>
         /// <exception cref="IOException">Thrown when NormSetTxPort() returns false, indicating the failure to set tx port.</exception>
@@ -134,8 +133,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function limits the NormSession to perform NORM sender functions only.
         /// </summary>
         /// <remarks>
-        /// This is a default function which calls etTxOnly(bool txOnly, bool connectToSessionAddress) override
-        /// with connectToSessionAddress set as false.
+        /// This is an overload which calls SetTxOnly() with connectToSessionAddress set as false.
         /// </remarks>
         /// <param name="txOnly">Boolean specifing whether to turn on or off the txOnly operation.</param>
         public void SetTxOnly(bool txOnly)
@@ -158,8 +156,7 @@ namespace Mil.Navy.Nrl.Norm
         /// This function allows the user to control the port reuse and binding behavior for the receive socket.
         /// </summary>
         /// <remarks>
-        /// This is a default function which calls SetRxPortReuse(bool enable, string? rxBindAddress, string? senderAddress, int senderPort)
-        /// with rxBindAddress set to null, senderAddress set to null, and senderPort set to 0.
+        /// This is an overload that calls SetRxPortReuse() with rxBindAddress set to null, senderAddress set to null, and senderPort set to 0.
         /// </remarks>
         /// <param name="enable">When the enable parameter is set to true, reuse of the NormSession port number by multiple NORM instances or sessions is enabled.</param>
         public void SetRxPortReuse(bool enable)
@@ -181,8 +178,7 @@ namespace Mil.Navy.Nrl.Norm
         }
 
         /// <remarks>
-        /// This is a default function which calls SetEcnSupport(bool ecnEnable, bool ignoreLoss, bool tolerateLoss) override
-        /// with tolerateLoss set as false.
+        /// This is an overload which calls SetEcnSupport() with tolerateLoss set as false.
         /// </remarks>
         /// <param name="ecnEnable">Enables NORM ECN (congestion control) support.</param>
         /// <param name="ignoreLoss">With "ecnEnable", use ECN-only, ignoring packet loss.</param>
@@ -321,8 +317,7 @@ namespace Mil.Navy.Nrl.Norm
         /// but congestion control operation can be dynamically enabled/disabled during the course of sender operation.
         /// </summary>
         /// <remarks>
-        /// This is the default function which calls SetCongestionControl(bool enable, bool adjustRate) override
-        /// with adjustRate set to true.
+        /// This is an overload which calls SetCongestionControl() with adjustRate set to true.
         /// </remarks>
         /// <param name="enable">Specifies whether to enable or disable the NORM sender congestion control operation.</param>
         public void SetCongestionControl(bool enable)
