@@ -9,7 +9,8 @@
 
   <ItemGroup>
     <None Include="$(SolutionDir)lib\norm.dll">
-      <PackagePath>lib/$(TargetFramework)</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <PackagePath>runtimes/win-x86/native</PackagePath>
       <Pack>true</Pack>
     </None>
   </ItemGroup>
