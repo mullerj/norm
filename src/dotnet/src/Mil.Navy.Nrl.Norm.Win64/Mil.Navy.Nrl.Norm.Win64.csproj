@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="cd ..\..\..\..\&#xD;&#xA;python .\waf configure --msvc_target=x64&#xD;&#xA;python .\waf&#xD;&#xA;cd $(ProjectDir)&#xD;&#xA;copy ..\..\..\..\build\norm*.dll $(TargetDir)&#xD;&#xA;cd $(TargetDir)&#xD;&#xA;del /f norm.dll&#xD;&#xA;ren norm*.dll norm.dll" />
+  </Target>
+
+  <ItemGroup>
+    <None Include="bin\$(Configuration)\**\norm.dll">
+      <PackagePath>lib/</PackagePath>
+      <Pack>true</Pack>
+    </None>
+  </ItemGroup>
+
+</Project>
