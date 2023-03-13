@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <None Include="$(SolutionDir)lib\norm.so">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <PackagePath>lib/$(TargetFramework)</PackagePath>
       <Pack>true</Pack>
     </None>
