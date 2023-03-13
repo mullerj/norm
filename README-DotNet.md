@@ -53,8 +53,14 @@ To package the .NET extension for NORM, execute the .NET CLI command in the src/
 dotnet pack . -c Release
 ```
 
-To package the .NET extension for NORM that targets 64-bit Windows, execute the .NET CLI command in the src/dotnet directory:
+To package the .NET extension for NORM that targets 64-bit Windows, execute the command in the src/dotnet directory:
 
 ```
-dotnet pack . -c Release-Win64
+pack-win64.bat
+```
+
+To package the .NET extension for NORM that targets 32-bit Windows, execute the command in the src/dotnet directory:
+
+```
+pack-win32.bat
 ```
