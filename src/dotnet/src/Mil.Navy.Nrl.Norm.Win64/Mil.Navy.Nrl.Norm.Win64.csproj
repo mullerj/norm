@@ -18,4 +18,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Mil.Navy.Nrl.Norm\Mil.Navy.Nrl.Norm.csproj" />
+  </ItemGroup>
+
 </Project>
