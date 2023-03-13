@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Include="$(SolutionDir)lib\norm.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <PackagePath>lib/$(TargetFramework)</PackagePath>
       <Pack>true</Pack>
     </None>
