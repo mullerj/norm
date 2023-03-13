@@ -11,4 +11,4 @@ cd lib
 del /f norm.dll
 ren norm*.dll norm.dll
 cd %currenPath%
-dotnet pack . -c Release-Win32
+dotnet pack . -c Release-win-x86

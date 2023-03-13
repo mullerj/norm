@@ -56,17 +56,17 @@ dotnet pack . -c Release
 To package the .NET extension for NORM that targets 64-bit Windows, execute the command in the src/dotnet directory:
 
 ```
-pack-win64.bat
+pack-win-x64.bat
 ```
 
 To package the .NET extension for NORM that targets 32-bit Windows, execute the command in the src/dotnet directory:
 
 ```
-pack-win32.bat
+pack-win-x86.bat
 ```
 
-To package the .NET extension for NORM that targets Linux, execute the command in the src/dotnet directory:
+To package the .NET extension for NORM that targets 64-bit Linux, execute the command in the src/dotnet directory:
 
 ```
-./pack-linux.sh
+./pack-linux-x64.sh
 ```
