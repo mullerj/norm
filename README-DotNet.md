@@ -64,3 +64,9 @@ To package the .NET extension for NORM that targets 32-bit Windows, execute the 
 ```
 pack-win32.bat
 ```
+
+To package the .NET extension for NORM that targets Linux, execute the command in the src/dotnet directory:
+
+```
+./pack-linux.sh
+```
