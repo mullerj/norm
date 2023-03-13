@@ -1,5 +1,5 @@
 #!/bin/bash
-currenPath="$pwd"
+currenPath="$PWD"
 cd ../../
 ./waf
 cd "$currenPath"
