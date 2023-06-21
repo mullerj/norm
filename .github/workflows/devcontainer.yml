@@ -1,0 +1,25 @@
+name: 'Dev Container'
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build Dev Container task
+      uses: devcontainers/ci@v0.3
+      with:
+       imageName: ghcr.io/norm/norm-devcontainer
+       cacheFrom: ghcr.io/norm/norm-devcontainer
