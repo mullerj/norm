@@ -42,11 +42,6 @@ jobs:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Build Dev Container task
-      uses: devcontainers/ci@v0.3
-      with:
-       imageName: ghcr.io/${{ github.repository_owner }}/norm-devcontainer
-       cacheFrom: ghcr.io/${{ github.repository_owner }}/norm-devcontainer
     - name: Package .NET
       uses: devcontainers/ci@v0.3
       with:
