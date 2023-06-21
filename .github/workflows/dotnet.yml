@@ -41,3 +41,4 @@ jobs:
           cd ./src/dotnet
           chmod 755 *.sh
           ./pack-linux-x64.sh
+        push: never
