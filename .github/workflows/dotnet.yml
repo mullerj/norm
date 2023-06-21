@@ -45,9 +45,7 @@ jobs:
     - name: Package .NET
       uses: devcontainers/ci@v0.3
       with:
-        imageName: ghcr.io/${{ github.repository_owner }}/norm-devcontainer
         cacheFrom: ghcr.io/${{ github.repository_owner }}/norm-devcontainer
-        push: never
         runCmd: | 
           cd ./src/dotnet
           chmod 755 *.sh
