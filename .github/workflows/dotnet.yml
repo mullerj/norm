@@ -12,6 +12,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    
+    - name: Setup Python
+      uses: actions/setup-python@v3.1.4
+      with:
+        python-version: 3.x
+    - name: Build NORM
+      run: ./waf
+      working-directory: .
+        
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
