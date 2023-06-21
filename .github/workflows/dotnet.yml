@@ -33,3 +33,11 @@ jobs:
       run: dotnet build --no-restore --configuration Release
     - name: Test
       run: dotnet test --no-build --verbosity normal --configuration Release
+      
+    - name: Package .NET
+      uses: devcontainers/ci@v0.3
+      with:
+        runCmd: | 
+          cd ./src/dotnet
+          chmod 755 *.sh
+          ./pack-linux-x64.sh
