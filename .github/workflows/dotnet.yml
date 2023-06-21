@@ -45,13 +45,13 @@ jobs:
     - name: Build Dev Container task
       uses: devcontainers/ci@v0.3
       with:
-       imageName: ghcr.io/norm/norm-devcontainer
-       cacheFrom: ghcr.io/norm/norm-devcontainer
+       imageName: ghcr.io/${{ github.repository_owner }}/norm-devcontainer
+       cacheFrom: ghcr.io/${{ github.repository_owner }}/norm-devcontainer
     - name: Package .NET
       uses: devcontainers/ci@v0.3
       with:
-        imageName: ghcr.io/norm/norm-devcontainer
-        cacheFrom: ghcr.io/norm/norm-devcontainer
+        imageName: ghcr.io/${{ github.repository_owner }}/norm-devcontainer
+        cacheFrom: ghcr.io/${{ github.repository_owner }}/norm-devcontainer
         push: never
         runCmd: | 
           cd ./src/dotnet
