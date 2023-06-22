@@ -6,8 +6,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
     defaults:
       run:
         working-directory: ./src/dotnet
@@ -36,16 +34,9 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal --configuration Release
     
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
     - name: Package .NET
       uses: devcontainers/ci@v0.3
       with:
-        cacheFrom: ghcr.io/${{ github.repository_owner }}/norm-devcontainer
         push: never
         runCmd: | 
           cd ./src/dotnet
