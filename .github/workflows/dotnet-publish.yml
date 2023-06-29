@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: [".NET"]
     types:
-    - completed
+    - requested
     branches:
     - '**'
 
