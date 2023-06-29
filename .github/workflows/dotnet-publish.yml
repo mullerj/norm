@@ -2,7 +2,7 @@ name: ".NET Publish"
 
 on:
   workflow_run:
-    workflows: [".NET"]
+    workflows: ['*']
     types:
     - requested
     branches:
