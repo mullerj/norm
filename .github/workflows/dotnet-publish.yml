@@ -1,10 +1,6 @@
 name: ".NET Publish"
 
-on:
-  workflow_run:
-    workflows: ['.NET']
-    types:
-    - completed
+on: [push, pull_request]
 
 jobs:
   build:
@@ -18,7 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        ref: ${{ github.event.workflow_run.head_branch }}
         submodules: recursive
     
     - name: Package .NET
