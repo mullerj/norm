@@ -29,3 +29,7 @@ jobs:
           cd ./src/dotnet
           chmod 755 *.sh
           ./pack-linux-x64.sh
+          find ./src -name \*linux*.nupkg -exec cp {} $GITHUB_WORKSPACE \;
+    - name: Check workspace contents
+      run: ls
+      working-directory: .
