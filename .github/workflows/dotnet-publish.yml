@@ -2,11 +2,9 @@ name: ".NET Publish"
 
 on:
   workflow_run:
-    workflows: ['*']
+    workflows: ['.NET']
     types:
-    - requested
-    branches:
-    - '**'
+    - completed
 
 jobs:
   build:
@@ -16,6 +14,7 @@ jobs:
       run:
         working-directory: ./src/dotnet
 
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     - uses: actions/checkout@v3
       with:
