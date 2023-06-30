@@ -23,6 +23,14 @@ jobs:
           cd ./src/dotnet
           chmod 755 *.sh
           ./pack-linux-x64.sh
-    - name: Check workspace contents
-      run: ls /home/runner -R
-      working-directory: .
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+        source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    - name: Publish .NET
+      run: |
+        package=$(find /home/runner/work -type f -name "*linux-x64*.nupkg")
+        dotnet nuget push "$package"
