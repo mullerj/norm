@@ -23,7 +23,7 @@ jobs:
           cd ./src/dotnet
           chmod 755 *.sh
           ./pack-linux-x64.sh
-          find ./src -name \*linux*.nupkg -exec cp {} $GITHUB_OUTPUT \;
+          find ./src -name \*linux*.nupkg -exec cp {} /mnt/github/output \;
     - name: Check workspace contents
       run: ls
       working-directory: .
