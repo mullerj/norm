@@ -19,20 +19,16 @@
 "customizations": {
 	"vscode": {
 		"extensions": [
-			"ms-vscode.cpptools-extension-pack",
-			"vscjava.vscode-java-pack",
-			"ms-python.python",
-			"ms-python.isort",
-			"ms-dotnettools.csdevkit",
-			"ms-vscode-remote.remote-containers",
-			"ms-azuretools.vscode-docker",
-			"github.vscode-github-actions",
-			"GitHub.codespaces",
+      "DavidAnson.vscode-markdownlint",
+      "github.vscode-github-actions",
+      "GitHub.codespaces",
 			"GitHub.vscode-pull-request-github",
-			"yzhang.markdown-all-in-one",
-			"DavidAnson.vscode-markdownlint",
-			"jebbs.plantuml",
-			"tomoki1207.pdf"
+      "jebbs.plantuml",
+			"ms-python.isort",
+			"ms-vscode-remote.remote-containers",
+      "ms-vscode.cpptools-themes",
+      "tomoki1207.pdf",
+			"yzhang.markdown-all-in-one"
 		]
 	}
 }
