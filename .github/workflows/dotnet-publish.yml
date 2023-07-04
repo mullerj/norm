@@ -1,6 +1,10 @@
 name: ".NET Publish"
 
-on: [push, pull_request]
+on:
+  workflow_run:
+    workflows: ['.NET']
+    types:
+    - completed
 
 jobs:
   publish:
@@ -12,6 +16,7 @@ jobs:
       run:
         working-directory: ./src/dotnet
 
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -38,6 +43,7 @@ jobs:
     permissions:
       packages: write
 
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -72,6 +78,7 @@ jobs:
       run:
         working-directory: ./src/dotnet
 
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -105,6 +112,7 @@ jobs:
       run:
         working-directory: ./src/dotnet
 
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     - uses: actions/checkout@v3
       with:
