@@ -15,5 +15,25 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
       "version": "20.10"
     }
-  }
+},
+"customizations": {
+	"vscode": {
+		"extensions": [
+			"ms-vscode.cpptools-extension-pack",
+			"vscjava.vscode-java-pack",
+			"ms-python.python",
+			"ms-python.isort",
+			"ms-dotnettools.csdevkit",
+			"ms-vscode-remote.remote-containers",
+			"ms-azuretools.vscode-docker",
+			"github.vscode-github-actions",
+			"GitHub.codespaces",
+			"GitHub.vscode-pull-request-github",
+			"yzhang.markdown-all-in-one",
+			"DavidAnson.vscode-markdownlint",
+			"jebbs.plantuml",
+			"tomoki1207.pdf"
+		]
+	}
+}
 }
