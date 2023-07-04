@@ -19,15 +19,16 @@
 "customizations": {
 	"vscode": {
 		"extensions": [
-      "DavidAnson.vscode-markdownlint",
-      "github.vscode-github-actions",
-      "GitHub.codespaces",
+			"DavidAnson.vscode-markdownlint",
+      "eamodio.gitlens",
+			"github.vscode-github-actions",
+			"GitHub.codespaces",
 			"GitHub.vscode-pull-request-github",
-      "jebbs.plantuml",
+			"jebbs.plantuml",
 			"ms-python.isort",
 			"ms-vscode-remote.remote-containers",
-      "ms-vscode.cpptools-themes",
-      "tomoki1207.pdf",
+			"ms-vscode.cpptools-themes",
+			"tomoki1207.pdf",
 			"yzhang.markdown-all-in-one"
 		]
 	}
