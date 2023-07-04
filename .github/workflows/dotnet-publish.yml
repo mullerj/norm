@@ -3,14 +3,11 @@ name: ".NET Publish"
 on: [push, pull_request]
 
 jobs:
-  build:
+  publish-linux-x64:
 
     runs-on: ubuntu-latest
     permissions:
       packages: write
-    defaults:
-      run:
-        working-directory: ./src/dotnet
 
     steps:
     - uses: actions/checkout@v3
@@ -35,4 +32,38 @@ jobs:
     - name: Publish .NET
       run: |
         package=$(find /home/runner/work -type f -name "*linux-x64*.nupkg")
+        dotnet nuget push "$package"
+
+  publish-win-x64:
+
+    runs-on: windows-latest
+    permissions:
+      packages: write
+    defaults:
+      run:
+        working-directory: ./src/dotnet
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Setup Python
+      uses: actions/setup-python@v3.1.4
+      with:
+        python-version: 3.x
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+        source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Package .NET
+      run: pack-win-x64.bat
+    - name: Publish .NET
+      shell: pwsh
+      run: |
+        $package=Get-ChildItem -Path .\ -Filter *win-x64*.nupkg -Recurse -File | ForEach-Object { $_.FullName }
         dotnet nuget push "$package"
