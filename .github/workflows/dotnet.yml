@@ -32,10 +32,10 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release
     - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration Release --logger trx --results-directory ./TestResults
+      run: dotnet test --no-build --verbosity normal --configuration Release --logger trx --results-directory TestResults
     - name: Upload test results
       uses: actions/upload-artifact@v3
       with:
         name: dotnet-results
-        path: ./TestResults
+        path: ./src/dotnet/TestResults
       if: ${{ always() }}
