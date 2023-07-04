@@ -1,13 +1,8 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/python:3.11-bullseye",
+  "image": "mcr.microsoft.com/devcontainers/universal:2.4",
   "features": {
     "ghcr.io/devcontainers/features/dotnet:1": {
       "version": "6"
-    },
-    "ghcr.io/devcontainers/features/java:1": {
-      "version": "17",
-      "installAnt": true,
-      "antVersion": "1.10.12"
     },
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
       "version": "20.10"
@@ -26,10 +21,12 @@
         "jebbs.plantuml",
         "ms-python.isort",
         "ms-vscode-remote.remote-containers",
+        "ms-vscode.cpptools-extension-pack",
         "ms-vscode.cpptools-themes",
         "ms-vscode.PowerShell",
         "tomoki1207.pdf",
-        "yzhang.markdown-all-in-one"
+        "vscjava.vscode-java-pack",
+        "yzhang.markdown-all-in-one"		
       ]
     }
   }
