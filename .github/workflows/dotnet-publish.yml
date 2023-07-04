@@ -61,9 +61,8 @@ jobs:
         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: Package .NET
-      run: pack-win-x64.bat
+      run: .\pack-win-x64.bat
     - name: Publish .NET
-      shell: pwsh
       run: |
         $package=Get-ChildItem -Path .\ -Filter *win-x64*.nupkg -Recurse -File | ForEach-Object { $_.FullName }
         dotnet nuget push "$package"
