@@ -5,6 +5,9 @@ on:
     workflows: ['.NET']
     types:
     - completed
+    branches:
+      - master
+      - main
 
 jobs:
   publish:
