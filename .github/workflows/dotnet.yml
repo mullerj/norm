@@ -36,6 +36,6 @@ jobs:
     - name: Upload test results
       uses: actions/upload-artifact@v3
       with:
-        name: dotnet-results
+        name: *.trx
         path: TestResults
       if: ${{ always() }}
