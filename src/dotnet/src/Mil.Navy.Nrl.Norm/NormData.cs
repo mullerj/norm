@@ -3,7 +3,7 @@
 namespace Mil.Navy.Nrl.Norm
 {
     /// <summary>
-    /// A transport object of type NORM_OBJECT_FILE.
+    /// A transport object of type NORM_OBJECT_DATA.
     /// </summary>
     /// <remarks>
     /// The data storage area for the specified transport object.
