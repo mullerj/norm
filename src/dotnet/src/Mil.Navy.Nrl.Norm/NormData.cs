@@ -18,10 +18,7 @@ namespace Mil.Navy.Nrl.Norm
             var dataPointer = NormDataAccessData(_handle);
             var length = NormObjectGetSize(_handle);
             var data = new byte[length];
-            for (var i = 0; i < length; i++)
-            {
-                data[i] = Marshal.ReadByte(dataPointer, i);
-            }
+            Marshal.Copy(dataPointer, data, 0, length);
             return data;
         }
 
