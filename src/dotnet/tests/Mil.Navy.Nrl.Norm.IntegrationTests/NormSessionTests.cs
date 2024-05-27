@@ -93,7 +93,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             if (_isReceiverStarted && !_isReceiverStopped)
             {
                 _normSession.StopReceiver();
-                _isSenderStopped = true;
+                _isReceiverStopped = true;
             }
         }
 
@@ -464,7 +464,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 Assert.Equivalent(expectedEventTypes, actualEventTypes);
 
                 var actualEvent = actualEvents.FirstOrDefault(e => e.Type == NormEventType.NORM_RX_OBJECT_COMPLETED);
-                var actualNormData = Assert.IsType<NormData>(actualEvent.Object);
+                var actualNormData = Assert.IsType<NormData>(actualEvent?.Object);
                 
                 var actualData = actualNormData.GetData();
                 Assert.Equal(expectedData, actualData);
