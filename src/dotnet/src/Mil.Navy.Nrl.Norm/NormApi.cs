@@ -542,7 +542,7 @@ namespace Mil.Navy.Nrl.Norm
         /// NORM_INFO content is left to the application's discretion</param>
         /// <returns>A NormObjectHandle is returned which the application may use in other NORM API calls as needed.</returns>
         [DllImport(NORM_LIBRARY)]
-        public static extern long NormDataEnqueue(long sessionHandle, nint dataPtr, int dataLen, nint infoPtr, int infoLen);
+        public static extern long NormDataEnqueue(long sessionHandle, nint dataPtr, int dataLen, byte[]? info, int infoLen);
 
         /// <summary>
         /// This function enqueues a segment of application memory space for transmission within the specified NORM sessionHandle.
@@ -562,22 +562,16 @@ namespace Mil.Navy.Nrl.Norm
         public static long NormDataEnqueue(long sessionHandle, byte[] data, int dataLen, byte[]? info, int infoLen)
         {
             long objectHandle;
-            var dataPtr = Marshal.AllocHGlobal(dataLen);
-            var infoPtr = Marshal.AllocHGlobal(infoLen);
-
+            var dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            
             try
             {
-                Marshal.Copy(data, 0, dataPtr, dataLen);
-                if (info != null)
-                {
-                    Marshal.Copy(info, 0, infoPtr, infoLen);
-                }
-                objectHandle = NormDataEnqueue(sessionHandle, dataPtr, dataLen, infoPtr, infoLen);
+                var dataPtr = dataHandle.AddrOfPinnedObject();
+                objectHandle = NormDataEnqueue(sessionHandle, dataPtr, dataLen, info, infoLen);
             }
             finally
             {
-                Marshal.FreeHGlobal(dataPtr);
-                Marshal.FreeHGlobal(infoPtr);
+                dataHandle.Free();
             }
             return objectHandle;
         }
