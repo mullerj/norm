@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Mil.Navy.Nrl.Norm
@@ -526,12 +527,26 @@ namespace Mil.Navy.Nrl.Norm
                 infoBytes = null;
                 infoLength = 0;
             }
-            var objectHandle = NormDataEnqueue(_handle, dataBytes, dataLength, infoBytes, infoLength);
-            if (objectHandle == NormObject.NORM_OBJECT_INVALID)
+
+            var dataHandle = GCHandle.Alloc(dataBytes, GCHandleType.Pinned);
+            var infoHandle = GCHandle.Alloc(infoBytes, GCHandleType.Pinned);
+
+            try
             {
-                throw new IOException("Failed to enqueue data");
+                var dataPtr = dataHandle.AddrOfPinnedObject();
+                var infoPtr = infoHandle.AddrOfPinnedObject();
+                var objectHandle = NormDataEnqueue(_handle, dataPtr, dataLength, infoPtr, infoLength);
+                if (objectHandle == NormObject.NORM_OBJECT_INVALID)
+                {
+                    throw new IOException("Failed to enqueue data");
+                }
+                return new NormData(objectHandle);
+            } 
+            finally
+            {
+                dataHandle.Free();
+                infoHandle.Free();
             }
-            return new NormData(objectHandle);
         }
 
         /// <summary>
