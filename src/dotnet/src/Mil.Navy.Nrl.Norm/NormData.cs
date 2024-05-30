@@ -8,8 +8,11 @@ namespace Mil.Navy.Nrl.Norm
     /// <remarks>
     /// The data storage area for the specified transport object.
     /// </remarks>
-    public class NormData : NormObject
+    public class NormData : NormObject, IDisposable
     {
+        private GCHandle _dataHandle;
+        private GCHandle _infoHandle;
+
         /// <summary>
         /// Get the data storage area associated with a transport object of type NORM_OBJECT_DATA.
         /// </summary>
@@ -22,11 +25,23 @@ namespace Mil.Navy.Nrl.Norm
             return data;
         }
 
+        void IDisposable.Dispose()
+        {
+            _dataHandle.Free();
+            _infoHandle.Free();
+        }
+
+        internal NormData(long handle, GCHandle dataHandle, GCHandle infoHandle) : base(handle)
+        {
+            _dataHandle = dataHandle;
+            _infoHandle = infoHandle;
+        }
+
         /// <summary>
         /// Constructor of NormData
         /// </summary>
         /// <param name="handle">Type is used to reference state kept for data transport objects being actively transmitted or received.</param>
-        internal NormData(long handle) : base(handle)
+        internal NormData(long handle) : this(handle, GCHandle.Alloc(null, GCHandleType.Weak), GCHandle.Alloc(null, GCHandleType.Weak))
         {
         }
     }

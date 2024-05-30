@@ -14,6 +14,8 @@
         /// </summary>
         protected long _handle;
 
+        public event EventHandler<long> Cancelled;
+
         /// <summary>
         /// Internal constructor for NormObject
         /// </summary>
@@ -114,6 +116,7 @@
         public void Cancel()
         {
             NormObjectCancel(_handle);
+            Cancelled?.Invoke(this, _handle);
         }
 
         /// <summary>

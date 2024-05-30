@@ -21,6 +21,7 @@ namespace Mil.Navy.Nrl.Norm
         /// The NormSessionHandle type is used to reference the NORM transport session.
         /// </summary>
         private long _handle;
+        private Dictionary<long, NormData> _enqueuedNormData = new Dictionary<long, NormData>(); 
 
         /// <summary>
         /// Used for the application's participation in the NormSession.
@@ -432,6 +433,11 @@ namespace Mil.Navy.Nrl.Norm
         public void StopSender()
         {
             NormStopSender(_handle);
+            foreach (IDisposable normData in _enqueuedNormData.Values)
+            {
+                normData.Dispose();
+            }
+            _enqueuedNormData.Clear();
         }
 
         /// <summary>
@@ -531,22 +537,25 @@ namespace Mil.Navy.Nrl.Norm
             var dataHandle = GCHandle.Alloc(dataBytes, GCHandleType.Pinned);
             var infoHandle = GCHandle.Alloc(infoBytes, GCHandleType.Pinned);
 
-            try
+            var dataPtr = dataHandle.AddrOfPinnedObject();
+            var infoPtr = infoHandle.AddrOfPinnedObject();
+            var objectHandle = NormDataEnqueue(_handle, dataPtr, dataLength, infoPtr, infoLength);
+            if (objectHandle == NormObject.NORM_OBJECT_INVALID)
             {
-                var dataPtr = dataHandle.AddrOfPinnedObject();
-                var infoPtr = infoHandle.AddrOfPinnedObject();
-                var objectHandle = NormDataEnqueue(_handle, dataPtr, dataLength, infoPtr, infoLength);
-                if (objectHandle == NormObject.NORM_OBJECT_INVALID)
-                {
-                    throw new IOException("Failed to enqueue data");
-                }
-                return new NormData(objectHandle);
-            } 
-            finally
-            {
-                dataHandle.Free();
-                infoHandle.Free();
+                throw new IOException("Failed to enqueue data");
             }
+            var normData = new NormData(objectHandle);
+            normData.Cancelled += NormData_Cancelled;
+            _enqueuedNormData.Add(objectHandle, normData);
+
+            return normData;
+        }
+
+        private void NormData_Cancelled(object? sender, long handle)
+        {
+            IDisposable normData = _enqueuedNormData[handle];
+            normData.Dispose();
+            _enqueuedNormData.Remove(handle);
         }
 
         /// <summary>
