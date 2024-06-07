@@ -186,7 +186,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         /// Generates text content
         /// </summary>
         /// <returns>The generated text content</returns>
-        private string GenerateTextContent()
+        private static string GenerateTextContent()
         {
             var faker = new Faker();
             return faker.Lorem.Paragraph();
@@ -398,17 +398,46 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [SkippableFact(typeof(IOException))]
-        public void EnqueuesData()
+        public static IEnumerable<object[]> GenerateData()
+        {
+            var data = new List<object[]>();
+
+            var content = GenerateTextContent();
+            var expectedContent = content;
+            var offset = 0;
+            var length = content.Length;
+            data.Add(new object[] { content, expectedContent, offset, length });
+
+            var faker = new Faker();
+            length = faker.Random.Int(content.Length / 2, content.Length - 1);
+            expectedContent = content.Substring(offset, length);
+            data.Add(new object[] { content, expectedContent, offset, length });
+
+            offset = faker.Random.Int(1, content.Length - 1 / 2);
+            length = content.Length - offset;
+            expectedContent = content.Substring(offset, length);
+            data.Add(new object[] { content, expectedContent, offset, length });
+
+            offset = faker.Random.Int(1, content.Length - 1 / 2);
+            length = faker.Random.Int(1, content.Length - offset);
+            expectedContent = content.Substring(offset, length);
+            data.Add(new object[] { content, expectedContent, offset, length });
+
+            return data;
+        }
+
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateData))]
+        public void EnqueuesData(string content, string expectedContent, int offset, int length)
         {
             StartSender();
             //Create data to write to the stream
-            var expectedContent = GenerateTextContent();
-            byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            var data = Encoding.ASCII.GetBytes(content);
+            var expectedData = Encoding.ASCII.GetBytes(expectedContent);
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(data, offset, length);
                 var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY };
                 var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
                 Assert.Equal(expectedEventTypes, actualEventTypes);
