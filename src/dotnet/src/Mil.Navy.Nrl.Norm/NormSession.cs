@@ -526,23 +526,34 @@ namespace Mil.Navy.Nrl.Norm
             {
                 throw new ArgumentOutOfRangeException(nameof(dataLength), "The data length is out of range");
             }
-            var dataBytes = dataBuffer.Skip(dataOffset).Take(dataLength).ToArray();
-            byte[]? infoBytes;
-            if (info != null)
+            unsafe
             {
-                infoBytes = info.Skip(infoOffset).Take(infoLength).ToArray();
-            } 
-            else
-            {
-                infoBytes = null;
-                infoLength = 0;
-            }
-            var objectHandle = NormDataEnqueue(_handle, dataBytes, dataLength, infoBytes, infoLength);
-            if (objectHandle == NormObject.NORM_OBJECT_INVALID)
-            {
-                throw new IOException("Failed to enqueue data");
-            }
-            return new NormData(objectHandle);
+                fixed (byte* dataPointer = &dataBuffer[0])
+                {
+                    byte* dataPointerWithOffset = dataPointer + dataOffset;
+
+                    byte* infoPointerWithOffset;
+
+                    if (info != null)
+                    {
+                        fixed (byte* infoPointer = &info[0])
+                        {
+                            infoPointerWithOffset = infoPointer + infoOffset;
+                        }  
+                    }
+                    else
+                    {
+                        infoPointerWithOffset = null;
+                        infoLength = 0;
+                    }
+                    var objectHandle = NormDataEnqueue(_handle, (IntPtr)dataPointerWithOffset, dataLength, (IntPtr)infoPointerWithOffset, infoLength);
+                    if (objectHandle == NormObject.NORM_OBJECT_INVALID)
+                    {
+                        throw new IOException("Failed to enqueue data");
+                    }
+                    return new NormData(objectHandle);
+                }
+            }    
         }
 
         /// <summary>
