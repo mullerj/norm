@@ -456,8 +456,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [SkippableFact(typeof(IOException))]
-        public void ReceivesData()
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateData))]
+        public void ReceivesData(string content, string expectedContent, int offset, int length)
         {
             _normSession.SetLoopback(true);
             StartSender();
@@ -470,12 +471,12 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normInstance.SetCacheDirectory(cachePath);
 
             //Create data to be sent
-            var expectedContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(content);
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(data, offset, length);
                 var expectedEventTypes = new List<NormEventType>
                 {
                     NormEventType.NORM_REMOTE_SENDER_NEW,
