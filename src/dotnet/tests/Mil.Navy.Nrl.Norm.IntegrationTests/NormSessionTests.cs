@@ -456,6 +456,53 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
+        public static IEnumerable<object[]> GenerateOutOfRangeData()
+        {
+            var data = new List<object[]>();
+
+            var content = GenerateTextContent();
+            var faker = new Faker();
+            var offset = faker.Random.Int(-content.Length, -1);
+            var length = content.Length;
+            data.Add(new object[] { content, offset, length });
+
+            offset = faker.Random.Int(content.Length, content.Length * 2);
+            length = content.Length;
+            data.Add(new object[] { content, offset, length });
+
+            offset = 0;
+            length = faker.Random.Int(content.Length + 1, content.Length * 2);
+            data.Add(new object[] { content, offset, length });
+
+            offset = content.Length - 1;
+            length = content.Length;
+            data.Add(new object[] { content, offset, length });
+
+            return data;
+        }
+
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateOutOfRangeData))]
+        public void EnqueuesDataThrowsExceptionWhenOutOfRange(string content, int offset, int length)
+        {
+            StartSender();
+            //Create data to write to the stream
+            var data = Encoding.ASCII.GetBytes(content);
+
+            try
+            {
+                Assert.Throws<ArgumentOutOfRangeException>(() => _normSession.DataEnqueue(data, offset, length));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
+        }
+
         [SkippableTheory(typeof(IOException))]
         [MemberData(nameof(GenerateData))]
         public void ReceivesData(string content, string expectedContent, int offset, int length)

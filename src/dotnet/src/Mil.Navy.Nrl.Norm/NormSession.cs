@@ -497,6 +497,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="dataLength">Size of the message.</param>
         /// <returns>A NormData is returned which the application may use in other NORM API calls as needed.</returns>
         /// <exception cref="IOException">Thrown when NormDataEnqueue() returns NORM_OBJECT_INVALID, indicating the failure to enqueue data.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the data offset or data length are outside of the data buffer</exception>
         public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength)
         {
             return DataEnqueue(dataBuffer, dataOffset, dataLength, null, 0, 0);
@@ -514,8 +515,17 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="infoLength">The optional info and infoLength parameters are used to associate NORM_INFO content with the sent transport object.</param>
         /// <returns>A NormData is returned which the application may use in other NORM API calls as needed.</returns>
         /// <exception cref="IOException">Thrown when NormDataEnqueue() returns NORM_OBJECT_INVALID, indicating the failure to enqueue data.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the data offset or data length are outside of the data buffer</exception>
         public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength, byte[]? info, int infoOffset, int infoLength)
         {
+            if (dataOffset < 0 || dataOffset >= dataBuffer.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(dataOffset), "The data offset is out of range");
+            }
+            if (dataOffset + dataLength > dataBuffer.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(dataLength), "The data length is out of range");
+            }
             var dataBytes = dataBuffer.Skip(dataOffset).Take(dataLength).ToArray();
             byte[]? infoBytes;
             if (info != null)
