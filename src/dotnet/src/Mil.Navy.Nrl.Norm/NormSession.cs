@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Data;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Mil.Navy.Nrl.Norm
 {
@@ -526,34 +528,28 @@ namespace Mil.Navy.Nrl.Norm
             {
                 throw new ArgumentOutOfRangeException(nameof(dataLength), "The data length is out of range");
             }
-            unsafe
+
+            long objectHandle;
+            var dataHandle = GCHandle.Alloc(dataBuffer, GCHandleType.Pinned);
+            var infoHandle = GCHandle.Alloc(info, GCHandleType.Pinned);
+
+            try
             {
-                fixed (byte* dataPointer = &dataBuffer[0])
+                var dataPtr = dataHandle.AddrOfPinnedObject() + dataOffset;
+                var infoPtr = infoHandle.AddrOfPinnedObject() + infoOffset;
+                objectHandle = NormDataEnqueue(_handle, dataPtr, dataLength, infoPtr, infoLength);
+                if (objectHandle == NormObject.NORM_OBJECT_INVALID)
                 {
-                    byte* dataPointerWithOffset = dataPointer + dataOffset;
-
-                    byte* infoPointerWithOffset;
-
-                    if (info != null)
-                    {
-                        fixed (byte* infoPointer = &info[0])
-                        {
-                            infoPointerWithOffset = infoPointer + infoOffset;
-                        }  
-                    }
-                    else
-                    {
-                        infoPointerWithOffset = null;
-                        infoLength = 0;
-                    }
-                    var objectHandle = NormDataEnqueue(_handle, (IntPtr)dataPointerWithOffset, dataLength, (IntPtr)infoPointerWithOffset, infoLength);
-                    if (objectHandle == NormObject.NORM_OBJECT_INVALID)
-                    {
-                        throw new IOException("Failed to enqueue data");
-                    }
-                    return new NormData(objectHandle);
+                    throw new IOException("Failed to enqueue data");
                 }
-            }    
+            } 
+            finally
+            {
+                dataHandle.Free();
+                infoHandle.Free();
+            }
+
+            return new NormData(objectHandle);
         }
 
         /// <summary>
