@@ -502,38 +502,63 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         {
             var data = new List<object[]>();
 
-            var content = GenerateTextContent();
+            var dataContent = GenerateTextContent();
             var faker = new Faker();
-            var offset = faker.Random.Int(-content.Length, -1);
-            var length = content.Length;
-            data.Add(new object[] { content, offset, length });
+            var dataOffset = faker.Random.Int(-dataContent.Length, -1);
+            var dataLength = dataContent.Length;
+            data.Add(new object[] { dataContent, dataOffset, dataLength });
 
-            offset = faker.Random.Int(content.Length, content.Length * 2);
-            length = content.Length;
-            data.Add(new object[] { content, offset, length });
+            dataOffset = faker.Random.Int(dataContent.Length, dataContent.Length * 2);
+            dataLength = dataContent.Length;
+            data.Add(new object[] { dataContent, dataOffset, dataLength });
 
-            offset = 0;
-            length = faker.Random.Int(content.Length + 1, content.Length * 2);
-            data.Add(new object[] { content, offset, length });
+            dataOffset = 0;
+            dataLength = faker.Random.Int(dataContent.Length + 1, dataContent.Length * 2);
+            data.Add(new object[] { dataContent, dataOffset, dataLength });
 
-            offset = content.Length - 1;
-            length = content.Length;
-            data.Add(new object[] { content, offset, length });
+            dataOffset = dataContent.Length - 1;
+            dataLength = dataContent.Length;
+            data.Add(new object[] { dataContent, dataOffset, dataLength });
+
+            dataOffset = 0;
+            dataLength = dataContent.Length;
+
+            var infoContent = GenerateInfoContent();
+            var infoOffset = faker.Random.Int(-infoContent.Length, -1);
+            var infoLength = infoContent.Length;
+            data.Add(new object[] { dataContent, dataOffset, dataLength, infoContent, infoOffset, infoLength });
+
+            infoOffset = faker.Random.Int(infoContent.Length, infoContent.Length * 2);
+            infoLength = infoContent.Length;
+            data.Add(new object[] { dataContent, dataOffset, dataLength, infoContent, infoOffset, infoLength });
+
+            infoOffset = 0;
+            infoLength = faker.Random.Int(infoContent.Length + 1, infoContent.Length * 2);
+            data.Add(new object[] { dataContent, dataOffset, dataLength, infoContent, infoOffset, infoLength });
+
+            infoOffset = infoContent.Length - 1;
+            infoLength = infoContent.Length;
+            data.Add(new object[] { dataContent, dataOffset, dataLength, infoContent, infoOffset, infoLength });
 
             return data;
         }
 
         [SkippableTheory(typeof(IOException))]
         [MemberData(nameof(GenerateOutOfRangeData))]
-        public void EnqueuesDataThrowsExceptionWhenOutOfRange(string content, int offset, int length)
+        public void EnqueuesDataThrowsExceptionWhenOutOfRange(string dataContent, int dataOffset, int dataLength, string? infoContent = null, int? infoOffset = null, int? infoLength = null)
         {
             StartSender();
-            //Create data to write to the stream
-            var data = Encoding.ASCII.GetBytes(content);
+            //Create data to enqueue
+            var data = Encoding.ASCII.GetBytes(dataContent);
+            //Create info to enqueue
+            var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
 
             try
             {
-                Assert.Throws<ArgumentOutOfRangeException>(() => _normSession.DataEnqueue(data, offset, length));
+                Assert.Throws<ArgumentOutOfRangeException>(() => 
+                infoOffset != null && infoLength != null ? 
+                _normSession.DataEnqueue(data, dataOffset, dataLength, info, infoOffset.Value, infoLength.Value) : 
+                _normSession.DataEnqueue(data, dataOffset, dataLength));
             }
             catch (Exception)
             {
