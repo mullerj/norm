@@ -77,10 +77,12 @@ namespace Mil.Navy.Nrl.Norm
         /// </summary>
         /// <param name="handle">Specifies the session to return.</param>
         /// <returns>Returns a NormSession.</returns>
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        internal static NormSession GetSession(long handle)
+        internal static NormSession? GetSession(long handle)
         {
-            return _normSessions[handle];
+            lock (_normSessions)
+            {
+                return _normSessions.TryGetValue(handle, out NormSession? session) ? session : null;
+            }
         }
 
         /// <summary>
@@ -503,6 +505,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="dataLength">Size of the message.</param>
         /// <returns>A NormData is returned which the application may use in other NORM API calls as needed.</returns>
         /// <exception cref="IOException">Thrown when NormDataEnqueue() returns NORM_OBJECT_INVALID, indicating the failure to enqueue data.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the data offset or data length are outside of the data buffer.</exception>
         public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength)
         {
             return DataEnqueue(dataBuffer, dataOffset, dataLength, null, 0, 0);
@@ -520,35 +523,49 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="infoLength">The optional info and infoLength parameters are used to associate NORM_INFO content with the sent transport object.</param>
         /// <returns>A NormData is returned which the application may use in other NORM API calls as needed.</returns>
         /// <exception cref="IOException">Thrown when NormDataEnqueue() returns NORM_OBJECT_INVALID, indicating the failure to enqueue data.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the data offset, data length, info offset or info length are outside of the associated buffer.</exception>
         public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength, byte[]? info, int infoOffset, int infoLength)
         {
-            var dataBytes = dataBuffer.Skip(dataOffset).Take(dataLength).ToArray();
-            byte[]? infoBytes;
-            if (info != null)
+            if (dataOffset < 0 || dataOffset >= dataBuffer.Length)
             {
-                infoBytes = info.Skip(infoOffset).Take(infoLength).ToArray();
+                throw new ArgumentOutOfRangeException(nameof(dataOffset), "The data offset is out of range");
+            }
+            if (dataOffset + dataLength > dataBuffer.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(dataLength), "The data length is out of range");
+            }
+            if (infoOffset < 0 || infoOffset >= info?.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(infoOffset), "The info offset is out of range");
+            }
+            if (infoOffset + infoLength > info?.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(infoLength), "The info length is out of range");
+            }
+
+            long objectHandle;
+            var dataHandle = GCHandle.Alloc(dataBuffer, GCHandleType.Pinned);
+            var infoHandle = GCHandle.Alloc(info, GCHandleType.Pinned);
+
+            try
+            {
+                var dataPtr = dataHandle.AddrOfPinnedObject() + dataOffset;
+                var infoPtr = infoHandle.AddrOfPinnedObject() + infoOffset;
+                objectHandle = NormDataEnqueue(_handle, dataPtr, dataLength, infoPtr, infoLength);
+                if (objectHandle == NormObject.NORM_OBJECT_INVALID)
+                {
+                    throw new IOException("Failed to enqueue data");
+                }
+                var normData = new NormData(objectHandle);
+                normData.Cancelled += NormData_Cancelled;
+                _enqueuedNormData.Add(objectHandle, normData);
             } 
-            else
+            finally
             {
-                infoBytes = null;
-                infoLength = 0;
+                infoHandle.Free();
             }
 
-            var dataHandle = GCHandle.Alloc(dataBytes, GCHandleType.Pinned);
-            var infoHandle = GCHandle.Alloc(infoBytes, GCHandleType.Pinned);
-
-            var dataPtr = dataHandle.AddrOfPinnedObject();
-            var infoPtr = infoHandle.AddrOfPinnedObject();
-            var objectHandle = NormDataEnqueue(_handle, dataPtr, dataLength, infoPtr, infoLength);
-            if (objectHandle == NormObject.NORM_OBJECT_INVALID)
-            {
-                throw new IOException("Failed to enqueue data");
-            }
-            var normData = new NormData(objectHandle);
-            normData.Cancelled += NormData_Cancelled;
-            _enqueuedNormData.Add(objectHandle, normData);
-
-            return normData;
+            return new NormData(objectHandle);
         }
 
         private void NormData_Cancelled(object? sender, long handle)
