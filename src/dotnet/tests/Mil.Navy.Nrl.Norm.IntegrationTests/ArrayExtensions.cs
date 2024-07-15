@@ -3,9 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace Mil.Navy.Nrl.Norm.IntegrationTests
 {
-    public static class ArrayExtensions 
+    internal static class ArrayExtensions 
     {
-        public static SafeBuffer ToSafeBuffer(this byte[] buffer)
+        internal static SafeBuffer ToSafeBuffer(this byte[] buffer)
         {
             using var memoryMappedFile = MemoryMappedFile.CreateNew(null, buffer.Length);
             var memoryAccessor = memoryMappedFile.CreateViewAccessor(0, buffer.Length, MemoryMappedFileAccess.ReadWrite);
