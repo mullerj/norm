@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Microsoft.Win32.SafeHandles;
 using Mil.Navy.Nrl.Norm.Enums;
 using System.Text;
 
@@ -463,6 +464,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             StartSender();
             //Create data to write to enqueue
             var data = Encoding.ASCII.GetBytes(dataContent);
+            using var dataBuffer = data.ToSafeBuffer();
             var expectedData = Encoding.ASCII.GetBytes(expectedDataContent);
             //Create info to enqueue
             var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
@@ -471,8 +473,8 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             try
             {
                 var normData = infoOffset != null && infoLength != null ? 
-                    _normSession.DataEnqueue(data, dataOffset, dataLength, info, infoOffset.Value, infoLength.Value) : 
-                    _normSession.DataEnqueue(data, dataOffset, dataLength);
+                    _normSession.DataEnqueue(dataBuffer, dataOffset, dataLength, info, infoOffset.Value, infoLength.Value) : 
+                    _normSession.DataEnqueue(dataBuffer, dataOffset, dataLength);
                 var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY };
                 var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
                 Assert.Equal(expectedEventTypes, actualEventTypes);
@@ -550,6 +552,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             StartSender();
             //Create data to enqueue
             var data = Encoding.ASCII.GetBytes(dataContent);
+            using var dataBuffer = data.ToSafeBuffer();
             //Create info to enqueue
             var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
 
@@ -557,8 +560,8 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             {
                 Assert.Throws<ArgumentOutOfRangeException>(() => 
                 infoOffset != null && infoLength != null ? 
-                _normSession.DataEnqueue(data, dataOffset, dataLength, info, infoOffset.Value, infoLength.Value) : 
-                _normSession.DataEnqueue(data, dataOffset, dataLength));
+                _normSession.DataEnqueue(dataBuffer, dataOffset, dataLength, info, infoOffset.Value, infoLength.Value) : 
+                _normSession.DataEnqueue(dataBuffer, dataOffset, dataLength));
             }
             catch (Exception)
             {
@@ -586,6 +589,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Create data to be sent
             var data = Encoding.ASCII.GetBytes(content);
+            using var dataBuffer = data.ToSafeBuffer();
             var expectedData = Encoding.ASCII.GetBytes(expectedDataContent);
             //Create info to be sent
             var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
@@ -594,8 +598,8 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             try
             {
                 var normData = infoOffset != null && infoLength != null ?
-                    _normSession.DataEnqueue(data, dataOffset, dataLength, info, infoOffset.Value, infoLength.Value) :
-                    _normSession.DataEnqueue(data, dataOffset, dataLength);
+                    _normSession.DataEnqueue(dataBuffer, dataOffset, dataLength, info, infoOffset.Value, infoLength.Value) :
+                    _normSession.DataEnqueue(dataBuffer, dataOffset, dataLength);
                 var expectedEventTypes = new List<NormEventType>
                 {
                     NormEventType.NORM_REMOTE_SENDER_NEW,
@@ -1040,10 +1044,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY };
                 var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
                 Assert.Equal(expectedEventTypes, actualEventTypes);
@@ -1078,10 +1083,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 _normSession.SetWatermark(normData);
                 var expectedEventTypes = new List<NormEventType>
                 {
@@ -1126,10 +1132,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 _normSession.SetWatermark(normData);
                 _normSession.CancelWatermark();
                 var expectedEventTypes = new List<NormEventType>
@@ -1173,10 +1180,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 _normSession.SetWatermark(normData);
                 var expectedEventTypes = new List<NormEventType>
                 {
@@ -1243,10 +1251,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 _normSession.SetWatermark(normData);
                 WaitForEvents(TimeSpan.FromSeconds(1));
                 var expectedAckingStatus = NormAckingStatus.NORM_ACK_SUCCESS;
@@ -1677,10 +1686,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 Assert.Equal(NormObjectType.NORM_OBJECT_DATA, normData.Type);
             }
             catch (Exception)
@@ -1752,10 +1762,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
             var expectedSize = Encoding.ASCII.GetByteCount(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 Assert.Equal(expectedSize, normData.Size);
             }
             catch (Exception)
@@ -1775,10 +1786,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 normData.SetNackingMode(NormNackingMode.NORM_NACK_NONE);
             }
             catch (Exception)
@@ -1798,10 +1810,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 normData.SetNackingMode(NormNackingMode.NORM_NACK_INFO_ONLY);
             }
             catch (Exception)
@@ -1821,10 +1834,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 normData.SetNackingMode(NormNackingMode.NORM_NACK_NORMAL);
             }
             catch (Exception)
@@ -1845,10 +1859,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
             var expectedBytesPending = (long)0;
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 WaitForEvents();
                 Assert.Equal(expectedBytesPending, normData.GetBytesPending());
             }
@@ -1869,10 +1884,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 normData.Cancel();
             }
             catch (Exception)
@@ -1892,10 +1908,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 normData.Retain();
             }
             catch (Exception)
@@ -1915,10 +1932,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 normData.Retain();
                 normData.Release();
             }
@@ -1939,10 +1957,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 Assert.Throws<IOException>(() => normData.Sender);
             }
             catch (Exception)
@@ -1971,10 +1990,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0,     expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0,     expectedData.Length);
                 var normEventType = NormEventType.NORM_RX_OBJECT_COMPLETED;
                 var actualEvents = GetEvents();
                 Assert.Contains(normEventType, actualEvents.Select(e => e.Type));
@@ -2009,10 +2029,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                var normData = _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                var normData = _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
                 var normEventType = NormEventType.NORM_RX_OBJECT_COMPLETED;
                 var actualEvents = GetEvents();
                 Assert.Contains(normEventType, actualEvents.Select(e => e.Type));
@@ -2049,10 +2070,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
+            using var dataBuffer = expectedData.ToSafeBuffer();
 
             try
             {
-                _normSession.DataEnqueue(expectedData, 0, expectedData.Length);
+                _normSession.DataEnqueue(dataBuffer, 0, expectedData.Length);
 
                 var actualEvents = GetEvents();
 

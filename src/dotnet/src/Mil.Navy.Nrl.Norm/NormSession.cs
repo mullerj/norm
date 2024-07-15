@@ -499,7 +499,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <returns>A NormData is returned which the application may use in other NORM API calls as needed.</returns>
         /// <exception cref="IOException">Thrown when NormDataEnqueue() returns NORM_OBJECT_INVALID, indicating the failure to enqueue data.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the data offset or data length are outside of the data buffer.</exception>
-        public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength)
+        public NormData DataEnqueue(SafeBuffer dataBuffer, int dataOffset, int dataLength)
         {
             return DataEnqueue(dataBuffer, dataOffset, dataLength, null, 0, 0);
         }
@@ -517,13 +517,13 @@ namespace Mil.Navy.Nrl.Norm
         /// <returns>A NormData is returned which the application may use in other NORM API calls as needed.</returns>
         /// <exception cref="IOException">Thrown when NormDataEnqueue() returns NORM_OBJECT_INVALID, indicating the failure to enqueue data.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the data offset, data length, info offset or info length are outside of the associated buffer.</exception>
-        public NormData DataEnqueue(byte[] dataBuffer, int dataOffset, int dataLength, byte[]? info, int infoOffset, int infoLength)
+        public NormData DataEnqueue(SafeBuffer dataBuffer, int dataOffset, int dataLength, byte[]? info, int infoOffset, int infoLength)
         {
-            if (dataOffset < 0 || dataOffset >= dataBuffer.Length)
+            if (dataOffset < 0 || Convert.ToUInt64(dataOffset) >= dataBuffer.ByteLength)
             {
                 throw new ArgumentOutOfRangeException(nameof(dataOffset), "The data offset is out of range");
             }
-            if (dataOffset + dataLength > dataBuffer.Length)
+            if (Convert.ToUInt64(dataOffset + dataLength) > dataBuffer.ByteLength)
             {
                 throw new ArgumentOutOfRangeException(nameof(dataLength), "The data length is out of range");
             }
@@ -537,22 +537,24 @@ namespace Mil.Navy.Nrl.Norm
             }
 
             long objectHandle;
-            var dataHandle = GCHandle.Alloc(dataBuffer, GCHandleType.Pinned);
             var infoHandle = GCHandle.Alloc(info, GCHandleType.Pinned);
 
             try
             {
-                var dataPtr = dataHandle.AddrOfPinnedObject() + dataOffset;
-                var infoPtr = infoHandle.AddrOfPinnedObject() + infoOffset;
-                objectHandle = NormDataEnqueue(_handle, dataPtr, dataLength, infoPtr, infoLength);
-                if (objectHandle == NormObject.NORM_OBJECT_INVALID)
-                {
-                    throw new IOException("Failed to enqueue data");
+                unsafe {
+                    byte* dataBufferPointer = null;
+                    dataBuffer.AcquirePointer(ref dataBufferPointer);
+                    var dataPtr = (nint)dataBufferPointer + dataOffset;
+                    var infoPtr = infoHandle.AddrOfPinnedObject() + infoOffset;
+                    objectHandle = NormDataEnqueue(_handle, dataPtr, dataLength, infoPtr, infoLength);
+                    if (objectHandle == NormObject.NORM_OBJECT_INVALID)
+                    {
+                        throw new IOException("Failed to enqueue data");
+                    }
                 }
             } 
             finally
             {
-                dataHandle.Free();
                 infoHandle.Free();
             }
 
