@@ -4,9 +4,9 @@ using System.Runtime.InteropServices;
 namespace Mil.Navy.Nrl.Norm.IntegrationTests
 {
     /// <summary>
-    /// Extension methods for array
+    /// Extension methods to assist with testing
     /// </summary>
-    internal static class ArrayExtensions 
+    internal static class Extensions 
     {
         /// <summary>
         /// Obtain a safe buffer from a byte array buffer
