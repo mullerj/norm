@@ -1,6 +1,5 @@
 using System.IO.MemoryMappedFiles;
 using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
 
 public static class ArrayExtensions 
 {
