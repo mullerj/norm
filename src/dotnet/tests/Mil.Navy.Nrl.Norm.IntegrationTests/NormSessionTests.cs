@@ -464,7 +464,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             StartSender();
             //Create data to write to enqueue
             var data = Encoding.ASCII.GetBytes(dataContent);
-            using var dataBuffer = data.ToSafeBuffer();
+            using var dataBuffer = data.ToByteBuffer();
             var expectedData = Encoding.ASCII.GetBytes(expectedDataContent);
             //Create info to enqueue
             var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
@@ -552,7 +552,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             StartSender();
             //Create data to enqueue
             var data = Encoding.ASCII.GetBytes(dataContent);
-            using var dataBuffer = data.ToSafeBuffer();
+            using var dataBuffer = data.ToByteBuffer();
             //Create info to enqueue
             var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
 
@@ -589,7 +589,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             //Create data to be sent
             var data = Encoding.ASCII.GetBytes(content);
-            using var dataBuffer = data.ToSafeBuffer();
+            using var dataBuffer = data.ToByteBuffer();
             var expectedData = Encoding.ASCII.GetBytes(expectedDataContent);
             //Create info to be sent
             var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
@@ -1044,7 +1044,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1083,7 +1083,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1132,7 +1132,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1180,7 +1180,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1251,7 +1251,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1686,7 +1686,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1762,7 +1762,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
             var expectedSize = Encoding.ASCII.GetByteCount(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1786,7 +1786,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1810,7 +1810,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1834,7 +1834,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1859,7 +1859,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
             var expectedBytesPending = (long)0;
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1884,7 +1884,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1908,7 +1908,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1932,7 +1932,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1957,7 +1957,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to write to the stream
             var expectedContent = GenerateTextContent();
             byte[] expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -1990,7 +1990,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -2029,7 +2029,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
@@ -2070,7 +2070,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             //Create data to be sent
             var expectedContent = GenerateTextContent();
             var expectedData = Encoding.ASCII.GetBytes(expectedContent);
-            using var dataBuffer = expectedData.ToSafeBuffer();
+            using var dataBuffer = expectedData.ToByteBuffer();
 
             try
             {
