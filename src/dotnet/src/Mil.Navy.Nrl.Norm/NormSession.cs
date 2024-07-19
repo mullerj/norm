@@ -527,6 +527,48 @@ namespace Mil.Navy.Nrl.Norm
             {
                 throw new ArgumentOutOfRangeException(nameof(dataLength), "The data length is out of range");
             }
+            
+            unsafe 
+            {
+                byte* dataPtr = null;
+                dataBuffer.AcquirePointer(ref dataPtr);
+                return DataEnqueue((nint)dataPtr, dataOffset, dataLength, info, infoOffset, infoLength);
+            }
+        }
+
+        /// <summary>
+        /// This function enqueues a segment of application memory space for transmission.
+        /// </summary>
+        /// <remarks>
+        /// This is an overload which will call DataEnqueue() with info set to null, infoOffset set to 0, and infoLength set to 0.
+        /// </remarks>
+        /// <param name="dataPtr">The dataPtr is a pointer to the message to be transmitted.</param>
+        /// <param name="dataOffset">Indicates the start of the message. Anything before it will not be sent. 
+        /// Note: to send full message dataOffset should be set to 0.</param>
+        /// <param name="dataLength">Size of the message.</param>
+        /// <returns>A NormData is returned which the application may use in other NORM API calls as needed.</returns>
+        /// <exception cref="IOException">Thrown when NormDataEnqueue() returns NORM_OBJECT_INVALID, indicating the failure to enqueue data.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the data offset or data length are outside of the data buffer.</exception>
+        public NormData DataEnqueue(nint dataPtr, int dataOffset, int dataLength)
+        {
+            return DataEnqueue(dataPtr, dataOffset, dataLength, null, 0, 0);
+        }
+
+        /// <summary>
+        /// This function enqueues a segment of application memory space for transmission.
+        /// </summary>
+        /// <param name="dataPtr">The dataPtr is a pointer to the message to be transmitted.</param>
+        /// <param name="dataOffset">Indicates the start of the message. Anything before it will not be sent. 
+        /// Note: to send full message dataOffset should be set to 0.</param>
+        /// <param name="dataLength">Size of the message.</param>
+        /// <param name="info">The optional info and infoLength parameters are used to associate NORM_INFO content with the sent transport object.</param>
+        /// <param name="infoOffset">Indicates the start of the message.</param>
+        /// <param name="infoLength">The optional info and infoLength parameters are used to associate NORM_INFO content with the sent transport object.</param>
+        /// <returns>A NormData is returned which the application may use in other NORM API calls as needed.</returns>
+        /// <exception cref="IOException">Thrown when NormDataEnqueue() returns NORM_OBJECT_INVALID, indicating the failure to enqueue data.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the data offset, data length, info offset or info length are outside of the associated buffer.</exception>
+        public NormData DataEnqueue(nint dataPtr, int dataOffset, int dataLength, byte[]? info, int infoOffset, int infoLength)
+        {
             if (infoOffset < 0 || infoOffset >= info?.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(infoOffset), "The info offset is out of range");
@@ -541,16 +583,12 @@ namespace Mil.Navy.Nrl.Norm
 
             try
             {
-                unsafe {
-                    byte* dataBufferPointer = null;
-                    dataBuffer.AcquirePointer(ref dataBufferPointer);
-                    var dataPtr = (nint)dataBufferPointer + dataOffset;
-                    var infoPtr = infoHandle.AddrOfPinnedObject() + infoOffset;
-                    objectHandle = NormDataEnqueue(_handle, dataPtr, dataLength, infoPtr, infoLength);
-                    if (objectHandle == NormObject.NORM_OBJECT_INVALID)
-                    {
-                        throw new IOException("Failed to enqueue data");
-                    }
+                dataPtr += dataOffset;
+                var infoPtr = infoHandle.AddrOfPinnedObject() + infoOffset;
+                objectHandle = NormDataEnqueue(_handle, dataPtr, dataLength, infoPtr, infoLength);
+                if (objectHandle == NormObject.NORM_OBJECT_INVALID)
+                {
+                    throw new IOException("Failed to enqueue data");
                 }
             } 
             finally
