@@ -822,12 +822,6 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             StartSender();
             StartReceiver();
 
-            //Set up cache directory
-            var folderName = Guid.NewGuid().ToString();
-            var cachePath = Path.Combine(_testPath, folderName);
-            Directory.CreateDirectory(cachePath);
-            _normInstance.SetCacheDirectory(cachePath);
-
             var buffer = Encoding.ASCII.GetBytes(content);
             var expectedBuffer = Encoding.ASCII.GetBytes(expectedContent);
             //Create info to enqueue
