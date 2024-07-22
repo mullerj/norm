@@ -649,8 +649,18 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="infoLength">Size of the message.</param>
         /// <returns>A NormStream is returned which the application may use in other NORM API calls as needed.</returns>
         /// <exception cref="IOException">Thrown when NormStreamOpen() returns NORM_OBJECT_INVALID, indicating the failure to open stream.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the info offset or info length are outside of the info buffer.</exception>
         public NormStream StreamOpen(long bufferSize, byte[]? info, int infoOffset, int infoLength)
         {
+            if (infoOffset < 0 || infoOffset >= info?.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(infoOffset), "The info offset is out of range");
+            }
+            if (infoOffset + infoLength > info?.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(infoLength), "The info length is out of range");
+            }
+            
             byte[]? infoBytes;
             if (info != null)
             {

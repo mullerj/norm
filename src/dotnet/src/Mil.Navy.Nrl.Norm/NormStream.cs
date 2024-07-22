@@ -46,6 +46,15 @@
         /// <returns>This function returns the number of bytes of data successfully enqueued for NORM stream transmission.</returns>
         public int Write(byte[] buffer, int offset, int length)
         {
+            if (offset < 0 || offset >= buffer.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(offset), "The offset is out of range");
+            }
+            if (offset + length > buffer.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length), "The length is out of range");
+            }
+
             var bytes = buffer.Skip(offset).Take(length).ToArray();
             return NormStreamWrite(_handle, bytes, length);
         }

@@ -1,5 +1,4 @@
 ﻿using Bogus;
-using Microsoft.Win32.SafeHandles;
 using Mil.Navy.Nrl.Norm.Buffers;
 using Mil.Navy.Nrl.Norm.Enums;
 using System.Text;
@@ -810,6 +809,41 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             finally
             {
                 normStream?.Close(true);
+                StopSender();
+            }
+        }
+
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateOutOfRangeData))]
+        public void SendsStreamThrowsExceptionWhenOutOfRange(string content, int offset, int length, string? infoContent = null, int? infoOffset = null, int? infoLength = null)
+        {
+            StartSender();
+            var buffer = Encoding.ASCII.GetBytes(content);
+            //Create info to enqueue
+            var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+
+                if (infoOffset != null && infoLength != null) {
+                    Assert.Throws<ArgumentOutOfRangeException>(() =>
+                    _normSession.StreamOpen(repairWindowSize, info, infoOffset.Value, infoLength.Value));
+                } 
+                else 
+                {
+                    normStream = _normSession.StreamOpen(repairWindowSize);
+                    Assert.Throws<ArgumentOutOfRangeException>(() =>
+                    normStream.Write(buffer, offset, length));
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
                 StopSender();
             }
         }
