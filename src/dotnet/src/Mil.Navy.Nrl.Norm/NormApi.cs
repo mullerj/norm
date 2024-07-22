@@ -571,7 +571,7 @@ namespace Mil.Navy.Nrl.Norm
         /// which will enable NORM receiver applications to properly interpret the received stream as it is being received.</param>
         /// <returns>A NormObjectHandle is returned which the application may use in other NORM API calls as needed.</returns>
         [DllImport(NORM_LIBRARY)]
-        public static extern long NormStreamOpen(long sessionHandle, long bufferSize, byte[]? infoPtr, int infoLen);
+        public static extern long NormStreamOpen(long sessionHandle, long bufferSize, nint infoPtr, int infoLen);
 
         /// <summary>
         /// This function halts transfer of the stream specified by the streamHandle parameter and releases any resources
@@ -591,7 +591,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="numBytes">The numBytes parameter indicates the length of the data content.</param>
         /// <returns>This function returns the number of bytes of data successfully enqueued for NORM stream transmission.</returns>
         [DllImport(NORM_LIBRARY)]
-        internal static extern int NormStreamWrite(long streamHandle, byte[] buffer, int numBytes);
+        internal static extern int NormStreamWrite(long streamHandle, nint buffer, int numBytes);
 
         /// <summary>
         /// This function causes an immediate "flush" of the transmit stream specified by the streamHandle parameter.

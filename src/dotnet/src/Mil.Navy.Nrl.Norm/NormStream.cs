@@ -1,4 +1,6 @@
-﻿namespace Mil.Navy.Nrl.Norm
+﻿using System.Runtime.InteropServices;
+
+namespace Mil.Navy.Nrl.Norm
 {
     /// <summary>
     /// A transport object of type NORM_OBJECT_STREAM.
@@ -44,6 +46,7 @@
         /// Note: If the data is written in its entirety, offset should be set to 0.</param>
         /// <param name="length">The length parameter indicates the length of the data content.</param>
         /// <returns>This function returns the number of bytes of data successfully enqueued for NORM stream transmission.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the offset or length are outside of the buffer.</exception>
         public int Write(byte[] buffer, int offset, int length)
         {
             if (offset < 0 || offset >= buffer.Length)
@@ -55,8 +58,20 @@
                 throw new ArgumentOutOfRangeException(nameof(length), "The length is out of range");
             }
 
-            var bytes = buffer.Skip(offset).Take(length).ToArray();
-            return NormStreamWrite(_handle, bytes, length);
+            int numBytes;
+            var bufferHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+
+            try
+            {
+                var bufferPtr = bufferHandle.AddrOfPinnedObject() + offset;
+                numBytes = NormStreamWrite(_handle, bufferPtr, length);
+            } 
+            finally
+            {
+                bufferHandle.Free();
+            }
+
+            return numBytes;
         }
 
         /// <summary>
