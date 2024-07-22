@@ -253,8 +253,39 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [SkippableFact(typeof(IOException))]
-        public void EnqueuesFile()
+        public static IEnumerable<object?[]> GenerateInfo()
+        {
+            var info = new List<object?[]>();
+
+            var infoContent = GenerateInfoContent();
+            var expectedInfoContent = infoContent;
+            var infoOffset = 0;
+            var infoLength = infoContent.Length;
+            info.Add(new object?[] { infoContent, expectedInfoContent, infoOffset, infoLength });
+
+            var faker = new Faker();
+            infoLength = faker.Random.Int(infoContent.Length / 2, infoContent.Length - 1);
+            expectedInfoContent = infoContent.Substring(infoOffset, infoLength);
+            info.Add(new object?[] { infoContent, expectedInfoContent, infoOffset, infoLength });
+
+            infoOffset = faker.Random.Int(1, infoContent.Length - 1 / 2);
+            infoLength = infoContent.Length - infoOffset;
+            expectedInfoContent = infoContent.Substring(infoOffset, infoLength);
+            info.Add(new object?[] { infoContent, expectedInfoContent, infoOffset, infoLength });
+
+            infoOffset = faker.Random.Int(1, infoContent.Length - 1 / 2);
+            infoLength = faker.Random.Int(1, infoContent.Length - infoOffset);
+            expectedInfoContent = infoContent.Substring(infoOffset, infoLength);
+            info.Add(new object?[] { infoContent, expectedInfoContent, infoOffset, infoLength });
+
+            info.Add(new object?[] { null, "", null, null });
+
+            return info;
+        }
+
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateInfo))]
+        public void EnqueuesFile(string? infoContent = null, string expectedInfoContent = "", int? infoOffset = null, int? infoLength = null)
         {
             StartSender();
 
@@ -262,10 +293,15 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             var fileName = Guid.NewGuid().ToString();
             var filePath = Path.Combine(_testPath, fileName);
             File.WriteAllText(filePath, fileContent);
+            //Create info to enqueue
+            var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
+            var expectedInfo = Encoding.ASCII.GetBytes(expectedInfoContent);
 
             try
             {
-                var normFile = _normSession.FileEnqueue(filePath);
+                var normFile = infoOffset != null && infoLength != null ? 
+                    _normSession.FileEnqueue(filePath, info, infoOffset.Value, infoLength.Value) : 
+                    _normSession.FileEnqueue(filePath);
                 Assert.NotNull(normFile);
                 var expectedEventTypes = new List<NormEventType> { NormEventType.NORM_TX_OBJECT_SENT, NormEventType.NORM_TX_QUEUE_EMPTY };
                 var actualEvents = GetEvents();
@@ -285,8 +321,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [SkippableFact(typeof(IOException))]
-        public void ReceivesFile()
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateInfo))]
+        public void ReceivesFile(string? infoContent = null, string expectedInfoContent = "", int? infoOffset = null, int? infoLength = null)
         {
             _normSession.SetLoopback(true);
             StartSender();
@@ -303,11 +340,16 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             var fileContent = GenerateTextContent();
             var filePath = Path.Combine(_testPath, fileName);
             File.WriteAllText(filePath, fileContent);
+            //Create info to enqueue
+            var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
+            var expectedInfo = Encoding.ASCII.GetBytes(expectedInfoContent);
 
             try
             {
                 //Enqueue file
-                var normFile = _normSession.FileEnqueue(filePath);
+                var normFile = infoOffset != null && infoLength != null ? 
+                    _normSession.FileEnqueue(filePath, info, infoOffset.Value, infoLength.Value) : 
+                    _normSession.FileEnqueue(filePath);
                 //Wait for events
                 var normEvents = GetEvents();
                 AssertNormEvents(normEvents);

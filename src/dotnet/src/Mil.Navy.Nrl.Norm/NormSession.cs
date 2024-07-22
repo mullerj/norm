@@ -466,7 +466,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="infoLength">The optional info and infoLength parameters are used to associate NORM_INFO content with the sent transport object.</param>
         /// <returns>A NormFile is returned which the application may use in other NORM API calls as needed.</returns>
         /// <exception cref="IOException">Thrown when NormFileEnqueue() returns NORM_OBJECT_INVALID, indicating the failure to enqueue file.</exception>
-        public NormFile FileEnqueue(string filename, byte[] info, int infoOffset, int infoLength)
+        public NormFile FileEnqueue(string filename, byte[]? info, int infoOffset, int infoLength)
         {
             byte[]? infoBytes;
             if (info != null)
