@@ -524,7 +524,7 @@ namespace Mil.Navy.Nrl.Norm
         /// NORM_INFO content is left to the application's discretion</param>
         /// <returns>A NormObjectHandle is returned which the application may use in other NORM API calls as needed.</returns>
         [DllImport(NORM_LIBRARY)]
-        public static extern long NormFileEnqueue(long sessionHandle, string fileName, byte[]? infoPtr, int infoLen);
+        public static extern long NormFileEnqueue(long sessionHandle, string fileName, nint infoPtr, int infoLen);
 
         /// <summary>
         /// This function enqueues a segment of application memory space for transmission within the specified NORM sessionHandle.

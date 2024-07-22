@@ -478,21 +478,23 @@ namespace Mil.Navy.Nrl.Norm
                 throw new ArgumentOutOfRangeException(nameof(infoLength), "The info length is out of range");
             }
 
-            byte[]? infoBytes;
-            if (info != null)
+            long objectHandle;
+            var infoHandle = GCHandle.Alloc(info, GCHandleType.Pinned);
+
+            try
             {
-                infoBytes = info.Skip(infoOffset).Take(infoLength).ToArray();
-            }
-            else
+                var infoPtr = infoHandle.AddrOfPinnedObject() + infoOffset;
+                objectHandle = NormFileEnqueue(_handle, filename, infoPtr, infoLength);
+                if (objectHandle == NormObject.NORM_OBJECT_INVALID)
+                {
+                    throw new IOException("Failed to enqueue file");
+                }
+            } 
+            finally
             {
-                infoBytes = null;
-                infoLength = 0;
+                infoHandle.Free();
             }
-            var objectHandle = NormFileEnqueue(_handle, filename, infoBytes, infoLength);
-            if (objectHandle == NormObject.NORM_OBJECT_INVALID)
-            {
-                throw new IOException("Failed to enqueue file");
-            }
+
             return new NormFile(objectHandle);
         }
 
