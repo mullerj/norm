@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Mil.Navy.Nrl.Norm.Buffers 
 {
-    public sealed class DirectByteBuffer : ByteBuffer
+    internal sealed class DirectByteBuffer : ByteBuffer
     {
         internal DirectByteBuffer(int capacity)
         {
