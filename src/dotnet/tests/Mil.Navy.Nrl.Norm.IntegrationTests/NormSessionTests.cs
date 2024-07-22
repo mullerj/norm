@@ -767,29 +767,41 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [SkippableFact(typeof(IOException))]
-        public void SendsStream()
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateData))]
+        public void SendsStream(string content, string expectedContent, int offset, int length, string? infoContent = null, string expectedInfoContent = "", int? infoOffset = null, int? infoLength = null)
         {
             StartSender();
 
-            var fileContent = GenerateTextContent();
-            var data = Encoding.ASCII.GetBytes(fileContent);
-            var dataOffset = 0;
+            var buffer = Encoding.ASCII.GetBytes(content);
+            var expectedBuffer = Encoding.ASCII.GetBytes(expectedContent);
+            //Create info to enqueue
+            var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
+            var expectedInfo = Encoding.ASCII.GetBytes(expectedInfoContent);
             NormStream? normStream = null;
 
             try
             {
                 var repairWindowSize = 1024 * 1024;
-                normStream = _normSession.StreamOpen(repairWindowSize);
+                normStream = infoOffset != null && infoLength != null ? 
+                    _normSession.StreamOpen(repairWindowSize, info, infoOffset.Value, infoLength.Value) : 
+                    _normSession.StreamOpen(repairWindowSize);
 
-                var expectedBytesWritten = data.Length;
-                var actualBytesWritten = normStream.Write(data,  dataOffset, data.Length);
+                var expectedBytesWritten = expectedBuffer.Length;
+                var actualBytesWritten = normStream.Write(buffer, offset, length);
 
                 WaitForEvents();
                 normStream.MarkEom();
                 normStream.Flush();
 
                 Assert.Equal(expectedBytesWritten, actualBytesWritten);
+                var actualInfo = normStream.Info;
+                Assert.Equal(expectedInfo, actualInfo);
+                if (actualInfo != null)
+                {
+                    var actualInfoContent = Encoding.ASCII.GetString(actualInfo);
+                    Assert.Equal(expectedInfoContent, actualInfoContent);
+                }
             }
             catch (Exception)
             {
@@ -802,8 +814,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [SkippableFact(typeof(IOException))]
-        public void ReceivesStream()
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateData))]
+        public void ReceivesStream(string content, string expectedContent, int offset, int length, string? infoContent = null, string expectedInfoContent = "", int? infoOffset = null, int? infoLength = null)
         {
             _normSession.SetLoopback(true);
             StartSender();
@@ -815,18 +828,22 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             Directory.CreateDirectory(cachePath);
             _normInstance.SetCacheDirectory(cachePath);
 
-            var fileContent = GenerateTextContent();
-            var data = Encoding.ASCII.GetBytes(fileContent);
-            var dataOffset = 0;
+            var buffer = Encoding.ASCII.GetBytes(content);
+            var expectedBuffer = Encoding.ASCII.GetBytes(expectedContent);
+            //Create info to enqueue
+            var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
+            var expectedInfo = Encoding.ASCII.GetBytes(expectedInfoContent);
             NormStream? normStream = null;
 
             try
             {
                 var repairWindowSize = 1024 * 1024;
-                normStream = _normSession.StreamOpen(repairWindowSize);
+                normStream = infoOffset != null && infoLength != null ? 
+                    _normSession.StreamOpen(repairWindowSize, info, infoOffset.Value, infoLength.Value) : 
+                    _normSession.StreamOpen(repairWindowSize);
 
-                var expectedBytesWritten = data.Length;
-                normStream.Write(data, dataOffset, data.Length-dataOffset);
+                var expectedBytesWritten = expectedBuffer.Length;
+                normStream.Write(buffer, offset, length);
 
                 normStream.MarkEom();
                 normStream.Flush();
@@ -840,14 +857,21 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var receivedNormStream = Assert.IsType<NormStream>(normObjectEvent.Object);
                 var numRead = 0;
                 var receiveBuffer = new byte[65536];
-                while ((numRead = receivedNormStream.Read(receiveBuffer, dataOffset, receiveBuffer.Length-dataOffset)) > 0)
+                while ((numRead = receivedNormStream.Read(receiveBuffer, 0, length)) > 0)
                 {
                     if (numRead != -1)
                     {
                         var receivedData = receiveBuffer.Take(numRead).ToArray();
                         var receivedContent = Encoding.ASCII.GetString(receivedData);
-                        Assert.Equal(fileContent, receivedContent);
+                        Assert.Equal(expectedContent, receivedContent);
                     }
+                }
+                var actualInfo = receivedNormStream.Info;
+                Assert.Equal(expectedInfo, actualInfo);
+                if (actualInfo != null)
+                {
+                    var actualInfoContent = Encoding.ASCII.GetString(actualInfo);
+                    Assert.Equal(expectedInfoContent, actualInfoContent);
                 }
             }
             catch (Exception)
