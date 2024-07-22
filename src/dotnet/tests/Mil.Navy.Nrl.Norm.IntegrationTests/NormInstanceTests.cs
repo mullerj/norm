@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Mil.Navy.Nrl.Norm.Buffers;
 using System.Text;
 
 namespace Mil.Navy.Nrl.Norm.IntegrationTests
@@ -230,7 +231,8 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             var dataContent = faker.Lorem.Paragraph();
             var data = Encoding.ASCII.GetBytes(dataContent);
-            using var dataBuffer = data.ToSafeBuffer();
+            using var dataBuffer = ByteBuffer.AllocateDirect(data.Length);
+            dataBuffer.WriteArray(0, data, 0, data.Length);
             _normSession.DataEnqueue(dataBuffer, 0, data.Length);
 
             Assert.True(_normInstance.HasNextEvent(TimeSpan.FromSeconds(1.5)));
@@ -252,7 +254,8 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             var dataContent = faker.Lorem.Paragraph();
             var data = Encoding.ASCII.GetBytes(dataContent);
-            using var dataBuffer = data.ToSafeBuffer();
+            using var dataBuffer = ByteBuffer.AllocateDirect(data.Length);
+            dataBuffer.WriteArray(0, data, 0, data.Length);
             _normSession.DataEnqueue(dataBuffer, 0, data.Length);
 
             Assert.True(_normInstance.HasNextEvent(1, 500000));
