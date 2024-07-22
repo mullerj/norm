@@ -14,14 +14,8 @@ namespace Mil.Navy.Nrl.Norm.Buffers
 
         protected override bool ReleaseHandle()
         {
-            try {
-                Marshal.FreeHGlobal(handle);
-                return true;
-            } 
-            catch 
-            {
-                return false;
-            } 
+            Marshal.FreeHGlobal(handle);
+            return true;
         }
     }
 }
