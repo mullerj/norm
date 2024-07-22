@@ -321,6 +321,61 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
+        public static IEnumerable<object[]> GenerateOutOfRangeInfo()
+        {
+            var info = new List<object[]>();
+            var faker = new Faker();
+
+            var infoContent = GenerateInfoContent();
+            var infoOffset = faker.Random.Int(-infoContent.Length, -1);
+            var infoLength = infoContent.Length;
+            info.Add(new object[] { infoContent, infoOffset, infoLength });
+
+            infoOffset = faker.Random.Int(infoContent.Length, infoContent.Length * 2);
+            infoLength = infoContent.Length;
+            info.Add(new object[] { infoContent, infoOffset, infoLength });
+
+            infoOffset = 0;
+            infoLength = faker.Random.Int(infoContent.Length + 1, infoContent.Length * 2);
+            info.Add(new object[] { infoContent, infoOffset, infoLength });
+
+            infoOffset = infoContent.Length - 1;
+            infoLength = infoContent.Length;
+            info.Add(new object[] { infoContent, infoOffset, infoLength });
+
+            return info;
+        }
+
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateOutOfRangeInfo))]
+        public void EnqueuesFileThrowsExceptionWhenOutOfRange(string? infoContent = null, int? infoOffset = null, int? infoLength = null)
+        {
+            StartSender();
+            
+            var fileContent = GenerateTextContent();
+            var fileName = Guid.NewGuid().ToString();
+            var filePath = Path.Combine(_testPath, fileName);
+            File.WriteAllText(filePath, fileContent);
+            //Create info to enqueue
+            var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
+
+            try
+            {
+                Assert.Throws<ArgumentOutOfRangeException>(() => 
+                infoOffset != null && infoLength != null ? 
+                _normSession.FileEnqueue(filePath, info, infoOffset.Value, infoLength.Value) : 
+                _normSession.FileEnqueue(filePath));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
+        }
+
         [SkippableTheory(typeof(IOException))]
         [MemberData(nameof(GenerateInfo))]
         public void ReceivesFile(string? infoContent = null, string expectedInfoContent = "", int? infoOffset = null, int? infoLength = null)
