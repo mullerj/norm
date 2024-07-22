@@ -11,11 +11,5 @@ namespace Mil.Navy.Nrl.Norm.Buffers
         public static ByteBuffer AllocateDirect(int capacity) {
             return new DirectByteBuffer(capacity);
         }
-
-        protected override bool ReleaseHandle()
-        {
-            Marshal.FreeHGlobal(handle);
-            return true;
-        }
     }
 }

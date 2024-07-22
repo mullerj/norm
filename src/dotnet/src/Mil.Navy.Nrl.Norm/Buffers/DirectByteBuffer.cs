@@ -9,5 +9,11 @@ namespace Mil.Navy.Nrl.Norm.Buffers
             SetHandle(Marshal.AllocHGlobal(capacity));
             Initialize(Convert.ToUInt64(capacity));
         }
+
+        protected override bool ReleaseHandle()
+        {
+            Marshal.FreeHGlobal(handle);
+            return true;
+        }
     }
 }
