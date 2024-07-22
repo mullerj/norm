@@ -294,7 +294,12 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             var filePath = Path.Combine(_testPath, fileName);
             File.WriteAllText(filePath, fileContent);
             //Create info to enqueue
-            var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
+            byte[]? info = null;
+            if (infoContent != null) {
+                info = Encoding.ASCII.GetBytes(infoContent);
+            } else {
+                expectedInfoContent = filePath;
+            }
             var expectedInfo = Encoding.ASCII.GetBytes(expectedInfoContent);
 
             try
@@ -310,6 +315,13 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var expectedFileName = filePath;
                 var actualFileName = normFile.Name;
                 Assert.Equal(expectedFileName, actualFileName);
+                var actualInfo = normFile.Info;
+                Assert.Equal(expectedInfo, actualInfo);
+                if (actualInfo != null)
+                {
+                    var actualInfoContent = Encoding.ASCII.GetString(actualInfo);
+                    Assert.Equal(expectedInfoContent, actualInfoContent);
+                }
             }
             catch (Exception)
             {
@@ -396,7 +408,12 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             var filePath = Path.Combine(_testPath, fileName);
             File.WriteAllText(filePath, fileContent);
             //Create info to enqueue
-            var info = infoContent != null ? Encoding.ASCII.GetBytes(infoContent) : null;
+            byte[]? info = null;
+            if (infoContent != null) {
+                info = Encoding.ASCII.GetBytes(infoContent);
+            } else {
+                expectedInfoContent = filePath;
+            }
             var expectedInfo = Encoding.ASCII.GetBytes(expectedInfoContent);
 
             try
@@ -428,6 +445,13 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var actualContent = File.ReadAllText(actualFileName);
                 Assert.Equal(fileContent, actualContent);
 
+                var actualInfo = receivedNormFile.Info;
+                Assert.Equal(expectedInfo, actualInfo);
+                if (actualInfo != null)
+                {
+                    var actualInfoContent = Encoding.ASCII.GetString(actualInfo);
+                    Assert.Equal(expectedInfoContent, actualInfoContent);
+                }
             }
             catch (Exception)
             {
@@ -724,7 +748,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 Assert.Equal(expectedData, actualData);
                 var actualDataContent = Encoding.ASCII.GetString(actualData);
                 Assert.Equal(expectedDataContent, actualDataContent);
-                var actualInfo = normData.Info;
+                var actualInfo = actualNormData.Info;
                 Assert.Equal(expectedInfo, actualInfo);
                 if (actualInfo != null)
                 {
