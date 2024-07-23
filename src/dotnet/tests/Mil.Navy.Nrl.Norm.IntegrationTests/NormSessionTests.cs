@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using Mil.Navy.Nrl.Norm.Buffers;
 using Mil.Navy.Nrl.Norm.Enums;
+using System.Net;
 using System.Text;
 
 namespace Mil.Navy.Nrl.Norm.IntegrationTests
@@ -241,8 +242,12 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 {
                     var actualId = normNode.Id;
                     Assert.NotEqual(NormNode.NORM_NODE_NONE, actualId);
+                    var expectedIpAddress = Dns.GetHostAddresses(Dns.GetHostName())
+                        .FirstOrDefault(i => i.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && !IPAddress.IsLoopback(i));
                     var actualAddress = normNode.Address;
                     Assert.NotNull(actualAddress);
+                    Assert.Equal(expectedIpAddress, actualAddress.Address);
+                    Assert.NotEqual(default, actualAddress.Port);
                     var actualGrtt = normNode.Grtt;
                     Assert.NotEqual(-1, actualGrtt);
                     var expectedEventString = $"NormEvent [type={normEvent.Type}]";
