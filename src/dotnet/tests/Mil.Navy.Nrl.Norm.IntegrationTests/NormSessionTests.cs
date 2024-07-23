@@ -1480,6 +1480,42 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
+        public static IEnumerable<object[]> GenerateOutOfRangeCommand()
+        {
+            var command = new List<object[]>();
+
+            var content = GenerateTextContent();
+            var faker = new Faker();
+
+            var length = faker.Random.Int(content.Length + 1, content.Length * 2);
+            command.Add(new object[] { content, length });
+
+            return command;
+        }
+
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateOutOfRangeCommand))]
+        public void SendsCommandThrowsExceptionWhenOutOfRange(string content, int length)
+        {
+            StartSender();
+            //Create data to enqueue
+            var command = Encoding.ASCII.GetBytes(content);
+
+            try
+            {
+                Assert.Throws<ArgumentOutOfRangeException>(() =>
+                _normSession.SendCommand(command, length, false));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+            }
+        }
+
         public static IEnumerable<object[]> GenerateCommand()
         {
             var data = new List<object[]>();

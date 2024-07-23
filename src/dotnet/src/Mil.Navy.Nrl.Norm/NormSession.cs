@@ -894,9 +894,15 @@ namespace Mil.Navy.Nrl.Norm
         /// but can be optionally transmitted with repetition (once per GRTT) according to the NORM transmit robust factor
         /// value for the given session if the robust parameter is set to true.</param>
         /// <exception cref="IOException">Thrown when NormSendCommand() returns false, indicating the failure to send command.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the command length is outside of the command buffer.</exception>
         public void SendCommand(byte[] cmdBuffer, int cmdLength, bool robust)
         {
-            if(!NormSendCommand(_handle, cmdBuffer, cmdLength, robust))
+            if (cmdLength > cmdBuffer.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(cmdLength), "The command length is out of range");
+            }
+
+            if (!NormSendCommand(_handle, cmdBuffer, cmdLength, robust))
             {
                 throw new IOException("Failed to send command");
             }
