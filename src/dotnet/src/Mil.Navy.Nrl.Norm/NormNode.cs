@@ -71,7 +71,7 @@ namespace Mil.Navy.Nrl.Norm
         {
             get
             {
-                var buffer = new byte[256];
+                var buffer = new byte[512];
                 var bufferLength = buffer.Length;
                 if (!NormNodeGetCommand(_handle, buffer, ref bufferLength))
                 {

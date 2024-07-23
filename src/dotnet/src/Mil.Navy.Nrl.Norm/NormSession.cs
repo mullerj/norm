@@ -902,9 +902,19 @@ namespace Mil.Navy.Nrl.Norm
                 throw new ArgumentOutOfRangeException(nameof(cmdLength), "The command length is out of range");
             }
 
-            if (!NormSendCommand(_handle, cmdBuffer, cmdLength, robust))
+            var commandHandle = GCHandle.Alloc(cmdBuffer, GCHandleType.Pinned);
+
+            try
             {
-                throw new IOException("Failed to send command");
+                var cmdPtr = commandHandle.AddrOfPinnedObject();
+                if (!NormSendCommand(_handle, cmdPtr, cmdLength, robust))
+                {
+                    throw new IOException("Failed to send command");
+                }
+            }
+            finally
+            {
+                commandHandle.Free();
             }
         }
 

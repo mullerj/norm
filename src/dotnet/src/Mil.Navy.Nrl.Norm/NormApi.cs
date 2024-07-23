@@ -725,7 +725,7 @@ namespace Mil.Navy.Nrl.Norm
         /// operation (see NormStartSender()), the cmdLength exceeds the configured session segmentLength, or a previously-
         /// enqueued command has not yet been sent.</returns>
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormSendCommand(long sessionHandle, byte[] cmdBuffer, int cmdLength, bool robust);
+        public static extern bool NormSendCommand(long sessionHandle, nint cmdBuffer, int cmdLength, bool robust);
 
         /// <summary>
         /// This function terminates any pending NORM_CMD(APPLICATION) transmission that was previously initiated with the NormSendCommand() call. 
