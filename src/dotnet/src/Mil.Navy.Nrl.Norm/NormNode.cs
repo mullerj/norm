@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Runtime.InteropServices;
 
 namespace Mil.Navy.Nrl.Norm
 {
@@ -65,20 +66,25 @@ namespace Mil.Navy.Nrl.Norm
         public double Grtt => NormNodeGetGrtt(_handle);
 
         /// <summary>
-        /// NORM application-defined command for transmission.
+        /// This function retrieves the content of an application-defined command that was received from a remote sender.
         /// </summary>
-        public byte[] Command
+        public int GetCommand(byte[] buffer, int offset, int length)
         {
-            get
+            var bufferHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+
+            try
             {
-                var buffer = new byte[512];
-                var bufferLength = buffer.Length;
-                if (!NormNodeGetCommand(_handle, buffer, ref bufferLength))
+                var bufferPtr = bufferHandle.AddrOfPinnedObject() + offset;
+                if (!NormNodeGetCommand(_handle, bufferPtr, ref length))
                 {
                     throw new IOException("Failed to get command");
                 }
-                return buffer.Take(bufferLength).ToArray();
+            } 
+            finally
+            {
+                bufferHandle.Free();
             }
+            return length;
         }
 
         /// <summary>

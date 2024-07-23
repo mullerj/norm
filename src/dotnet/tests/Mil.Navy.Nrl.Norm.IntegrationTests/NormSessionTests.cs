@@ -1560,8 +1560,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 Assert.Equivalent(expectedEventTypes, actualEventTypes);
 
                 var actualEvent = actualEvents.First(e => e.Type == NormEventType.NORM_RX_CMD_NEW);
-                var actualCommand = actualEvent?.Node?.Command;
-                Assert.NotNull(actualCommand);
+                var actualCommand = new byte[length];
+                var actualLength = actualEvent?.Node?.GetCommand(actualCommand, 0, length);
+                Assert.Equal(length, actualLength);
                 Assert.Equal(expectedCommand, actualCommand);
                 var actualContent = Encoding.ASCII.GetString(actualCommand);
                 Assert.Equal(expectedContent, actualContent);
@@ -1843,7 +1844,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 var actualNode = actualEvent.Node;
                 Assert.NotNull(actualNode);
 
-                var actualCommand = actualNode.Command;
+                var actualCommand = new byte[expectedCommand.Length];
+                var actualLength = actualEvent?.Node?.GetCommand(actualCommand, 0, expectedCommand.Length);
+                Assert.Equal(expectedCommand.Length, actualLength);
                 Assert.Equal(expectedCommand, actualCommand);
                 var actualContent = Encoding.ASCII.GetString(actualCommand);
                 Assert.Equal(expectedContent, actualContent);

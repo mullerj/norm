@@ -1097,13 +1097,13 @@ namespace Mil.Navy.Nrl.Norm
         /// This function retrieves the content of an application-defined command that was received from a remote sender associated with the given nodeHandle.
         /// </summary>
         /// <param name="remoteSender"> notification for a given remote sender when multiple senders may be providing content</param>
-        /// <param name="buffer">Allocated system resources for each active sender</param>
+        /// <param name="cmdBuffer">Allocated system resources for each active sender</param>
         /// <param name="buflen">A return value of false indicates that either no command was available or the provided buffer size</param>
         /// <returns>This function returns true upon successful retrieval of command content. A return value of false indicates that
         /// either no command was available or the provided buffer size (buflen parameter) was inadequate.
         /// The value referenced by the buflen parameter is adjusted to indicate the actual command length (in bytes) upon return.</returns>
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormNodeGetCommand(long remoteSender, [Out] byte[] buffer, ref int buflen);
+        public static extern bool NormNodeGetCommand(long remoteSender, nint cmdBuffer, ref int buflen);
 
         /// <summary>
         /// This function releases memory resources that were allocated for a remote sender. 
