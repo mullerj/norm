@@ -1459,7 +1459,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         public void SendsCommand()
         {
             StartSender();
-            //Create data to write to the stream
+            //Create command to send
             var expectedContent = GenerateTextContent();
             byte[] expectedCommand = Encoding.ASCII.GetBytes(expectedContent);
 
@@ -1480,19 +1480,38 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        [SkippableFact(typeof(IOException))]
-        public void ReceivesCommand()
+        public static IEnumerable<object[]> GenerateCommand()
+        {
+            var data = new List<object[]>();
+
+            var content = GenerateTextContent();
+            var expectedContent = content;
+            var length = content.Length;
+            data.Add(new object[] { content, expectedContent, length });
+
+            var faker = new Faker();
+
+            length = faker.Random.Int(content.Length / 2, content.Length - 1);
+            expectedContent = content[..length];
+            data.Add(new object[] { content, expectedContent, length });
+
+            return data;
+        }
+
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateCommand))]
+        public void ReceivesCommand(string content, string expectedContent, int length)
         {
             _normSession.SetLoopback(true);
             StartSender();
             StartReceiver();
-            //Create data to write to the stream
-            var expectedContent = GenerateTextContent();
-            byte[] expectedCommand = Encoding.ASCII.GetBytes(expectedContent);
+            //Create command to send
+            var command = Encoding.ASCII.GetBytes(content);
+            var expectedCommand = Encoding.ASCII.GetBytes(expectedContent);
 
             try
             {
-                _normSession.SendCommand(expectedCommand, expectedCommand.Length, false);
+                _normSession.SendCommand(command, length, false);
                 var expectedEventTypes = new List<NormEventType> 
                 { 
                     NormEventType.NORM_TX_CMD_SENT, 
@@ -1500,8 +1519,16 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                     NormEventType.NORM_REMOTE_SENDER_ACTIVE,
                     NormEventType.NORM_RX_CMD_NEW 
                 };
-                var actualEventTypes = GetEvents().Select(e => e.Type).ToList();
+                var actualEvents = GetEvents();
+                var actualEventTypes = actualEvents.Select(e => e.Type).ToList();
                 Assert.Equivalent(expectedEventTypes, actualEventTypes);
+
+                var actualEvent = actualEvents.First(e => e.Type == NormEventType.NORM_RX_CMD_NEW);
+                var actualCommand = actualEvent?.Node?.Command;
+                Assert.NotNull(actualCommand);
+                Assert.Equal(expectedCommand, actualCommand);
+                var actualContent = Encoding.ASCII.GetString(actualCommand);
+                Assert.Equal(expectedContent, actualContent);
             }
             catch (Exception)
             {
