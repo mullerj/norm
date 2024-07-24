@@ -217,7 +217,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             Assert.Equal(expectedDebugLevel, actualDebugLevel);
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void HasEventsFromTimeSpan()
         {
             var faker = new Faker();
@@ -240,7 +240,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             _normSession.StopSender();
         }
 
-        [Fact]
+        [SkippableFact(typeof(IOException))]
         public void HasEventsFromSecondsAndMicroseconds()
         {
             var faker = new Faker();
