@@ -897,7 +897,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the command length is outside of the command buffer.</exception>
         public void SendCommand(byte[] cmdBuffer, int cmdLength, bool robust)
         {
-            if (cmdLength > cmdBuffer.Length)
+            if (cmdLength < 0 || cmdLength > cmdBuffer.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(cmdLength), "The command length is out of range");
             }
