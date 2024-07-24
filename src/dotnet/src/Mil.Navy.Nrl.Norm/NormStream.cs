@@ -158,20 +158,19 @@ namespace Mil.Navy.Nrl.Norm
                 throw new ArgumentOutOfRangeException(nameof(length), "The length is out of range");
             }
 
-            var bytes = new byte[length];
+            var bufferHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
 
-            if (!NormStreamRead(_handle, bytes, ref length))
+            try
             {
-                return -1;
-            }
-
-            for (var i = 0; i < length; i++)
-            {
-                var bufferPosition = offset + i;
-                if (bufferPosition < buffer.Length)
+                var bufferPtr = bufferHandle.AddrOfPinnedObject() + offset;
+                if (!NormStreamRead(_handle, bufferPtr, ref length))
                 {
-                    buffer[bufferPosition] = bytes[i];
-                } 
+                    return -1;
+                }
+            }
+            finally
+            {
+                bufferHandle.Free();
             }
 
             return length;

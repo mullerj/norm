@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace Mil.Navy.Nrl.Norm
 {
@@ -892,9 +894,10 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="buffer">The buffer parameter must be a pointer to an array where the received
         /// data can be stored of a length as referenced by the numBytes pointer</param>
         /// <param name="numBytes">Specifies the length of data.</param>
-        /// <returns></returns>
+        /// <returns>This function normally returns a value of true. However, if a break in the integrity of the reliable received stream 
+        /// occurs(or the stream has been ended by the sender), a value of false is returned to indicate the break. </returns>
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormStreamRead(long streamHandle, byte[] buffer, ref int numBytes);
+        public static extern bool NormStreamRead(long streamHandle, nint buffer, ref int numBytes);
 
         /// <summary>
         /// This function advances the read offset of the receive stream referenced by the streamHandle parameter to align
