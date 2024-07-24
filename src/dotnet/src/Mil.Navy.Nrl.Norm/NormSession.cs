@@ -656,7 +656,7 @@ namespace Mil.Navy.Nrl.Norm
             {
                 throw new ArgumentOutOfRangeException(nameof(infoOffset), "The info offset is out of range");
             }
-            if (infoOffset + infoLength > info?.Length)
+            if (infoLength < 0 || infoOffset + infoLength > info?.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(infoLength), "The info length is out of range");
             }
