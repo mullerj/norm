@@ -272,12 +272,12 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             expectedInfoContent = infoContent.Substring(infoOffset, infoLength);
             info.Add(new object?[] { infoContent, expectedInfoContent, infoOffset, infoLength });
 
-            infoOffset = faker.Random.Int(1, infoContent.Length - 1 / 2);
+            infoOffset = faker.Random.Int(1, (infoContent.Length - 1) / 2);
             infoLength = infoContent.Length - infoOffset;
             expectedInfoContent = infoContent.Substring(infoOffset, infoLength);
             info.Add(new object?[] { infoContent, expectedInfoContent, infoOffset, infoLength });
 
-            infoOffset = faker.Random.Int(1, infoContent.Length - 1 / 2);
+            infoOffset = faker.Random.Int(1, (infoContent.Length - 1) / 2);
             infoLength = faker.Random.Int(1, infoContent.Length - infoOffset);
             expectedInfoContent = infoContent.Substring(infoOffset, infoLength);
             info.Add(new object?[] { infoContent, expectedInfoContent, infoOffset, infoLength });
@@ -556,12 +556,12 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             expectedInfoContent = infoContent.Substring(infoOffset, infoLength);
             data.Add(new object[] { dataContent, expectedDataContent, dataOffset, dataLength, infoContent, expectedInfoContent, infoOffset, infoLength });
 
-            infoOffset = faker.Random.Int(1, infoContent.Length - 1 / 2);
+            infoOffset = faker.Random.Int(1, (infoContent.Length - 1) / 2);
             infoLength = infoContent.Length - infoOffset;
             expectedInfoContent = infoContent.Substring(infoOffset, infoLength);
             data.Add(new object[] { dataContent, expectedDataContent, dataOffset, dataLength, infoContent, expectedInfoContent, infoOffset, infoLength });
 
-            infoOffset = faker.Random.Int(1, infoContent.Length - 1 / 2);
+            infoOffset = faker.Random.Int(1, (infoContent.Length - 1) / 2);
             infoLength = faker.Random.Int(1, infoContent.Length - infoOffset);
             expectedInfoContent = infoContent.Substring(infoOffset, infoLength);
             data.Add(new object[] { dataContent, expectedDataContent, dataOffset, dataLength, infoContent, expectedInfoContent, infoOffset, infoLength });
@@ -570,12 +570,12 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             expectedDataContent = dataContent.Substring(dataOffset, dataLength);
             data.Add(new object[] { dataContent, expectedDataContent, dataOffset, dataLength });
 
-            dataOffset = faker.Random.Int(1, dataContent.Length - 1 / 2);
+            dataOffset = faker.Random.Int(1, (dataContent.Length - 1) / 2);
             dataLength = dataContent.Length - dataOffset;
             expectedDataContent = dataContent.Substring(dataOffset, dataLength);
             data.Add(new object[] { dataContent, expectedDataContent, dataOffset, dataLength });
 
-            dataOffset = faker.Random.Int(1, dataContent.Length - 1 / 2);
+            dataOffset = faker.Random.Int(1, (dataContent.Length - 1) / 2);
             dataLength = faker.Random.Int(1, dataContent.Length - dataOffset);
             expectedDataContent = dataContent.Substring(dataOffset, dataLength);
             data.Add(new object[] { dataContent, expectedDataContent, dataOffset, dataLength });
