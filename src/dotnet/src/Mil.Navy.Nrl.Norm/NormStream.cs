@@ -165,7 +165,7 @@ namespace Mil.Navy.Nrl.Norm
                 var bufferPtr = bufferHandle.AddrOfPinnedObject() + offset;
                 if (!NormStreamRead(_handle, bufferPtr, ref length))
                 {
-                    return -1;
+                    length = -1;
                 }
             }
             finally
