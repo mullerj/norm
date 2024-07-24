@@ -153,7 +153,7 @@ namespace Mil.Navy.Nrl.Norm
             {
                 throw new ArgumentOutOfRangeException(nameof(offset), "The offset is out of range");
             }
-            if (offset + length > buffer.Length)
+            if (length < 0 || offset + length > buffer.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(length), "The length is out of range");
             }
