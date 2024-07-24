@@ -146,8 +146,18 @@ namespace Mil.Navy.Nrl.Norm
         /// Note: To read the data in its entirety, begin at offset 0.</param>
         /// <param name="length">Expected length of data received</param>
         /// <returns>The length of data received</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the offset or length are outside of the buffer.</exception>
         public int Read(byte[] buffer, int offset, int length)
         {
+            if (offset < 0 || offset >= buffer.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(offset), "The offset is out of range");
+            }
+            if (offset + length > buffer.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length), "The length is out of range");
+            }
+
             var bytes = new byte[length];
 
             if (!NormStreamRead(_handle, bytes, ref length))

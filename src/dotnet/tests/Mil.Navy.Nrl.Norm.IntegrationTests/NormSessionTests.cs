@@ -986,6 +986,84 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
+        public static IEnumerable<object[]> GenerateOutOfRangeReceiveStream()
+        {
+            var data = new List<object[]>();
+
+            var faker = new Faker();
+            var initialLength = faker.Random.Int(256, 1024);
+            var dataOffset = faker.Random.Int(-initialLength, -1);
+            var dataLength = initialLength;
+            data.Add(new object[] { initialLength, dataOffset, dataLength });
+
+            dataOffset = faker.Random.Int(initialLength, initialLength * 2);
+            dataLength = initialLength;
+            data.Add(new object[] { initialLength, dataOffset, dataLength });
+
+            dataOffset = 0;
+            dataLength = faker.Random.Int(initialLength + 1, initialLength * 2);
+            data.Add(new object[] { initialLength, dataOffset, dataLength });
+
+            dataOffset = initialLength - 1;
+            dataLength = initialLength;
+            data.Add(new object[] { initialLength, dataOffset, dataLength });
+
+            return data;
+        }
+
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateOutOfRangeReceiveStream))]
+        public void ReceivesStreamThrowsExceptionWhenOutOfRange(int initialReceiveBufferLength, int receiveBufferOffset, int receiveBufferLength)
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+
+            //Set up cache directory
+            var folderName = Guid.NewGuid().ToString();
+            var cachePath = Path.Combine(_testPath, folderName);
+            Directory.CreateDirectory(cachePath);
+            _normInstance.SetCacheDirectory(cachePath);
+
+            var fileContent = GenerateTextContent();
+            var data = Encoding.ASCII.GetBytes(fileContent);
+            NormStream? normStream = null;
+
+            try
+            {
+                var repairWindowSize = 1024 * 1024;
+
+                normStream = _normSession.StreamOpen(repairWindowSize);
+                var offset = 0;
+                var length = data.Length;
+                normStream.Write(data, offset, length);
+                normStream.MarkEom();
+                normStream.Flush();
+
+                var normEvents = GetEvents();
+                AssertNormEvents(normEvents);
+
+                var expectedNormEventType = NormEventType.NORM_RX_OBJECT_UPDATED;
+                var normObjectEvent = normEvents.First(e => e.Type == expectedNormEventType);
+                var receivedNormStream = Assert.IsType<NormStream>(normObjectEvent.Object);
+
+                var receiveBuffer = new byte[initialReceiveBufferLength];
+
+                Assert.Throws<ArgumentOutOfRangeException>(() => 
+                receivedNormStream.Read(receiveBuffer, receiveBufferOffset, receiveBufferLength));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                normStream?.Close(true);
+                StopSender();
+                StopReceiver();
+            }
+        }
+
         [Fact]
         public void SetsTxPort()
         {
