@@ -535,7 +535,7 @@ namespace Mil.Navy.Nrl.Norm
             {
                 throw new ArgumentOutOfRangeException(nameof(dataOffset), "The data offset is out of range");
             }
-            if (Convert.ToUInt64(dataOffset + dataLength) > dataBuffer.ByteLength)
+            if (dataLength < 0 || Convert.ToUInt64(dataOffset + dataLength) > dataBuffer.ByteLength)
             {
                 throw new ArgumentOutOfRangeException(nameof(dataLength), "The data length is out of range");
             }
@@ -585,7 +585,7 @@ namespace Mil.Navy.Nrl.Norm
             {
                 throw new ArgumentOutOfRangeException(nameof(infoOffset), "The info offset is out of range");
             }
-            if (infoOffset + infoLength > info?.Length)
+            if (infoLength < 0 || infoOffset + infoLength > info?.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(infoLength), "The info length is out of range");
             }

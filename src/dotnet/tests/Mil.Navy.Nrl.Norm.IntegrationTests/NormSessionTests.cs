@@ -355,6 +355,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             infoLength = faker.Random.Int(infoContent.Length + 1, infoContent.Length * 2);
             info.Add(new object[] { infoContent, infoOffset, infoLength });
 
+            infoLength = -1;
+            info.Add(new object[] { infoContent, infoOffset, infoLength });
+
             infoOffset = infoContent.Length - 1;
             infoLength = infoContent.Length;
             info.Add(new object[] { infoContent, infoOffset, infoLength });
@@ -645,6 +648,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             dataLength = faker.Random.Int(dataContent.Length + 1, dataContent.Length * 2);
             data.Add(new object[] { dataContent, dataOffset, dataLength });
 
+            dataLength = -1;
+            data.Add(new object[] { dataContent, dataOffset, dataLength });
+
             dataOffset = dataContent.Length - 1;
             dataLength = dataContent.Length;
             data.Add(new object[] { dataContent, dataOffset, dataLength });
@@ -663,6 +669,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             infoOffset = 0;
             infoLength = faker.Random.Int(infoContent.Length + 1, infoContent.Length * 2);
+            data.Add(new object[] { dataContent, dataOffset, dataLength, infoContent, infoOffset, infoLength });
+
+            infoLength = -1;
             data.Add(new object[] { dataContent, dataOffset, dataLength, infoContent, infoOffset, infoLength });
 
             infoOffset = infoContent.Length - 1;
@@ -1002,6 +1011,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
             dataOffset = 0;
             dataLength = faker.Random.Int(initialLength + 1, initialLength * 2);
+            data.Add(new object[] { initialLength, dataOffset, dataLength });
+
+            dataLength = -1;
             data.Add(new object[] { initialLength, dataOffset, dataLength });
 
             dataOffset = initialLength - 1;
@@ -1571,6 +1583,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             var faker = new Faker();
 
             var length = faker.Random.Int(content.Length + 1, content.Length * 2);
+            command.Add(new object[] { content, length });
+
+            length = -1;
             command.Add(new object[] { content, length });
 
             return command;
