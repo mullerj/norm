@@ -1080,7 +1080,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <param name="port">port number and/or specify a specific source address binding that is used for packet transmission.</param>
         /// <returns>A value of true is returned upon success and false upon failure. An invalid nodeHandle parameter value would lead to such failure.</returns>
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormNodeGetAddress(long nodeHandle, [Out] byte[] addrBuffer, ref int bufferLen, out int port);
+        public static extern bool NormNodeGetAddress(long nodeHandle, nint addrBuffer, ref int bufferLen, out int port);
 
         /// <summary>
         /// This function retrieves the advertised estimate of group round-trip timing (GRTT) for the remote sender referenced by the given nodeHandle value.

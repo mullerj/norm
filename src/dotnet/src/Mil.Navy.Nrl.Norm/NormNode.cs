@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Mil.Navy.Nrl.Norm.Buffers;
+using System.Net;
 using System.Runtime.InteropServices;
 
 namespace Mil.Navy.Nrl.Norm
@@ -46,14 +47,23 @@ namespace Mil.Navy.Nrl.Norm
         {
             get
             {
-                var buffer = new byte[256];
-                var bufferLength = buffer.Length;
-                if (!NormNodeGetAddress(_handle, buffer, ref bufferLength, out var port))
+                var bufferLength = 256;
+                using var buffer = ByteBuffer.AllocateDirect(bufferLength);
+                int port;
+
+                unsafe
                 {
-                    throw new IOException("Failed to get node address");
+                    byte* addrBuffer = null;
+                    buffer.AcquirePointer(ref addrBuffer);
+                    if (!NormNodeGetAddress(_handle, (nint)addrBuffer, ref bufferLength, out port))
+                    {
+                        throw new IOException("Failed to get node address");
+                    }
                 }
-                buffer = buffer.Take(bufferLength).ToArray();
-                var ipAddressText = string.Join('.', buffer);
+
+                var addressBytes = new byte[bufferLength];
+                buffer.ReadArray(0, addressBytes, 0, bufferLength);
+                var ipAddressText = string.Join('.', addressBytes);
                 var ipAddress = IPAddress.Parse(ipAddressText);
 
                 return new IPEndPoint(ipAddress, port);
