@@ -78,8 +78,18 @@ namespace Mil.Navy.Nrl.Norm
         /// <summary>
         /// This function retrieves the content of an application-defined command that was received from a remote sender.
         /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the offset or length are outside of the buffer.</exception>
         public int GetCommand(byte[] buffer, int offset, int length)
         {
+            if (offset < 0 || offset >= buffer.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(offset), "The offset is out of range");
+            }
+            if (length < 1 || offset + length > buffer.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(length), "The length is out of range");
+            }
+
             var bufferHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
 
             try

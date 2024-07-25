@@ -1706,6 +1706,77 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
+        public static IEnumerable<object[]> GenerateOutOfRangeReceiveCommand()
+        {
+            var command = new List<object[]>();
+
+            var content = GenerateTextContent();
+            var faker = new Faker();
+            var offset = faker.Random.Int(-content.Length, -1);
+            var length = content.Length;
+            command.Add(new object[] { content, offset, length });
+
+            offset = faker.Random.Int(content.Length, content.Length * 2);
+            length = content.Length;
+            command.Add(new object[] { content, offset, length });
+
+            offset = 0;
+            length = faker.Random.Int(content.Length + 1, content.Length * 2);
+            command.Add(new object[] { content, offset, length });
+
+            length = -1;
+            command.Add(new object[] { content, offset, length });
+
+            length = 0;
+            command.Add(new object[] { content, offset, length });
+
+            offset = content.Length - 1;
+            length = content.Length;
+            command.Add(new object[] { content, offset, length });
+
+            return command;
+        }
+
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateOutOfRangeReceiveCommand))]
+        public void ReceivesCommandThrowsExceptionWhenOutOfRange(string content, int offset, int length)
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+            //Create command to send
+            var command = Encoding.ASCII.GetBytes(content);
+
+            try
+            {
+                _normSession.SendCommand(command, command.Length, false);
+                var expectedEventTypes = new List<NormEventType>
+                {
+                    NormEventType.NORM_TX_CMD_SENT,
+                    NormEventType.NORM_REMOTE_SENDER_NEW,
+                    NormEventType.NORM_REMOTE_SENDER_ACTIVE,
+                    NormEventType.NORM_RX_CMD_NEW
+                };
+                var actualEvents = GetEvents();
+                var actualEventTypes = actualEvents.Select(e => e.Type).ToList();
+                Assert.Equivalent(expectedEventTypes, actualEventTypes);
+
+                var actualEvent = actualEvents.First(e => e.Type == NormEventType.NORM_RX_CMD_NEW);
+                var actualCommand = new byte[command.Length];
+                Assert.Throws<ArgumentOutOfRangeException>(() =>
+                actualEvent?.Node?.GetCommand(actualCommand, offset, length));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+            }
+        }
+
         [SkippableFact(typeof(IOException))]
         public void CancelsCommand()
         {
