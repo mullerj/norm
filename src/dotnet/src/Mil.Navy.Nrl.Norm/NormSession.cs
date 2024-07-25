@@ -473,7 +473,7 @@ namespace Mil.Navy.Nrl.Norm
             {
                 throw new ArgumentOutOfRangeException(nameof(infoOffset), "The info offset is out of range");
             }
-            if (infoLength < 0 || infoOffset + infoLength > info?.Length)
+            if (info != null && infoLength < 1 || infoOffset + infoLength > info?.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(infoLength), "The info length is out of range");
             }
@@ -535,7 +535,7 @@ namespace Mil.Navy.Nrl.Norm
             {
                 throw new ArgumentOutOfRangeException(nameof(dataOffset), "The data offset is out of range");
             }
-            if (dataLength < 0 || Convert.ToUInt64(dataOffset + dataLength) > dataBuffer.ByteLength)
+            if (dataLength < 1 || Convert.ToUInt64(dataOffset + dataLength) > dataBuffer.ByteLength)
             {
                 throw new ArgumentOutOfRangeException(nameof(dataLength), "The data length is out of range");
             }
@@ -585,7 +585,7 @@ namespace Mil.Navy.Nrl.Norm
             {
                 throw new ArgumentOutOfRangeException(nameof(infoOffset), "The info offset is out of range");
             }
-            if (infoLength < 0 || infoOffset + infoLength > info?.Length)
+            if (info != null && infoLength < 1 || infoOffset + infoLength > info?.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(infoLength), "The info length is out of range");
             }
@@ -656,7 +656,7 @@ namespace Mil.Navy.Nrl.Norm
             {
                 throw new ArgumentOutOfRangeException(nameof(infoOffset), "The info offset is out of range");
             }
-            if (infoLength < 0 || infoOffset + infoLength > info?.Length)
+            if (info != null && infoLength < 1 || infoOffset + infoLength > info?.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(infoLength), "The info length is out of range");
             }
@@ -897,7 +897,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the command length is outside of the command buffer.</exception>
         public void SendCommand(byte[] cmdBuffer, int cmdLength, bool robust)
         {
-            if (cmdLength < 0 || cmdLength > cmdBuffer.Length)
+            if (cmdLength < 1 || cmdLength > cmdBuffer.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(cmdLength), "The command length is out of range");
             }

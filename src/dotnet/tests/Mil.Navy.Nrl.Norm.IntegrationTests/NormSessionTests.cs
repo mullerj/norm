@@ -242,11 +242,11 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 {
                     var actualId = normNode.Id;
                     Assert.NotEqual(NormNode.NORM_NODE_NONE, actualId);
-                    var expectedIpAddress = Dns.GetHostAddresses(Dns.GetHostName())
-                        .FirstOrDefault(i => i.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && !IPAddress.IsLoopback(i));
+                    var expectedIpAddresses = Dns.GetHostAddresses(Dns.GetHostName())
+                        .Where(i => i.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork && !IPAddress.IsLoopback(i));
                     var actualAddress = normNode.Address;
                     Assert.NotNull(actualAddress);
-                    Assert.Equal(expectedIpAddress, actualAddress.Address);
+                    Assert.Contains(actualAddress.Address, expectedIpAddresses);
                     Assert.NotEqual(default, actualAddress.Port);
                     var actualGrtt = normNode.Grtt;
                     Assert.NotEqual(-1, actualGrtt);
@@ -282,14 +282,16 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             expectedInfoContent = infoContent.Substring(infoOffset, infoLength);
             info.Add(new object?[] { infoContent, expectedInfoContent, infoOffset, infoLength });
 
-            info.Add(new object?[] { null, "", null, null });
+            info.Add(new object?[] { null, null, null, null });
+
+            info.Add(new object?[] { null, "", 0, 0 });
 
             return info;
         }
 
         [SkippableTheory(typeof(IOException))]
         [MemberData(nameof(GenerateInfo))]
-        public void EnqueuesFile(string? infoContent = null, string expectedInfoContent = "", int? infoOffset = null, int? infoLength = null)
+        public void EnqueuesFile(string? infoContent = null, string? expectedInfoContent = null, int? infoOffset = null, int? infoLength = null)
         {
             StartSender();
 
@@ -301,10 +303,17 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             byte[]? info = null;
             if (infoContent != null) {
                 info = Encoding.ASCII.GetBytes(infoContent);
-            } else {
+            } 
+            else if (expectedInfoContent == null) 
+            {
                 expectedInfoContent = filePath;
             }
-            var expectedInfo = Encoding.ASCII.GetBytes(expectedInfoContent);
+
+            var expectedInfo = Array.Empty<byte>();
+            if (expectedInfoContent != null)
+            {
+                expectedInfo = Encoding.ASCII.GetBytes(expectedInfoContent);
+            }
 
             try
             {
@@ -358,6 +367,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             infoLength = -1;
             info.Add(new object[] { infoContent, infoOffset, infoLength });
 
+            infoLength = 0;
+            info.Add(new object[] { infoContent, infoOffset, infoLength });
+
             infoOffset = infoContent.Length - 1;
             infoLength = infoContent.Length;
             info.Add(new object[] { infoContent, infoOffset, infoLength });
@@ -397,7 +409,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
 
         [SkippableTheory(typeof(IOException))]
         [MemberData(nameof(GenerateInfo))]
-        public void ReceivesFile(string? infoContent = null, string expectedInfoContent = "", int? infoOffset = null, int? infoLength = null)
+        public void ReceivesFile(string? infoContent = null, string? expectedInfoContent = null, int? infoOffset = null, int? infoLength = null)
         {
             _normSession.SetLoopback(true);
             StartSender();
@@ -418,10 +430,16 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             byte[]? info = null;
             if (infoContent != null) {
                 info = Encoding.ASCII.GetBytes(infoContent);
-            } else {
+            } 
+            else if (expectedInfoContent == null) 
+            {
                 expectedInfoContent = filePath;
             }
-            var expectedInfo = Encoding.ASCII.GetBytes(expectedInfoContent);
+            var expectedInfo = Array.Empty<byte>();
+            if (expectedInfoContent != null)
+            {
+                expectedInfo = Encoding.ASCII.GetBytes(expectedInfoContent);
+            }
 
             try
             {
@@ -651,6 +669,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             dataLength = -1;
             data.Add(new object[] { dataContent, dataOffset, dataLength });
 
+            dataLength = 0;
+            data.Add(new object[] { dataContent, dataOffset, dataLength });
+
             dataOffset = dataContent.Length - 1;
             dataLength = dataContent.Length;
             data.Add(new object[] { dataContent, dataOffset, dataLength });
@@ -672,6 +693,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             data.Add(new object[] { dataContent, dataOffset, dataLength, infoContent, infoOffset, infoLength });
 
             infoLength = -1;
+            data.Add(new object[] { dataContent, dataOffset, dataLength, infoContent, infoOffset, infoLength });
+
+            infoLength = 0;
             data.Add(new object[] { dataContent, dataOffset, dataLength, infoContent, infoOffset, infoLength });
 
             infoOffset = infoContent.Length - 1;
@@ -1014,6 +1038,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             data.Add(new object[] { initialLength, dataOffset, dataLength });
 
             dataLength = -1;
+            data.Add(new object[] { initialLength, dataOffset, dataLength });
+
+            dataLength = 0;
             data.Add(new object[] { initialLength, dataOffset, dataLength });
 
             dataOffset = initialLength - 1;
@@ -1586,6 +1613,9 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             command.Add(new object[] { content, length });
 
             length = -1;
+            command.Add(new object[] { content, length });
+
+            length = 0;
             command.Add(new object[] { content, length });
 
             return command;
