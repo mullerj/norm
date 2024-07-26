@@ -889,13 +889,14 @@ namespace Mil.Navy.Nrl.Norm
         /// This function enqueues a NORM application-defined command for transmission.
         /// </summary>
         /// <param name="cmdBuffer">The cmdBuffer parameter points to a buffer containing the application-defined command content that will be contained in the NORM_CMD(APPLICA-TION) message payload.</param>
+        /// <param name="cmdOffset"></param>
         /// <param name="cmdLength">The cmdLength indicates the length of this content (in bytes) and MUST be less than or equal to the segmentLength value for the given session.</param>
+        /// <exception cref="IOException">Thrown when NormSendCommand() returns false, indicating the failure to send command.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the command length is outside of the command buffer.</exception>
         /// <param name="robust">The command is NOT delivered reliably, 
         /// but can be optionally transmitted with repetition (once per GRTT) according to the NORM transmit robust factor
         /// value for the given session if the robust parameter is set to true.</param>
-        /// <exception cref="IOException">Thrown when NormSendCommand() returns false, indicating the failure to send command.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the command length is outside of the command buffer.</exception>
-        public void SendCommand(byte[] cmdBuffer, int cmdLength, bool robust)
+        public void SendCommand(byte[] cmdBuffer, int cmdOffset, int cmdLength, bool robust)
         {
             if (cmdLength < 1 || cmdLength > cmdBuffer.Length)
             {
@@ -906,7 +907,7 @@ namespace Mil.Navy.Nrl.Norm
 
             try
             {
-                var cmdPtr = commandHandle.AddrOfPinnedObject();
+                var cmdPtr = commandHandle.AddrOfPinnedObject() + cmdOffset;
                 if (!NormSendCommand(_handle, cmdPtr, cmdLength, robust))
                 {
                     throw new IOException("Failed to send command");
