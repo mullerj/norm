@@ -62,7 +62,7 @@ class NormSession {
     + AddAckingNode(nodeId:long) : void
     + RemoveAckingNode(nodeId:long) : void
     + GetAckingStatus(nodeId:long) : NormAckingStatus
-    + SendCommand(cmdBuffer:byte[], cmdLength:int, robust:bool) : void
+    + SendCommand(cmdBuffer:byte[], cmdOffset:int, cmdLength:int, robust:bool) : void
     + CancelCommand() : void
     + SetRxCacheLimit(countMax:int) : void
     + SetRxSocketBuffer(bufferSize:long) : void
