@@ -1703,6 +1703,44 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
+        private void ReceivesCommandThrowsException<TExceptionType>(string content, int offset, int length) where TExceptionType : Exception
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+            //Create command to send
+            var command = Encoding.ASCII.GetBytes(content);
+
+            try
+            {
+                _normSession.SendCommand(command, 0, command.Length, false);
+                var expectedEventTypes = new List<NormEventType>
+                {
+                    NormEventType.NORM_TX_CMD_SENT,
+                    NormEventType.NORM_REMOTE_SENDER_NEW,
+                    NormEventType.NORM_REMOTE_SENDER_ACTIVE,
+                    NormEventType.NORM_RX_CMD_NEW
+                };
+                var actualEvents = GetEvents();
+                var actualEventTypes = actualEvents.Select(e => e.Type).ToList();
+                Assert.Equivalent(expectedEventTypes, actualEventTypes);
+
+                var actualEvent = actualEvents.First(e => e.Type == NormEventType.NORM_RX_CMD_NEW);
+                var actualCommand = new byte[command.Length];
+                Assert.Throws<TExceptionType>(() =>
+                actualEvent?.Node?.GetCommand(actualCommand, offset, length));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+            }
+        }
+
         public static IEnumerable<object[]> GenerateShortLengthCommand()
         {
             var command = new List<object[]>();
@@ -1728,40 +1766,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         [MemberData(nameof(GenerateShortLengthCommand))]
         public void ReceivesCommandThrowsExceptionWhenLengthLessThanCommand(string content, int offset, int length)
         {
-            _normSession.SetLoopback(true);
-            StartSender();
-            StartReceiver();
-            //Create command to send
-            var command = Encoding.ASCII.GetBytes(content);
-
-            try
-            {
-                _normSession.SendCommand(command, 0, command.Length, false);
-                var expectedEventTypes = new List<NormEventType>
-                {
-                    NormEventType.NORM_TX_CMD_SENT,
-                    NormEventType.NORM_REMOTE_SENDER_NEW,
-                    NormEventType.NORM_REMOTE_SENDER_ACTIVE,
-                    NormEventType.NORM_RX_CMD_NEW
-                };
-                var actualEvents = GetEvents();
-                var actualEventTypes = actualEvents.Select(e => e.Type).ToList();
-                Assert.Equivalent(expectedEventTypes, actualEventTypes);
-
-                var actualEvent = actualEvents.First(e => e.Type == NormEventType.NORM_RX_CMD_NEW);
-                var actualCommand = new byte[command.Length];
-                Assert.Throws<IOException>(() =>
-                actualEvent?.Node?.GetCommand(actualCommand, offset, length));
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                StopSender();
-                StopReceiver();
-            }
+            ReceivesCommandThrowsException<IOException>(content, offset, length);
         }
 
         public static IEnumerable<object[]> GenerateOutOfRangeReceiveCommand()
@@ -1799,40 +1804,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         [MemberData(nameof(GenerateOutOfRangeReceiveCommand))]
         public void ReceivesCommandThrowsExceptionWhenOutOfRange(string content, int offset, int length)
         {
-            _normSession.SetLoopback(true);
-            StartSender();
-            StartReceiver();
-            //Create command to send
-            var command = Encoding.ASCII.GetBytes(content);
-
-            try
-            {
-                _normSession.SendCommand(command, 0, command.Length, false);
-                var expectedEventTypes = new List<NormEventType>
-                {
-                    NormEventType.NORM_TX_CMD_SENT,
-                    NormEventType.NORM_REMOTE_SENDER_NEW,
-                    NormEventType.NORM_REMOTE_SENDER_ACTIVE,
-                    NormEventType.NORM_RX_CMD_NEW
-                };
-                var actualEvents = GetEvents();
-                var actualEventTypes = actualEvents.Select(e => e.Type).ToList();
-                Assert.Equivalent(expectedEventTypes, actualEventTypes);
-
-                var actualEvent = actualEvents.First(e => e.Type == NormEventType.NORM_RX_CMD_NEW);
-                var actualCommand = new byte[command.Length];
-                Assert.Throws<ArgumentOutOfRangeException>(() =>
-                actualEvent?.Node?.GetCommand(actualCommand, offset, length));
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                StopSender();
-                StopReceiver();
-            }
+            ReceivesCommandThrowsException<ArgumentOutOfRangeException>(content, offset, length);
         }
 
         [SkippableFact(typeof(IOException))]
