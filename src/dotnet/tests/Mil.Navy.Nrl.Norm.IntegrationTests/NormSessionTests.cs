@@ -1605,25 +1605,37 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
         public static IEnumerable<object[]> GenerateOutOfRangeCommand()
         {
             var command = new List<object[]>();
-
-            var content = GenerateTextContent();
             var faker = new Faker();
 
-            var length = faker.Random.Int(content.Length + 1, content.Length * 2);
-            command.Add(new object[] { content, length });
+            var content = GenerateInfoContent();
+            var offset = faker.Random.Int(-content.Length, -1);
+            var length = content.Length;
+            command.Add(new object[] { content, offset, length });
+
+            offset = faker.Random.Int(content.Length, content.Length * 2);
+            length = content.Length;
+            command.Add(new object[] { content, offset, length });
+
+            offset = 0;
+            length = faker.Random.Int(content.Length + 1, content.Length * 2);
+            command.Add(new object[] { content, offset, length });
 
             length = -1;
-            command.Add(new object[] { content, length });
+            command.Add(new object[] { content, offset, length });
 
             length = 0;
-            command.Add(new object[] { content, length });
+            command.Add(new object[] { content, offset, length });
+
+            offset = content.Length - 1;
+            length = content.Length;
+            command.Add(new object[] { content, offset, length });
 
             return command;
         }
 
         [SkippableTheory(typeof(IOException))]
         [MemberData(nameof(GenerateOutOfRangeCommand))]
-        public void SendsCommandThrowsExceptionWhenOutOfRange(string content, int length)
+        public void SendsCommandThrowsExceptionWhenOutOfRange(string content, int offset, int length)
         {
             StartSender();
             //Create data to enqueue
@@ -1632,7 +1644,7 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             try
             {
                 Assert.Throws<ArgumentOutOfRangeException>(() =>
-                _normSession.SendCommand(command, 0, length, false));
+                _normSession.SendCommand(command, offset, length, false));
             }
             catch (Exception)
             {
@@ -1644,38 +1656,23 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
             }
         }
 
-        public static IEnumerable<object[]> GenerateCommand()
-        {
-            var data = new List<object[]>();
-
-            var content = GenerateTextContent();
-            var expectedContent = content;
-            var length = content.Length;
-            data.Add(new object[] { content, expectedContent, length });
-
-            var faker = new Faker();
-
-            length = faker.Random.Int(content.Length / 2, content.Length - 1);
-            expectedContent = content[..length];
-            data.Add(new object[] { content, expectedContent, length });
-
-            return data;
-        }
-
-        [SkippableTheory(typeof(IOException))]
-        [MemberData(nameof(GenerateCommand))]
-        public void ReceivesCommand(string content, string expectedContent, int length)
+        [SkippableFact(typeof(IOException))]
+        public void ReceivesCommand()
         {
             _normSession.SetLoopback(true);
             StartSender();
             StartReceiver();
             //Create command to send
+            var content = GenerateInfoContent();
+            var expectedContent = content;
+            var offset = 0;
+            var length = content.Length;
             var command = Encoding.ASCII.GetBytes(content);
             var expectedCommand = Encoding.ASCII.GetBytes(expectedContent);
 
             try
             {
-                _normSession.SendCommand(command, 0, length, false);
+                _normSession.SendCommand(command, 0, command.Length, false);
                 var expectedEventTypes = new List<NormEventType> 
                 { 
                     NormEventType.NORM_TX_CMD_SENT, 
@@ -1688,12 +1685,73 @@ namespace Mil.Navy.Nrl.Norm.IntegrationTests
                 Assert.Equivalent(expectedEventTypes, actualEventTypes);
 
                 var actualEvent = actualEvents.First(e => e.Type == NormEventType.NORM_RX_CMD_NEW);
-                var actualCommand = new byte[length];
-                var actualLength = actualEvent?.Node?.GetCommand(actualCommand, 0, length);
+                var actualCommand = new byte[command.Length];
+                var actualLength = actualEvent?.Node?.GetCommand(actualCommand, offset, length);
                 Assert.Equal(length, actualLength);
                 Assert.Equal(expectedCommand, actualCommand);
                 var actualContent = Encoding.ASCII.GetString(actualCommand);
                 Assert.Equal(expectedContent, actualContent);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                StopSender();
+                StopReceiver();
+            }
+        }
+
+        public static IEnumerable<object[]> GenerateShortLengthCommand()
+        {
+            var command = new List<object[]>();
+
+            var content = GenerateInfoContent();
+            var faker = new Faker();
+            var offset = 0;
+            var length = faker.Random.Int(content.Length / 2, content.Length - 1);
+            command.Add(new object[] { content, offset, length });
+
+            offset = faker.Random.Int(1, (content.Length - 1) / 2);
+            length = content.Length - offset;
+            command.Add(new object[] { content, offset, length });
+
+            offset = faker.Random.Int(1, (content.Length - 1) / 2);
+            length = faker.Random.Int(1, content.Length - offset);
+            command.Add(new object[] { content, offset, length });
+
+            return command;
+        }
+
+        [SkippableTheory(typeof(IOException))]
+        [MemberData(nameof(GenerateShortLengthCommand))]
+        public void ReceivesCommandThrowsExceptionWhenLengthLessThanCommand(string content, int offset, int length)
+        {
+            _normSession.SetLoopback(true);
+            StartSender();
+            StartReceiver();
+            //Create command to send
+            var command = Encoding.ASCII.GetBytes(content);
+
+            try
+            {
+                _normSession.SendCommand(command, 0, command.Length, false);
+                var expectedEventTypes = new List<NormEventType>
+                {
+                    NormEventType.NORM_TX_CMD_SENT,
+                    NormEventType.NORM_REMOTE_SENDER_NEW,
+                    NormEventType.NORM_REMOTE_SENDER_ACTIVE,
+                    NormEventType.NORM_RX_CMD_NEW
+                };
+                var actualEvents = GetEvents();
+                var actualEventTypes = actualEvents.Select(e => e.Type).ToList();
+                Assert.Equivalent(expectedEventTypes, actualEventTypes);
+
+                var actualEvent = actualEvents.First(e => e.Type == NormEventType.NORM_RX_CMD_NEW);
+                var actualCommand = new byte[command.Length];
+                Assert.Throws<IOException>(() =>
+                actualEvent?.Node?.GetCommand(actualCommand, offset, length));
             }
             catch (Exception)
             {
