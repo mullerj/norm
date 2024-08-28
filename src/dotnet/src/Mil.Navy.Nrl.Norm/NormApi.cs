@@ -1104,7 +1104,7 @@ namespace Mil.Navy.Nrl.Norm
         /// either no command was available or the provided buffer size (buflen parameter) was inadequate.
         /// The value referenced by the buflen parameter is adjusted to indicate the actual command length (in bytes) upon return.</returns>
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormNodeGetCommand(long remoteSender, nint cmdBuffer, ref int buflen);
+        public unsafe static extern bool NormNodeGetCommand(long remoteSender, byte* cmdBuffer, ref int buflen);
 
         /// <summary>
         /// This function releases memory resources that were allocated for a remote sender. 

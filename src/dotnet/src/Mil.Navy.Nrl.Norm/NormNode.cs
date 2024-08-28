@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Runtime.InteropServices;
 
 namespace Mil.Navy.Nrl.Norm
 {
@@ -80,20 +79,17 @@ namespace Mil.Navy.Nrl.Norm
                 throw new ArgumentOutOfRangeException(nameof(length), "The length is out of range");
             }
 
-            var bufferHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-
-            try
+            unsafe
             {
-                var bufferPtr = bufferHandle.AddrOfPinnedObject() + offset;
-                if (!NormNodeGetCommand(_handle, bufferPtr, ref length))
+                fixed (byte* bufferPtr = buffer)
                 {
-                    throw new IOException("Failed to get command");
+                    if (!NormNodeGetCommand(_handle, bufferPtr + offset, ref length))
+                    {
+                        throw new IOException("Failed to get command");
+                    }
                 }
-            } 
-            finally
-            {
-                bufferHandle.Free();
             }
+
             return length;
         }
 
