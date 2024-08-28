@@ -59,16 +59,12 @@ namespace Mil.Navy.Nrl.Norm
             }
 
             int numBytes;
-            var bufferHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-
-            try
+            unsafe
             {
-                var bufferPtr = bufferHandle.AddrOfPinnedObject() + offset;
-                numBytes = NormStreamWrite(_handle, bufferPtr, length);
-            } 
-            finally
-            {
-                bufferHandle.Free();
+                fixed (byte* bufferPtr = buffer)
+                {
+                    numBytes = NormStreamWrite(_handle, bufferPtr + offset, length);
+                }
             }
 
             return numBytes;
