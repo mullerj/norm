@@ -48,9 +48,8 @@ namespace Mil.Navy.Nrl.Norm
             {
                 var bufferLength = 256;
                 var buffer = stackalloc byte[bufferLength];
-                var addrBuffer = (nint)buffer;
 
-                if (!NormNodeGetAddress(_handle, addrBuffer, ref bufferLength, out int port))
+                if (!NormNodeGetAddress(_handle, buffer, ref bufferLength, out int port))
                 {
                     throw new IOException("Failed to get node address");
                 }
