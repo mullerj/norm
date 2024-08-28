@@ -895,7 +895,7 @@ namespace Mil.Navy.Nrl.Norm
         /// <returns>This function normally returns a value of true. However, if a break in the integrity of the reliable received stream 
         /// occurs(or the stream has been ended by the sender), a value of false is returned to indicate the break. </returns>
         [DllImport(NORM_LIBRARY)]
-        public static extern bool NormStreamRead(long streamHandle, nint buffer, ref int numBytes);
+        public unsafe static extern bool NormStreamRead(long streamHandle, byte* buffer, ref int numBytes);
 
         /// <summary>
         /// This function advances the read offset of the receive stream referenced by the streamHandle parameter to align
