@@ -7,7 +7,7 @@
       "version": "3.11"
     },
     "ghcr.io/devcontainers/features/dotnet:1": {
-      "version": "6"
+      "version": "10"
     },
     "ghcr.io/devcontainers/features/java:1": {
       "version": "17",
@@ -15,10 +15,10 @@
       "antVersion": "1.10.12"
     },
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "version": "20.10"
+      "version": "29.0"
     },
     "ghcr.io/devcontainers/features/powershell:1": {
-      "version": "7.3"
+      "version": "7.5"
     }
 },
 "customizations": {
