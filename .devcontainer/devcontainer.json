@@ -15,7 +15,6 @@
       "antVersion": "1.10.12"
     },
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "version": "20.1"
     },
     "ghcr.io/devcontainers/features/powershell:1": {
       "version": "7.5"
